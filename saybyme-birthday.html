@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SayByMe – Create a Birthday Surprise</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kaushan+Script&family=Yellowtail&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --plum:#7a1646; --rose:#e8236f; --pink-1:#fde3ee; --pink-2:#f9c9dd;
+    --ink:#3d1630; --field:#fff6fa; --border:#f3a9c6;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    font-family:'Nunito',system-ui,sans-serif;color:var(--ink);
+    background:
+      radial-gradient(ellipse at 30% 25%, #fff0f6 0%, transparent 55%),
+      radial-gradient(ellipse at 80% 60%, #fbd3e3 0%, transparent 60%),
+      linear-gradient(160deg,#fde6f0,#f8c6dc);
+    min-height:100vh;overflow-x:hidden;position:relative;
+  }
+
+  /* Stage wrapper */
+  .stage{
+    position:relative;min-height:100vh;max-width:1400px;margin:0 auto;
+    overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  }
+
+  /* ---------- header ---------- */
+  header{
+    position:absolute;top:18px;left:0;right:0;text-align:center;z-index:10;
+  }
+  .logo{
+    font-family:'Yellowtail',cursive;font-size:clamp(30px,2.8vw,44px);
+    color:var(--plum);position:relative;display:inline-block;line-height:1;
+  }
+  .logo svg{position:absolute;right:-24px;top:-6px;width:22px;height:20px}
+  .tag{
+    margin-top:6px;font-size:clamp(11px,0.95vw,14px);font-weight:600;
+    color:var(--ink);letter-spacing:.3px;
+  }
+  .tag i{color:var(--rose);font-style:normal;margin:0 10px;font-size:.85em}
+
+  /* ---------- Glowing String Lights ---------- */
+  .lights{position:absolute;top:0;width:30%;height:130px;z-index:2;pointer-events:none}
+  .lights.l{left:0}.lights.r{right:0;transform:scaleX(-1)}
+
+  /* ---------- centered main layout ---------- */
+  main{
+    position:relative;z-index:4;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    width:100%;max-width:580px;margin:0 auto;
+    padding:80px 20px 24px;text-align:center;
+  }
+
+  /* Reduced Teddy Bear & Cake on Top */
+  .art{
+    position:relative;width:100%;max-width:340px;height:180px;
+    margin:0 auto 10px;
+  }
+  .art svg{position:absolute;overflow:visible}
+  
+  .cake{
+    left:50%;bottom:0;width:190px;
+    transform:translateX(-40%);
+    z-index:2;
+  }
+  .bear{
+    left:50%;bottom:0;width:130px;
+    transform:translateX(-106%);
+    z-index:3;
+  }
+  .gift-s{
+    left:50%;bottom:2px;width:66px;
+    transform:translateX(80%);
+    z-index:1;
+  }
+
+  /* Panel / Entry section */
+  .panel{
+    width:100%;
+    display:flex;flex-direction:column;align-items:center;
+  }
+
+  h1{
+    font-family:'Kaushan Script',cursive;font-weight:400;color:var(--plum);
+    font-size:clamp(38px,4.5vw,64px);line-height:1.05;
+    position:relative;display:inline-block;transform:rotate(-1.5deg);
+    margin-bottom:4px;
+  }
+  h1 .l2{display:block;margin-left:-8px}
+
+  /* Outline hearts */
+  .heart, h1 .heart{
+    position:absolute;
+    fill:none !important;
+    stroke:var(--rose) !important;
+    stroke-width:4.5;
+  }
+  h1 .h1a{top:-8px;right:-32px;width:clamp(26px,2.6vw,40px);transform:rotate(12deg)}
+  h1 .h1b{top:38%;right:-42px;width:clamp(22px,2.2vw,34px);transform:rotate(15deg)}
+  h1 .h1c{bottom:-8px;right:-6px;width:clamp(20px,2vw,30px)}
+  
+  .spark{
+    position:absolute;left:-44px;top:14px;width:34px;
+    stroke:var(--rose);stroke-width:4.5;stroke-linecap:round;
+    fill:none !important;
+  }
+
+  .underline{
+    display:block;width:78%;max-width:320px;height:14px;
+    margin:2px auto 0 auto;
+  }
+
+  .sub{
+    margin:14px auto 20px;font-size:clamp(14px,1.2vw,18px);line-height:1.5;
+    max-width:26em;color:var(--ink);
+  }
+
+  form{width:100%}
+
+  .field{
+    display:flex;align-items:center;gap:14px;height:clamp(48px,4.5vw,60px);
+    width:100%;max-width:440px;margin:0 auto 14px;
+    padding:0 24px;border-radius:999px;background:var(--field);
+    border:1.5px solid var(--border);box-shadow:0 6px 16px rgba(232,35,111,.08), inset 0 0 0 3px rgba(255,255,255,.6);
+    transition:border-color .2s, box-shadow .2s;
+  }
+  .field:focus-within{border-color:var(--rose);box-shadow:0 0 0 4px rgba(232,35,111,.16)}
+  .field svg{flex:none;width:24px;height:24px;stroke:var(--plum);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+  .field input{flex:1;border:0;outline:0;background:transparent;font:600 clamp(15px,1.25vw,18px) 'Nunito',sans-serif;color:var(--ink)}
+  .field input::placeholder{color:#7b4a6a;font-weight:600}
+
+  .cta-wrap{
+    position:relative;width:100%;max-width:360px;margin:24px auto 0;
+  }
+  .cta{
+    width:100%;height:clamp(48px,4.5vw,58px);border:0;border-radius:999px;cursor:pointer;
+    background:linear-gradient(90deg,#f0306f,#c3237e 60%,#8d1a72);color:#fff;
+    font:700 clamp(17px,1.5vw,22px) 'Nunito',sans-serif;display:flex;align-items:center;justify-content:center;gap:12px;
+    box-shadow:0 10px 22px rgba(193,35,110,.35);transition:transform .15s, box-shadow .15s;
+  }
+  .cta:hover{transform:translateY(-2px);box-shadow:0 14px 26px rgba(193,35,110,.42)}
+  .cta:focus-visible{outline:3px solid var(--plum);outline-offset:3px}
+  .cta svg{width:22px;height:22px;stroke:#fff;fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+
+  .burst{
+    position:absolute;top:50%;width:26px;
+    stroke:var(--rose);stroke-width:3;stroke-linecap:round;
+    fill:none !important;pointer-events:none;
+  }
+  .burst.a{left:-36px;transform:translateY(-50%)}
+  .burst.b{right:-36px;transform:translateY(-50%) scaleX(-1)}
+
+  /* ---------- decorations ---------- */
+  .deco{position:absolute;z-index:3;pointer-events:none}
+  .balloon-heart{left:5%;top:12%;width:8%}
+  .balloon-round{left:2%;top:26%;width:7%}
+  .balloon-right{right:2%;top:16%;width:7.5%}
+
+  .gift-l{left:2%;bottom:0;width:9.5%}
+  .gift-r1{right:2%;bottom:0;width:9%}
+  .gift-r2{right:11%;bottom:0;width:8%}
+
+  .cloud{position:absolute;bottom:-70px;border-radius:50%;background:radial-gradient(circle at 40% 30%,#fff3f8,#f7c0d8);filter:blur(3px);z-index:1;opacity:.85}
+  .confetti{position:absolute;z-index:3;width:12px;height:18px;border-radius:3px;opacity:.85;animation:fall 7s ease-in-out infinite alternate}
+  @keyframes fall{from{transform:translateY(0) rotate(var(--r))}to{transform:translateY(16px) rotate(calc(var(--r) + 30deg))}}
+  .flame{transform-origin:50% 100%;animation:flicker 1.4s ease-in-out infinite alternate}
+  @keyframes flicker{from{transform:scale(1,1)}to{transform:scale(.92,1.08) rotate(2deg)}}
+  @media (prefers-reduced-motion:reduce){.confetti,.flame{animation:none}}
+
+  /* ---------- responsive ---------- */
+  @media (max-width:600px){
+    main{padding:75px 16px 20px}
+    .art{max-width:290px;height:155px}
+    .cake{width:160px}
+    .bear{width:110px}
+    .gift-s{width:56px}
+    .spark{display:none}
+    .burst.a{left:-28px}.burst.b{right:-28px}
+  }
+</style>
+</head>
+<body>
+<div class="stage">
+
+  <!-- Realistic Glowing String Lights (Left & Right) -->
+  <svg class="lights l" viewBox="0 0 480 140" preserveAspectRatio="none" aria-hidden="true">
+    <defs>
+      <filter id="bulb-glow" x="-60%" y="-60%" width="220%" height="220%">
+        <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="blur1"/>
+        <feGaussianBlur in="SourceGraphic" stdDeviation="14" result="blur2"/>
+        <feMerge>
+          <feMergeNode in="blur2"/>
+          <feMergeNode in="blur1"/>
+          <feMergeNode in="SourceGraphic"/>
+        </feMerge>
+      </filter>
+      <radialGradient id="haloGrad" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#fff8d6" stop-opacity="0.95"/>
+        <stop offset="35%" stop-color="#ffca3a" stop-opacity="0.65"/>
+        <stop offset="70%" stop-color="#ff9233" stop-opacity="0.25"/>
+        <stop offset="100%" stop-color="#ff7b00" stop-opacity="0"/>
+      </radialGradient>
+      <linearGradient id="wireGrad" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stop-color="#6b4a5d"/>
+        <stop offset="100%" stop-color="#9a6b82"/>
+      </linearGradient>
+    </defs>
+    <!-- Drape wire -->
+    <path d="M0 65 Q130 95 260 55 T480 8" fill="none" stroke="url(#wireGrad)" stroke-width="2.2" stroke-linecap="round"/>
+    
+    <!-- Bulb 1 -->
+    <g transform="translate(35, 74)">
+      <circle cx="0" cy="8" r="22" fill="url(#haloGrad)"/>
+      <rect x="-3" y="0" width="6" height="4" rx="1" fill="#4a3728"/>
+      <ellipse cx="0" cy="10" rx="7" ry="10" fill="#fff7d6" filter="url(#bulb-glow)"/>
+      <ellipse cx="0" cy="10" rx="4.5" ry="7" fill="#ffffff"/>
+    </g>
+    <!-- Bulb 2 -->
+    <g transform="translate(125, 87)">
+      <circle cx="0" cy="8" r="22" fill="url(#haloGrad)"/>
+      <rect x="-3" y="0" width="6" height="4" rx="1" fill="#4a3728"/>
+      <ellipse cx="0" cy="10" rx="7" ry="10" fill="#fff7d6" filter="url(#bulb-glow)"/>
+      <ellipse cx="0" cy="10" rx="4.5" ry="7" fill="#ffffff"/>
+    </g>
+    <!-- Bulb 3 -->
+    <g transform="translate(220, 72)">
+      <circle cx="0" cy="8" r="22" fill="url(#haloGrad)"/>
+      <rect x="-3" y="0" width="6" height="4" rx="1" fill="#4a3728"/>
+      <ellipse cx="0" cy="10" rx="7" ry="10" fill="#fff7d6" filter="url(#bulb-glow)"/>
+      <ellipse cx="0" cy="10" rx="4.5" ry="7" fill="#ffffff"/>
+    </g>
+    <!-- Bulb 4 -->
+    <g transform="translate(315, 48)">
+      <circle cx="0" cy="8" r="22" fill="url(#haloGrad)"/>
+      <rect x="-3" y="0" width="6" height="4" rx="1" fill="#4a3728"/>
+      <ellipse cx="0" cy="10" rx="7" ry="10" fill="#fff7d6" filter="url(#bulb-glow)"/>
+      <ellipse cx="0" cy="10" rx="4.5" ry="7" fill="#ffffff"/>
+    </g>
+    <!-- Bulb 5 -->
+    <g transform="translate(410, 24)">
+      <circle cx="0" cy="8" r="22" fill="url(#haloGrad)"/>
+      <rect x="-3" y="0" width="6" height="4" rx="1" fill="#4a3728"/>
+      <ellipse cx="0" cy="10" rx="7" ry="10" fill="#fff7d6" filter="url(#bulb-glow)"/>
+      <ellipse cx="0" cy="10" rx="4.5" ry="7" fill="#ffffff"/>
+    </g>
+  </svg>
+
+  <svg class="lights r" viewBox="0 0 480 140" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0 65 Q130 95 260 55 T480 8" fill="none" stroke="url(#wireGrad)" stroke-width="2.2" stroke-linecap="round"/>
+    <g transform="translate(35, 74)">
+      <circle cx="0" cy="8" r="22" fill="url(#haloGrad)"/>
+      <rect x="-3" y="0" width="6" height="4" rx="1" fill="#4a3728"/>
+      <ellipse cx="0" cy="10" rx="7" ry="10" fill="#fff7d6" filter="url(#bulb-glow)"/>
+      <ellipse cx="0" cy="10" rx="4.5" ry="7" fill="#ffffff"/>
+    </g>
+    <g transform="translate(125, 87)">
+      <circle cx="0" cy="8" r="22" fill="url(#haloGrad)"/>
+      <rect x="-3" y="0" width="6" height="4" rx="1" fill="#4a3728"/>
+      <ellipse cx="0" cy="10" rx="7" ry="10" fill="#fff7d6" filter="url(#bulb-glow)"/>
+      <ellipse cx="0" cy="10" rx="4.5" ry="7" fill="#ffffff"/>
+    </g>
+    <g transform="translate(220, 72)">
+      <circle cx="0" cy="8" r="22" fill="url(#haloGrad)"/>
+      <rect x="-3" y="0" width="6" height="4" rx="1" fill="#4a3728"/>
+      <ellipse cx="0" cy="10" rx="7" ry="10" fill="#fff7d6" filter="url(#bulb-glow)"/>
+      <ellipse cx="0" cy="10" rx="4.5" ry="7" fill="#ffffff"/>
+    </g>
+    <g transform="translate(315, 48)">
+      <circle cx="0" cy="8" r="22" fill="url(#haloGrad)"/>
+      <rect x="-3" y="0" width="6" height="4" rx="1" fill="#4a3728"/>
+      <ellipse cx="0" cy="10" rx="7" ry="10" fill="#fff7d6" filter="url(#bulb-glow)"/>
+      <ellipse cx="0" cy="10" rx="4.5" ry="7" fill="#ffffff"/>
+    </g>
+    <g transform="translate(410, 24)">
+      <circle cx="0" cy="8" r="22" fill="url(#haloGrad)"/>
+      <rect x="-3" y="0" width="6" height="4" rx="1" fill="#4a3728"/>
+      <ellipse cx="0" cy="10" rx="7" ry="10" fill="#fff7d6" filter="url(#bulb-glow)"/>
+      <ellipse cx="0" cy="10" rx="4.5" ry="7" fill="#ffffff"/>
+    </g>
+  </svg>
+
+  <header>
+    <div class="logo">SayByMe
+      <svg viewBox="0 0 26 24" aria-hidden="true"><path d="M13 22C2 14 1 7 6 3.5c3-2 6 0 7 3 1-3 4-5 7-3 5 3.5 4 10.5-7 18.5z" fill="none" stroke="#e8236f" stroke-width="2.4" stroke-linejoin="round"/></svg>
+    </div>
+    <p class="tag"><i>✦</i>Create • Personalize • Surprise<i>✦</i></p>
+  </header>
+
+  <!-- decorations -->
+  <svg class="deco balloon-heart" viewBox="0 0 120 190" aria-hidden="true">
+    <path d="M60 150C8 112 0 62 26 34c16-17 34-9 34 6 0-15 18-23 34-6 26 28 18 78-34 116z" fill="#e8449a"/>
+    <path d="M26 54c4-14 14-20 24-18" stroke="#fff" stroke-opacity=".5" stroke-width="7" fill="none" stroke-linecap="round"/>
+    <path d="M60 150l-6 10h12z" fill="#d12f84"/>
+  </svg>
+  <svg class="deco balloon-round" viewBox="0 0 120 220" aria-hidden="true">
+    <ellipse cx="60" cy="80" rx="52" ry="68" fill="#f7a8c8"/>
+    <ellipse cx="38" cy="50" rx="12" ry="22" fill="#fff" opacity=".45"/>
+    <path d="M60 148l-6 10h12z" fill="#e88db3"/>
+    <path d="M60 158C60 190 40 200 50 220" stroke="#e7a1bb" stroke-width="2" fill="none"/>
+  </svg>
+  <svg class="deco balloon-right" viewBox="0 0 120 220" aria-hidden="true">
+    <ellipse cx="60" cy="80" rx="56" ry="72" fill="#ee5aa6"/>
+    <ellipse cx="38" cy="48" rx="12" ry="24" fill="#fff" opacity=".4"/>
+    <path d="M60 150l-6 10h12z" fill="#d93f90"/>
+  </svg>
+
+  <svg class="deco gift-l" viewBox="0 0 160 170" aria-hidden="true">
+    <rect x="10" y="60" width="140" height="110" rx="6" fill="#f6a0c4"/>
+    <rect x="68" y="60" width="26" height="110" fill="#e9b867"/>
+    <path d="M80 60C50 20 10 30 30 55c10 10 40 8 50 5zM80 60c30-40 70-30 50-5-10 10-40 8-50 5z" fill="#e9b867"/>
+  </svg>
+  <svg class="deco gift-r1" viewBox="0 0 160 190" aria-hidden="true">
+    <rect x="12" y="70" width="136" height="120" rx="6" fill="#f7b4cf"/>
+    <rect x="66" y="70" width="26" height="120" fill="#e9b867"/>
+    <path d="M80 70C50 28 8 40 28 64c10 10 42 8 52 6zM80 70c30-42 72-30 52-6-10 10-42 8-52 6z" fill="#e9b867"/>
+  </svg>
+  <svg class="deco gift-r2" viewBox="0 0 160 140" aria-hidden="true">
+    <rect x="12" y="40" width="136" height="100" rx="6" fill="#f6a0c4"/>
+    <rect x="66" y="40" width="26" height="100" fill="#e9b867"/>
+    <path d="M80 40C54 6 18 14 34 36c9 9 36 7 46 4zM80 40c26-34 62-26 46-4-9 9-36 7-46 4z" fill="#e9b867"/>
+  </svg>
+
+  <div class="cloud" style="left:-4%;width:24%;height:180px"></div>
+  <div class="cloud" style="left:14%;width:18%;height:140px;bottom:-80px"></div>
+  <div class="cloud" style="left:62%;width:16%;height:130px;bottom:-80px;opacity:.6"></div>
+
+  <!-- confetti -->
+  <span class="confetti" style="--r:20deg;left:24%;top:20%;background:#fbd34d;border-radius:50% 0"></span>
+  <span class="confetti" style="--r:-30deg;left:37%;top:28%;width:12px;height:18px;background:#f45b9a"></span>
+  <span class="confetti" style="--r:40deg;left:43%;top:40%;width:9px;height:9px;background:#f45b9a;animation-delay:-2s"></span>
+  <span class="confetti" style="--r:10deg;left:19%;top:33%;width:8px;height:12px;background:#fbd34d;animation-delay:-3s"></span>
+  <span class="confetti" style="--r:-20deg;left:44%;top:56%;width:8px;height:14px;background:#fbd34d"></span>
+  <span class="confetti" style="--r:25deg;left:95%;top:46%;width:10px;height:16px;background:#fbd34d;animation-delay:-1s"></span>
+  <span class="confetti" style="--r:25deg;left:7%;top:57%;width:11px;height:11px;background:#fbd34d"></span>
+
+  <main>
+    <!-- Reduced artwork placed right on top of the entry -->
+    <div class="art" aria-hidden="true">
+
+      <!-- Cake -->
+      <svg class="cake" viewBox="0 0 440 460">
+        <!-- candles -->
+        <g stroke-linecap="round">
+          <g id="c1"><rect x="108" y="64" width="16" height="108" rx="8" fill="#fff"/><path d="M110 78l12-6M110 104l12-6M110 130l12-6M110 156l12-6" stroke="#f4709f" stroke-width="7"/></g>
+          <g><rect x="170" y="44" width="16" height="128" rx="8" fill="#fff"/><path d="M172 58l12-6M172 84l12-6M172 110l12-6M172 136l12-6" stroke="#f4a63a" stroke-width="7"/></g>
+          <g><rect x="228" y="20" width="18" height="152" rx="9" fill="#fff"/><path d="M230 34l14-6M230 62l14-6M230 90l14-6M230 118l14-6M230 146l14-6" stroke="#f4a63a" stroke-width="7"/></g>
+          <g><rect x="292" y="44" width="16" height="128" rx="8" fill="#fff"/><path d="M294 58l12-6M294 84l12-6M294 110l12-6M294 136l12-6" stroke="#f4a63a" stroke-width="7"/></g>
+          <g><rect x="350" y="64" width="16" height="108" rx="8" fill="#fff"/><path d="M352 78l12-6M352 104l12-6M352 130l12-6M352 156l12-6" stroke="#f4709f" stroke-width="7"/></g>
+        </g>
+        <g class="flame"><path d="M116 36c-14-14-6-26 0-36 8 10 14 22 0 36z" fill="#ffd45a"/><path d="M116 32c-6-8-3-14 0-18 4 6 6 11 0 18z" fill="#fff4c4"/></g>
+        <g class="flame" style="animation-delay:-.3s"><path d="M178 16c-14-14-6-26 0-36 8 10 14 22 0 36z" fill="#ffd45a"/><path d="M178 12c-6-8-3-14 0-18 4 6 6 11 0 18z" fill="#fff4c4"/></g>
+        <g class="flame" style="animation-delay:-.6s"><path d="M237-8C220-26 230-40 237-52c9 12 17 26 0 44z" fill="#ffd45a"/><path d="M237-12c-7-10-4-17 0-22 5 7 7 14 0 22z" fill="#fff4c4"/></g>
+        <g class="flame" style="animation-delay:-.2s"><path d="M300 16c-14-14-6-26 0-36 8 10 14 22 0 36z" fill="#ffd45a"/><path d="M300 12c-6-8-3-14 0-18 4 6 6 11 0 18z" fill="#fff4c4"/></g>
+        <g class="flame" style="animation-delay:-.9s"><path d="M358 36c-14-14-6-26 0-36 8 10 14 22 0 36z" fill="#ffd45a"/><path d="M358 32c-6-8-3-14 0-18 4 6 6 11 0 18z" fill="#fff4c4"/></g>
+        <!-- strawberries -->
+        <ellipse cx="190" cy="180" rx="22" ry="20" fill="#e5342f"/><path d="M178 164l12 8 12-8" stroke="#5aa64a" stroke-width="6" fill="none" stroke-linecap="round"/>
+        <ellipse cx="290" cy="180" rx="22" ry="20" fill="#e5342f"/><path d="M278 164l12 8 12-8" stroke="#5aa64a" stroke-width="6" fill="none" stroke-linecap="round"/>
+        <circle cx="140" cy="188" r="12" fill="#b57ac4"/><circle cx="240" cy="190" r="12" fill="#b57ac4"/><circle cx="330" cy="188" r="11" fill="#e86aa4"/>
+        <!-- plate -->
+        <ellipse cx="220" cy="430" rx="205" ry="30" fill="#fbf0ee"/>
+        <ellipse cx="220" cy="418" rx="190" ry="24" fill="#fff"/>
+        <!-- body -->
+        <path d="M56 230h326v170c0 20-40 28-163 28S56 420 56 400z" fill="#fbd6a0"/>
+        <path d="M56 230h326v50H56z" fill="#fcdeaf"/>
+        <!-- frosting -->
+        <path d="M44 190c0-22 60-30 176-30s176 8 176 30v50c0 28-22 28-30 12-10-22-30-20-38 4-8 22-34 22-42-2-8-24-36-24-44 0-8 26-36 26-44 0-8-24-32-22-42 4-8 24-34 22-40-4-6-20-24-18-32 6-8 22-34 20-44-8z" fill="#fff0e8"/>
+        <!-- ribbon & bow -->
+        <rect x="52" y="330" width="332" height="56" fill="#f7a0c6"/>
+        <path d="M218 350C170 310 120 330 130 360c10 30 70 24 88-10zM218 350C266 310 316 330 306 360c-10 30-70 24-88-10z" fill="#f9b4d2"/>
+        <circle cx="218" cy="352" r="22" fill="#f08cb9"/>
+      </svg>
+
+      <!-- Bear (drawn after the cake so its arm hugs the front of it) -->
+      <svg class="bear" viewBox="0 0 300 420">
+        <defs>
+          <radialGradient id="fur" cx="40%" cy="30%" r="75%"><stop offset="0" stop-color="#fff7e4"/><stop offset="1" stop-color="#f5dcb2"/></radialGradient>
+        </defs>
+        <!-- foot -->
+        <ellipse cx="70" cy="392" rx="58" ry="28" fill="url(#fur)" stroke="#ecd0a0" stroke-width="2"/>
+        <ellipse cx="60" cy="395" rx="30" ry="15" fill="#f6c9c4"/>
+        <!-- body -->
+        <ellipse cx="105" cy="300" rx="92" ry="100" fill="url(#fur)" stroke="#ecd0a0" stroke-width="2"/>
+        <ellipse cx="108" cy="322" rx="50" ry="60" fill="#fff8ea" opacity=".8"/>
+        <!-- ears -->
+        <circle cx="38" cy="122" r="30" fill="#f3d9ae"/><circle cx="41" cy="124" r="17" fill="#f4b7b3"/>
+        <circle cx="172" cy="110" r="30" fill="#f3d9ae"/><circle cx="170" cy="112" r="17" fill="#f4b7b3"/>
+        <!-- head -->
+        <ellipse cx="105" cy="178" rx="88" ry="78" fill="url(#fur)" stroke="#ecd0a0" stroke-width="2" transform="rotate(8 105 178)"/>
+        <!-- face -->
+        <ellipse cx="68" cy="208" rx="17" ry="10" fill="#f6a9a6" opacity=".65"/>
+        <ellipse cx="163" cy="198" rx="17" ry="10" fill="#f6a9a6" opacity=".65"/>
+        <ellipse cx="114" cy="212" rx="41" ry="30" fill="#fff9ec" stroke="#f0dcb8" stroke-width="2"/>
+        <g fill="none" stroke="#4a2a22" stroke-width="5" stroke-linecap="round">
+          <path d="M58 186q15-19 32 0"/><path d="M58 180l-6-5"/>
+          <path d="M130 178q15-19 32 0"/><path d="M164 172l6-5"/>
+          <path d="M114 208v9M114 217q-13 13-26 2M114 217q13 13 26 2" stroke-width="4"/>
+        </g>
+        <ellipse cx="114" cy="198" rx="14" ry="10" fill="#4d2b22"/>
+        <!-- party hat -->
+        <g transform="rotate(-14 90 112)">
+          <path d="M48 120L92 26l42 84z" fill="#f6a6c6"/>
+          <circle cx="92" cy="24" r="14" fill="#f3cf6a"/>
+        </g>
+        <!-- arm hugging the cake -->
+        <ellipse cx="128" cy="314" rx="64" ry="36" fill="url(#fur)" stroke="#ecd0a0" stroke-width="2" transform="rotate(-8 128 314)"/>
+        <ellipse cx="188" cy="308" rx="34" ry="32" fill="url(#fur)" stroke="#ecd0a0" stroke-width="2"/>
+      </svg>
+
+      <!-- Small gift -->
+      <svg class="gift-s" viewBox="0 0 170 200">
+        <rect x="14" y="76" width="146" height="124" rx="6" fill="#f68ca9"/>
+        <rect x="70" y="76" width="30" height="124" fill="#e9b867"/>
+        <rect x="6" y="52" width="162" height="34" rx="6" fill="#f77d9d"/>
+        <rect x="70" y="52" width="30" height="34" fill="#e9b867"/>
+      </svg>
+    </div>
+
+    <!-- Centered panel -->
+    <section class="panel">
+      <h1>
+        <svg class="spark" viewBox="0 0 46 60" aria-hidden="true"><path d="M30 6l4 16M8 30l18 8M6 52l16 2"/></svg>
+        Create a
+        <span class="l2">Birthday Surprise</span>
+        <svg class="heart h1a" viewBox="0 0 60 56" aria-hidden="true"><path d="M30 52C4 34 2 14 16 8c8-3 14 2 14 8 0-6 6-11 14-8 14 6 12 26-14 44z"/></svg>
+        <svg class="heart h1b" viewBox="0 0 60 56" aria-hidden="true"><path d="M30 52C4 34 2 14 16 8c8-3 14 2 14 8 0-6 6-11 14-8 14 6 12 26-14 44z"/></svg>
+        <svg class="heart h1c" viewBox="0 0 60 56" aria-hidden="true"><path d="M30 52C4 34 2 14 16 8c8-3 14 2 14 8 0-6 6-11 14-8 14 6 12 26-14 44z"/></svg>
+      </h1>
+      <svg class="underline" viewBox="0 0 400 16" preserveAspectRatio="none" aria-hidden="true"><path d="M4 12C100 4 250 2 396 6" stroke="#f0306f" stroke-width="5" fill="none" stroke-linecap="round"/></svg>
+
+      <p class="sub">Turn your wishes into a special birthday experience for someone you love.</p>
+
+      <form onsubmit="event.preventDefault(); go();">
+        <label class="field">
+          <svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="11" r="6"/><path d="M5 28c1-7 6-10 11-10s10 3 11 10z"/></svg>
+          <input id="from" type="text" placeholder="Your Name" autocomplete="name" required>
+        </label>
+        <label class="field">
+          <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 28C4 20 3 10 9 6c4-2.500 7 0 7 3.500C16 6 19 3.500 23 6c6 4 5 14-7 22z"/></svg>
+          <input id="to" type="text" placeholder="Birthday Person’s Name" required>
+        </label>
+
+        <div class="cta-wrap">
+          <svg class="burst a" viewBox="0 0 30 30" aria-hidden="true"><path d="M4 22l8-6M12 6l4 8M2 12l9 1"/></svg>
+          <button class="cta" type="submit">Let’s Create Magic
+            <svg viewBox="0 0 28 28" aria-hidden="true"><path d="M4 14h20M16 6l8 8-8 8"/></svg>
+          </button>
+          <svg class="burst b" viewBox="0 0 30 30" aria-hidden="true"><path d="M4 22l8-6M12 6l4 8M2 12l9 1"/></svg>
+        </div>
+      </form>
+    </section>
+  </main>
+</div>
+
+<script>
+  function go(){
+    const from = document.getElementById('from').value.trim();
+    const to = document.getElementById('to').value.trim();
+    console.log({ from, to });
+    window.location.href = 'step2.html?from=' + encodeURIComponent(from) + '&to=' + encodeURIComponent(to);
+  }
+</script>
+</body>
+</html>

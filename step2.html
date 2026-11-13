@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SayByMe – Tell Us About Them 🎂</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kaushan+Script&family=Yellowtail&family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --plum:#7a1646; --rose:#e8236f; --rose-dark:#c2185b; --pink-1:#fde3ee; --pink-2:#f9c9dd;
+    --ink:#3d1630; --text-muted:#7b4a6a; --field:#fff6fa; --border:#f3a9c6;
+    --card-bg:#ffffff;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    font-family:'Nunito',system-ui,sans-serif;color:var(--ink);
+    background:
+      radial-gradient(ellipse at 30% 25%, #fff0f6 0%, transparent 55%),
+      radial-gradient(ellipse at 80% 60%, #fbd3e3 0%, transparent 60%),
+      linear-gradient(160deg,#fde6f0,#f8c6dc);
+    min-height:100vh;overflow-x:hidden;position:relative;
+  }
+
+  .stage{
+    position:relative;min-height:100vh;max-width:1440px;margin:0 auto;
+    overflow:hidden;display:flex;flex-direction:column;
+    padding-bottom:30px;
+  }
+
+  /* ---------- Header with Logo & Stepper ---------- */
+  header{
+    position:relative;width:100%;text-align:center;padding:16px 20px 0;z-index:10;
+  }
+  .logo{
+    font-family:'Yellowtail',cursive;font-size:clamp(28px,2.6vw,40px);
+    color:var(--plum);position:relative;display:inline-block;line-height:1;
+  }
+  .logo svg{position:absolute;right:-24px;top:-6px;width:22px;height:20px}
+  .tag{
+    margin-top:4px;font-size:clamp(11px,0.9vw,14px);font-weight:600;
+    color:var(--ink);letter-spacing:.3px;
+  }
+  .tag i{color:var(--rose);font-style:normal;margin:0 8px;font-size:.8em}
+
+  /* ---------- Stepper Progress Bar ---------- */
+  .stepper-wrap{
+    display:flex;align-items:center;justify-content:center;
+    width:100%;max-width:620px;margin:18px auto 8px;padding:0 12px;
+  }
+  .stepper{
+    display:flex;align-items:center;justify-content:space-between;
+    width:100%;position:relative;list-style:none;
+  }
+  .stepper::before{
+    content:'';position:absolute;top:15px;left:30px;right:30px;height:2px;
+    background:#eec0d3;z-index:1;
+  }
+  .step-progress-active{
+    position:absolute;top:15px;left:30px;width:25%;height:2px;
+    background:var(--rose);z-index:2;
+  }
+  .step-item{
+    position:relative;z-index:3;display:flex;flex-direction:column;align-items:center;
+  }
+  .step-bubble{
+    width:30px;height:30px;border-radius:50%;background:#ffffff;
+    border:2px solid #eec0d3;display:flex;align-items:center;justify-content:center;
+    font-size:12px;font-weight:700;color:#9e788b;
+    box-shadow:0 2px 8px rgba(0,0,0,0.06);transition:all 0.25s ease;
+  }
+  .step-item.done .step-bubble{
+    background:#a01b4e;border-color:#a01b4e;color:#ffffff;
+  }
+  .step-item.active .step-bubble{
+    background:var(--rose);border-color:var(--rose);color:#ffffff;
+    box-shadow:0 0 0 4px rgba(232,35,111,0.22);
+  }
+  .step-label{
+    margin-top:5px;font-size:12px;font-weight:600;color:#8f6d80;
+  }
+  .step-item.active .step-label{
+    color:var(--rose);font-weight:700;
+  }
+  .step-item.done .step-label{
+    color:var(--ink);
+  }
+
+  /* ---------- Glowing String Lights ---------- */
+  .lights{position:absolute;top:0;width:32%;height:130px;z-index:2;pointer-events:none}
+  .lights.l{left:0}.lights.r{right:0;transform:scaleX(-1)}
+
+  /* ---------- Page Heading ---------- */
+  .title-section{
+    text-align:center;margin:10px auto 14px;z-index:5;
+  }
+  .heading-row{
+    display:inline-flex;align-items:center;gap:12px;
+  }
+  .title-dash{
+    width:22px;height:3px;background:var(--rose);border-radius:3px;
+    display:inline-block;
+  }
+  .title-dash.dash-left{transform:rotate(25deg)}
+  .title-dash.dash-right{transform:rotate(-25deg)}
+  
+  h1{
+    font-family:'Kaushan Script',cursive;font-size:clamp(32px,3.4vw,48px);
+    color:#5a1032;font-weight:400;margin:0;line-height:1.15;
+  }
+  .sub{
+    font-size:clamp(13px,1.1vw,16px);color:#5d394e;margin-top:4px;font-weight:600;
+  }
+
+  /* ---------- Main Layout (Artwork Left + Form Right) ---------- */
+  main{
+    position:relative;z-index:5;display:grid;
+    grid-template-columns:1fr 1.25fr;align-items:center;justify-items:center;
+    width:100%;max-width:1160px;margin:0 auto;padding:0 24px;gap:24px;
+  }
+
+  /* Left Art Container */
+  .art-box{
+    position:relative;width:100%;max-width:440px;height:350px;
+    display:flex;align-items:flex-end;justify-content:center;
+  }
+  .art-svg{position:absolute;overflow:visible}
+  
+  .art-cake{
+    left:52%;bottom:10px;width:240px;transform:translateX(-30%);z-index:2;
+  }
+  .art-bear{
+    left:52%;bottom:6px;width:190px;transform:translateX(-95%);z-index:3;
+  }
+  .art-gift{
+    left:52%;bottom:12px;width:85px;transform:translateX(88%);z-index:1;
+  }
+
+  /* Right Form Card */
+  .card{
+    background:var(--card-bg);border-radius:26px;
+    padding:28px 32px 30px;width:100%;max-width:600px;
+    box-shadow:0 14px 34px rgba(232,35,111,0.12), 0 2px 6px rgba(0,0,0,0.03);
+    border:1.5px solid rgba(255,255,255,0.9);
+  }
+
+  .section-header{
+    display:flex;align-items:center;gap:10px;margin-bottom:14px;
+  }
+  .section-header svg{
+    width:22px;height:22px;stroke:var(--rose);stroke-width:2.2;fill:none;
+    stroke-linecap:round;stroke-linejoin:round;
+  }
+  .section-title{
+    font-size:16px;font-weight:700;color:var(--ink);
+  }
+  .section-title .opt{
+    color:var(--rose);font-weight:600;font-size:14px;margin-left:4px;
+  }
+
+  /* Relationship Pills Grid */
+  .pills-grid{
+    display:grid;grid-template-columns:repeat(3, 1fr);gap:10px;margin-bottom:24px;
+  }
+  .pill-option{
+    display:flex;align-items:center;justify-content:center;gap:8px;
+    padding:11px 12px;border-radius:999px;cursor:pointer;
+    border:1.5px solid #f3bfd3;background:#ffffff;color:var(--ink);
+    font-size:13.5px;font-weight:700;transition:all 0.2s ease;
+    user-select:none;box-shadow:0 2px 6px rgba(232,35,111,0.05);
+  }
+  .pill-option:hover{
+    border-color:var(--rose);transform:translateY(-1px);
+    box-shadow:0 4px 10px rgba(232,35,111,0.15);
+  }
+  .pill-option.active{
+    background:linear-gradient(90deg, #f0286b, #d81b60);
+    border-color:transparent;color:#ffffff;
+    box-shadow:0 6px 16px rgba(232,35,111,0.35);
+  }
+  .pill-option svg{
+    width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;
+    flex-shrink:0;
+  }
+  .pill-option.active svg{
+    stroke:#ffffff;
+  }
+
+  /* Date Input Field */
+  .date-field{
+    display:flex;align-items:center;gap:12px;
+    width:100%;height:52px;padding:0 20px;border-radius:999px;
+    background:var(--field);border:1.5px solid var(--border);
+    box-shadow:inset 0 1px 3px rgba(0,0,0,0.04);transition:border-color 0.2s;
+  }
+  .date-field:focus-within{
+    border-color:var(--rose);box-shadow:0 0 0 3px rgba(232,35,111,0.15);
+  }
+  .date-field svg{
+    width:20px;height:20px;stroke:var(--rose);stroke-width:2;fill:none;flex-shrink:0;
+  }
+  .date-field input{
+    flex:1;border:0;outline:0;background:transparent;
+    font-family:'Nunito',sans-serif;font-size:15px;font-weight:600;color:var(--ink);
+  }
+  .date-field input::placeholder{color:#9e738c;font-weight:600}
+
+  /* ---------- Bottom Action Buttons ---------- */
+  .actions-row{
+    display:flex;align-items:center;justify-content:center;gap:16px;
+    width:100%;max-width:580px;margin:22px auto 0;
+  }
+  .btn-back{
+    padding:12px 28px;height:50px;border-radius:999px;cursor:pointer;
+    background:#ffffff;border:1.5px solid #d82b6c;color:#7a1646;
+    font-family:'Nunito',sans-serif;font-size:15px;font-weight:700;
+    display:inline-flex;align-items:center;justify-content:center;gap:8px;
+    box-shadow:0 4px 12px rgba(216,43,108,0.12);text-decoration:none;
+    transition:all 0.2s ease;
+  }
+  .btn-back:hover{
+    background:#fff5f8;transform:translateY(-1px);
+    box-shadow:0 6px 16px rgba(216,43,108,0.2);
+  }
+  .btn-next{
+    flex:1;max-width:340px;height:50px;border-radius:999px;cursor:pointer;
+    background:linear-gradient(90deg, #ff3366, #d81b60 60%, #880e4f);
+    border:0;color:#ffffff;
+    font-family:'Nunito',sans-serif;font-size:16px;font-weight:700;
+    display:inline-flex;align-items:center;justify-content:center;gap:10px;
+    box-shadow:0 10px 22px rgba(216,27,96,0.35);text-decoration:none;
+    transition:all 0.2s ease;
+  }
+  .btn-next:hover{
+    transform:translateY(-2px);box-shadow:0 14px 28px rgba(216,27,96,0.45);
+  }
+
+  /* Ambient corner gifts & balloons */
+  .deco{position:absolute;z-index:2;pointer-events:none}
+  .balloon-left{left:4%;top:20%;width:8.5%}
+  .balloon-right{right:2%;top:24%;width:8.5%}
+  .gift-bl{left:2%;bottom:0;width:9.5%}
+  .gift-br{right:2%;bottom:0;width:9.5%}
+  
+  .flame{transform-origin:50% 100%;animation:flicker 1.4s ease-in-out infinite alternate}
+  @keyframes flicker{from{transform:scale(1,1)}to{transform:scale(.92,1.08) rotate(2deg)}}
+
+  @media(max-width:900px){
+    main{grid-template-columns:1fr;gap:16px;padding:0 16px}
+    .art-box{height:250px;max-width:340px;margin-bottom:8px}
+    .art-cake{width:180px}
+    .art-bear{width:140px}
+    .art-gift{width:65px}
+    .pills-grid{grid-template-columns:repeat(2, 1fr)}
+  }
+</style>
+</head>
+<body>
+<div class="stage">
+
+  <!-- Realistic Glowing String Lights (Left & Right) -->
+  <svg class="lights l" viewBox="0 0 480 140" preserveAspectRatio="none" aria-hidden="true">
+    <defs>
+      <filter id="bulb-glow" x="-60%" y="-60%" width="220%" height="220%">
+        <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="blur1"/>
+        <feGaussianBlur in="SourceGraphic" stdDeviation="14" result="blur2"/>
+        <feMerge>
+          <feMergeNode in="blur2"/>
+          <feMergeNode in="blur1"/>
+          <feMergeNode in="SourceGraphic"/>
+        </feMerge>
+      </filter>
+      <radialGradient id="haloGrad" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#fff8d6" stop-opacity="0.95"/>
+        <stop offset="35%" stop-color="#ffca3a" stop-opacity="0.65"/>
+        <stop offset="70%" stop-color="#ff9233" stop-opacity="0.25"/>
+        <stop offset="100%" stop-color="#ff7b00" stop-opacity="0"/>
+      </radialGradient>
+      <linearGradient id="wireGrad" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stop-color="#6b4a5d"/>
+        <stop offset="100%" stop-color="#9a6b82"/>
+      </linearGradient>
+    </defs>
+    <!-- Drape wire -->
+    <path d="M0 65 Q130 95 260 55 T480 8" fill="none" stroke="url(#wireGrad)" stroke-width="2.2" stroke-linecap="round"/>
+    
+    <!-- Bulb 1 -->
+    <g transform="translate(35, 74)">
+      <circle cx="0" cy="8" r="22" fill="url(#haloGrad)"/>
+      <rect x="-3" y="0" width="6" height="4" rx="1" fill="#4a3728"/>
+      <ellipse cx="0" cy="10" rx="7" ry="10" fill="#fff7d6" filter="url(#bulb-glow)"/>
+      <ellipse cx="0" cy="10" rx="4.5" ry="7" fill="#ffffff"/>
+    </g>
+    <!-- Bulb 2 -->
+    <g transform="translate(125, 87)">
+      <circle cx="0" cy="8" r="22" fill="url(#haloGrad)"/>
+      <rect x="-3" y="0" width="6" height="4" rx="1" fill="#4a3728"/>
+      <ellipse cx="0" cy="10" rx="7" ry="10" fill="#fff7d6" filter="url(#bulb-glow)"/>
+      <ellipse cx="0" cy="10" rx="4.5" ry="7" fill="#ffffff"/>
+    </g>
+    <!-- Bulb 3 -->
+    <g transform="translate(220, 72)">
+      <circle cx="0" cy="8" r="22" fill="url(#haloGrad)"/>
+      <rect x="-3" y="0" width="6" height="4" rx="1" fill="#4a3728"/>
+      <ellipse cx="0" cy="10" rx="7" ry="10" fill="#fff7d6" filter="url(#bulb-glow)"/>
+      <ellipse cx="0" cy="10" rx="4.5" ry="7" fill="#ffffff"/>
+    </g>
+    <!-- Bulb 4 -->
+    <g transform="translate(315, 48)">
+      <circle cx="0" cy="8" r="22" fill="url(#haloGrad)"/>
+      <rect x="-3" y="0" width="6" height="4" rx="1" fill="#4a3728"/>
+      <ellipse cx="0" cy="10" rx="7" ry="10" fill="#fff7d6" filter="url(#bulb-glow)"/>
+      <ellipse cx="0" cy="10" rx="4.5" ry="7" fill="#ffffff"/>
+    </g>
+    <!-- Bulb 5 -->
+    <g transform="translate(410, 24)">
+      <circle cx="0" cy="8" r="22" fill="url(#haloGrad)"/>
+      <rect x="-3" y="0" width="6" height="4" rx="1" fill="#4a3728"/>
+      <ellipse cx="0" cy="10" rx="7" ry="10" fill="#fff7d6" filter="url(#bulb-glow)"/>
+      <ellipse cx="0" cy="10" rx="4.5" ry="7" fill="#ffffff"/>
+    </g>
+  </svg>
+
+  <svg class="lights r" viewBox="0 0 480 140" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0 65 Q130 95 260 55 T480 8" fill="none" stroke="url(#wireGrad)" stroke-width="2.2" stroke-linecap="round"/>
+    <g transform="translate(35, 74)">
+      <circle cx="0" cy="8" r="22" fill="url(#haloGrad)"/>
+      <rect x="-3" y="0" width="6" height="4" rx="1" fill="#4a3728"/>
+      <ellipse cx="0" cy="10" rx="7" ry="10" fill="#fff7d6" filter="url(#bulb-glow)"/>
+      <ellipse cx="0" cy="10" rx="4.5" ry="7" fill="#ffffff"/>
+    </g>
+    <g transform="translate(125, 87)">
+      <circle cx="0" cy="8" r="22" fill="url(#haloGrad)"/>
+      <rect x="-3" y="0" width="6" height="4" rx="1" fill="#4a3728"/>
+      <ellipse cx="0" cy="10" rx="7" ry="10" fill="#fff7d6" filter="url(#bulb-glow)"/>
+      <ellipse cx="0" cy="10" rx="4.5" ry="7" fill="#ffffff"/>
+    </g>
+    <g transform="translate(220, 72)">
+      <circle cx="0" cy="8" r="22" fill="url(#haloGrad)"/>
+      <rect x="-3" y="0" width="6" height="4" rx="1" fill="#4a3728"/>
+      <ellipse cx="0" cy="10" rx="7" ry="10" fill="#fff7d6" filter="url(#bulb-glow)"/>
+      <ellipse cx="0" cy="10" rx="4.5" ry="7" fill="#ffffff"/>
+    </g>
+    <g transform="translate(315, 48)">
+      <circle cx="0" cy="8" r="22" fill="url(#haloGrad)"/>
+      <rect x="-3" y="0" width="6" height="4" rx="1" fill="#4a3728"/>
+      <ellipse cx="0" cy="10" rx="7" ry="10" fill="#fff7d6" filter="url(#bulb-glow)"/>
+      <ellipse cx="0" cy="10" rx="4.5" ry="7" fill="#ffffff"/>
+    </g>
+    <g transform="translate(410, 24)">
+      <circle cx="0" cy="8" r="22" fill="url(#haloGrad)"/>
+      <rect x="-3" y="0" width="6" height="4" rx="1" fill="#4a3728"/>
+      <ellipse cx="0" cy="10" rx="7" ry="10" fill="#fff7d6" filter="url(#bulb-glow)"/>
+      <ellipse cx="0" cy="10" rx="4.5" ry="7" fill="#ffffff"/>
+    </g>
+  </svg>
+
+  <!-- Ambient Balloons & Corner Gifts -->
+  <svg class="deco balloon-left" viewBox="0 0 120 190" aria-hidden="true">
+    <ellipse cx="60" cy="75" rx="54" ry="70" fill="#e8449a"/>
+    <ellipse cx="38" cy="48" rx="12" ry="24" fill="#fff" opacity=".4"/>
+    <path d="M60 145l-6 10h12z" fill="#d12f84"/>
+  </svg>
+  <svg class="deco balloon-right" viewBox="0 0 120 190" aria-hidden="true">
+    <ellipse cx="60" cy="75" rx="54" ry="70" fill="#ee5aa6"/>
+    <ellipse cx="38" cy="48" rx="12" ry="24" fill="#fff" opacity=".4"/>
+    <path d="M60 145l-6 10h12z" fill="#d93f90"/>
+  </svg>
+
+  <svg class="deco gift-bl" viewBox="0 0 160 170" aria-hidden="true">
+    <rect x="10" y="60" width="140" height="110" rx="6" fill="#f6a0c4"/>
+    <rect x="68" y="60" width="26" height="110" fill="#e9b867"/>
+    <path d="M80 60C50 20 10 30 30 55c10 10 40 8 50 5zM80 60c30-40 70-30 50-5-10 10-40 8-50 5z" fill="#e9b867"/>
+  </svg>
+  <svg class="deco gift-br" viewBox="0 0 160 170" aria-hidden="true">
+    <rect x="10" y="60" width="140" height="110" rx="6" fill="#f6a0c4"/>
+    <rect x="68" y="60" width="26" height="110" fill="#e9b867"/>
+    <path d="M80 60C50 20 10 30 30 55c10 10 40 8 50 5zM80 60c30-40 70-30 50-5-10 10-40 8-50 5z" fill="#e9b867"/>
+  </svg>
+
+  <header>
+    <div class="logo">SayByMe
+      <svg viewBox="0 0 26 24" aria-hidden="true"><path d="M13 22C2 14 1 7 6 3.5c3-2 6 0 7 3 1-3 4-5 7-3 5 3.5 4 10.5-7 18.5z" fill="none" stroke="#e8236f" stroke-width="2.4" stroke-linejoin="round"/></svg>
+    </div>
+    <p class="tag"><i>✦</i>Create • Personalize • Surprise<i>✦</i></p>
+
+    <!-- Stepper Navigation -->
+    <div class="stepper-wrap">
+      <ol class="stepper" aria-label="Progress">
+        <div class="step-progress-active"></div>
+        <li class="step-item done">
+          <div class="step-bubble">✓</div>
+          <span class="step-label">Details</span>
+        </li>
+        <li class="step-item active">
+          <div class="step-bubble">2</div>
+          <span class="step-label">About Them</span>
+        </li>
+        <li class="step-item">
+          <div class="step-bubble">3</div>
+          <span class="step-label">Message</span>
+        </li>
+        <li class="step-item">
+          <div class="step-bubble">4</div>
+          <span class="step-label">Customize</span>
+        </li>
+        <li class="step-item">
+          <div class="step-bubble">5</div>
+          <span class="step-label">Review</span>
+        </li>
+      </ol>
+    </div>
+  </header>
+
+  <!-- Title section -->
+  <div class="title-section">
+    <div class="heading-row">
+      <span class="title-dash dash-left"></span>
+      <h1>Tell Us About Them</h1>
+      <span class="title-dash dash-right"></span>
+    </div>
+    <p class="sub">Help us personalize the birthday surprise for them.</p>
+  </div>
+
+  <!-- Main Content Area -->
+  <main>
+    <!-- Left: Artwork (Bear + Cake + Gift) -->
+    <div class="art-box" aria-hidden="true">
+      <!-- Cake -->
+      <svg class="art-svg art-cake" viewBox="0 0 440 460">
+        <!-- candles -->
+        <g stroke-linecap="round">
+          <g><rect x="108" y="64" width="16" height="108" rx="8" fill="#fff"/><path d="M110 78l12-6M110 104l12-6M110 130l12-6M110 156l12-6" stroke="#f4709f" stroke-width="7"/></g>
+          <g><rect x="170" y="44" width="16" height="128" rx="8" fill="#fff"/><path d="M172 58l12-6M172 84l12-6M172 110l12-6M172 136l12-6" stroke="#f4a63a" stroke-width="7"/></g>
+          <g><rect x="228" y="20" width="18" height="152" rx="9" fill="#fff"/><path d="M230 34l14-6M230 62l14-6M230 90l14-6M230 118l14-6M230 146l14-6" stroke="#f4a63a" stroke-width="7"/></g>
+          <g><rect x="292" y="44" width="16" height="128" rx="8" fill="#fff"/><path d="M294 58l12-6M294 84l12-6M294 110l12-6M294 136l12-6" stroke="#f4a63a" stroke-width="7"/></g>
+          <g><rect x="350" y="64" width="16" height="108" rx="8" fill="#fff"/><path d="M352 78l12-6M352 104l12-6M352 130l12-6M352 156l12-6" stroke="#f4709f" stroke-width="7"/></g>
+        </g>
+        <g class="flame"><path d="M116 36c-14-14-6-26 0-36 8 10 14 22 0 36z" fill="#ffd45a"/><path d="M116 32c-6-8-3-14 0-18 4 6 6 11 0 18z" fill="#fff4c4"/></g>
+        <g class="flame" style="animation-delay:-.3s"><path d="M178 16c-14-14-6-26 0-36 8 10 14 22 0 36z" fill="#ffd45a"/><path d="M178 12c-6-8-3-14 0-18 4 6 6 11 0 18z" fill="#fff4c4"/></g>
+        <g class="flame" style="animation-delay:-.6s"><path d="M237-8C220-26 230-40 237-52c9 12 17 26 0 44z" fill="#ffd45a"/><path d="M237-12c-7-10-4-17 0-22 5 7 7 14 0 22z" fill="#fff4c4"/></g>
+        <g class="flame" style="animation-delay:-.2s"><path d="M300 16c-14-14-6-26 0-36 8 10 14 22 0 36z" fill="#ffd45a"/><path d="M300 12c-6-8-3-14 0-18 4 6 6 11 0 18z" fill="#fff4c4"/></g>
+        <g class="flame" style="animation-delay:-.9s"><path d="M358 36c-14-14-6-26 0-36 8 10 14 22 0 36z" fill="#ffd45a"/><path d="M358 32c-6-8-3-14 0-18 4 6 6 11 0 18z" fill="#fff4c4"/></g>
+        <!-- strawberries -->
+        <ellipse cx="190" cy="180" rx="22" ry="20" fill="#e5342f"/><path d="M178 164l12 8 12-8" stroke="#5aa64a" stroke-width="6" fill="none" stroke-linecap="round"/>
+        <ellipse cx="290" cy="180" rx="22" ry="20" fill="#e5342f"/><path d="M278 164l12 8 12-8" stroke="#5aa64a" stroke-width="6" fill="none" stroke-linecap="round"/>
+        <circle cx="140" cy="188" r="12" fill="#b57ac4"/><circle cx="240" cy="190" r="12" fill="#b57ac4"/><circle cx="330" cy="188" r="11" fill="#e86aa4"/>
+        <!-- plate -->
+        <ellipse cx="220" cy="430" rx="205" ry="30" fill="#fbf0ee"/>
+        <ellipse cx="220" cy="418" rx="190" ry="24" fill="#fff"/>
+        <!-- body -->
+        <path d="M56 230h326v170c0 20-40 28-163 28S56 420 56 400z" fill="#fbd6a0"/>
+        <path d="M56 230h326v50H56z" fill="#fcdeaf"/>
+        <!-- frosting -->
+        <path d="M44 190c0-22 60-30 176-30s176 8 176 30v50c0 28-22 28-30 12-10-22-30-20-38 4-8 22-34 22-42-2-8-24-36-24-44 0-8 26-36 26-44 0-8-24-32-22-42 4-8 24-34 22-40-4-6-20-24-18-32 6-8 22-34 20-44-8z" fill="#fff0e8"/>
+        <!-- ribbon & bow -->
+        <rect x="52" y="330" width="332" height="56" fill="#f7a0c6"/>
+        <path d="M218 350C170 310 120 330 130 360c10 30 70 24 88-10zM218 350C266 310 316 330 306 360c-10 30-70 24-88-10z" fill="#f9b4d2"/>
+        <circle cx="218" cy="352" r="22" fill="#f08cb9"/>
+      </svg>
+
+      <!-- Bear holding gift box -->
+      <svg class="art-svg art-bear" viewBox="0 0 300 420">
+        <defs>
+          <radialGradient id="bearFur" cx="40%" cy="30%" r="75%"><stop offset="0" stop-color="#fff7e4"/><stop offset="1" stop-color="#f5dcb2"/></radialGradient>
+        </defs>
+        <!-- foot -->
+        <ellipse cx="70" cy="392" rx="58" ry="28" fill="url(#bearFur)" stroke="#ecd0a0" stroke-width="2"/>
+        <ellipse cx="60" cy="395" rx="30" ry="15" fill="#f6c9c4"/>
+        <!-- body -->
+        <ellipse cx="105" cy="300" rx="92" ry="100" fill="url(#bearFur)" stroke="#ecd0a0" stroke-width="2"/>
+        <ellipse cx="108" cy="322" rx="50" ry="60" fill="#fff8ea" opacity=".8"/>
+        <!-- ears -->
+        <circle cx="38" cy="122" r="30" fill="#f3d9ae"/><circle cx="41" cy="124" r="17" fill="#f4b7b3"/>
+        <circle cx="172" cy="110" r="30" fill="#f3d9ae"/><circle cx="170" cy="112" r="17" fill="#f4b7b3"/>
+        <!-- head -->
+        <ellipse cx="105" cy="178" rx="88" ry="78" fill="url(#bearFur)" stroke="#ecd0a0" stroke-width="2" transform="rotate(8 105 178)"/>
+        <!-- face -->
+        <ellipse cx="68" cy="208" rx="17" ry="10" fill="#f6a9a6" opacity=".65"/>
+        <ellipse cx="163" cy="198" rx="17" ry="10" fill="#f6a9a6" opacity=".65"/>
+        <ellipse cx="114" cy="212" rx="41" ry="30" fill="#fff9ec" stroke="#f0dcb8" stroke-width="2"/>
+        <g fill="none" stroke="#4a2a22" stroke-width="5" stroke-linecap="round">
+          <path d="M58 186q15-19 32 0"/><path d="M58 180l-6-5"/>
+          <path d="M130 178q15-19 32 0"/><path d="M164 172l6-5"/>
+          <path d="M114 208v9M114 217q-13 13-26 2M114 217q13 13 26 2" stroke-width="4"/>
+        </g>
+        <ellipse cx="114" cy="198" rx="14" ry="10" fill="#4d2b22"/>
+        <!-- party hat -->
+        <g transform="rotate(-14 90 112)">
+          <path d="M48 120L92 26l42 84z" fill="#f6a6c6"/>
+          <circle cx="92" cy="24" r="14" fill="#f3cf6a"/>
+        </g>
+        <!-- Pink Gift Box Held by Bear -->
+        <g transform="translate(90, 260)">
+          <rect x="0" y="16" width="94" height="80" rx="6" fill="#f4729b"/>
+          <rect x="36" y="16" width="22" height="80" fill="#f3c86b"/>
+          <rect x="-6" y="0" width="106" height="22" rx="4" fill="#f784a7"/>
+          <rect x="36" y="0" width="22" height="22" fill="#f3c86b"/>
+          <!-- gold bow -->
+          <ellipse cx="36" cy="-4" rx="18" ry="10" fill="#f3c86b" transform="rotate(-25 36 -4)"/>
+          <ellipse cx="58" cy="-4" rx="18" ry="10" fill="#f3c86b" transform="rotate(25 58 -4)"/>
+          <circle cx="47" cy="-2" r="7" fill="#ffd682"/>
+        </g>
+        <!-- Bear paws holding the gift -->
+        <ellipse cx="88" cy="300" rx="22" ry="18" fill="url(#bearFur)" stroke="#ecd0a0" stroke-width="2"/>
+        <ellipse cx="190" cy="300" rx="22" ry="18" fill="url(#bearFur)" stroke="#ecd0a0" stroke-width="2"/>
+      </svg>
+
+      <!-- Small background gift -->
+      <svg class="art-svg art-gift" viewBox="0 0 170 200">
+        <rect x="14" y="76" width="146" height="124" rx="6" fill="#f68ca9"/>
+        <rect x="70" y="76" width="30" height="124" fill="#e9b867"/>
+        <rect x="6" y="52" width="162" height="34" rx="6" fill="#f77d9d"/>
+        <rect x="70" y="52" width="30" height="34" fill="#e9b867"/>
+      </svg>
+    </div>
+
+    <!-- Right: Selection Card -->
+    <div class="card">
+      <!-- Section 1: Relationship -->
+      <div class="section-header">
+        <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        <span class="section-title">Your Relationship with Them</span>
+      </div>
+
+      <div class="pills-grid" id="relationship-pills">
+        <div class="pill-option" data-rel="best-friend">
+          <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+          <span>Best Friend</span>
+        </div>
+        <div class="pill-option active" data-rel="girlfriend">
+          <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+          <span>Girlfriend</span>
+        </div>
+        <div class="pill-option" data-rel="boyfriend">
+          <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+          <span>Boyfriend</span>
+        </div>
+        <div class="pill-option" data-rel="sibling">
+          <svg viewBox="0 0 24 24"><circle cx="8" cy="8" r="4"/><circle cx="16" cy="12" r="3"/><path d="M2 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/></svg>
+          <span>Sibling</span>
+        </div>
+        <div class="pill-option" data-rel="parent">
+          <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          <span>Parent</span>
+        </div>
+        <div class="pill-option" data-rel="special">
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <span>Someone Special</span>
+        </div>
+      </div>
+
+      <!-- Section 2: Birthday Date -->
+      <div class="section-header">
+        <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        <span class="section-title">Their Birthday Date <span class="opt">(Optional)</span></span>
+      </div>
+
+      <div class="date-field">
+        <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        <input type="date" id="bday-date" placeholder="Select Date">
+      </div>
+    </div>
+  </main>
+
+  <!-- Bottom Buttons -->
+  <div class="actions-row">
+    <a href="index.html" class="btn-back">
+      <span>← Back</span>
+    </a>
+    <button id="btn-next" class="btn-next">
+      <span>Next: Write a Message →</span>
+    </button>
+  </div>
+</div>
+
+<script>
+  // Relationship selector logic
+  let selectedRelation = 'girlfriend';
+  const pills = document.querySelectorAll('.pill-option');
+  pills.forEach(pill => {
+    pill.addEventListener('click', () => {
+      pills.forEach(p => p.classList.remove('active'));
+      pill.classList.add('active');
+      selectedRelation = pill.getAttribute('data-rel');
+    });
+  });
+
+  // URL Params preservation
+  const params = new URLSearchParams(window.location.search);
+  const fromName = params.get('from') || '';
+  const toName = params.get('to') || '';
+
+  document.getElementById('btn-next').addEventListener('click', () => {
+    const bdayDate = document.getElementById('bday-date').value;
+    const query = new URLSearchParams({
+      from: fromName,
+      to: toName,
+      rel: selectedRelation,
+      date: bdayDate
+    });
+    // Advance to step 3 / surprise
+    window.location.href = 'step3.html?' + query.toString();
+  });
+</script>
+</body>
+</html>

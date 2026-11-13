@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SayByMe – Birthday Wishes 🎂</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kaushan+Script&family=Yellowtail&family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --plum:#7a1646; --rose:#e8236f; --rose-dark:#c2185b; --pink-1:#fde3ee; --pink-2:#f9c9dd;
+    --ink:#3d1630; --text-muted:#7b4a6a; --field:#fff6fa; --border:#f3a9c6;
+    --card-bg:#ffffff;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    font-family:'Nunito',system-ui,sans-serif;color:var(--ink);
+    background:
+      radial-gradient(ellipse at 30% 25%, #fff0f6 0%, transparent 55%),
+      radial-gradient(ellipse at 80% 60%, #fbd3e3 0%, transparent 60%),
+      linear-gradient(160deg,#fde6f0,#f8c6dc);
+    min-height:100vh;overflow-x:hidden;position:relative;
+  }
+
+  .stage{
+    position:relative;min-height:100vh;max-width:1440px;margin:0 auto;
+    overflow:hidden;display:flex;flex-direction:column;
+    padding-bottom:30px;
+  }
+
+  /* ---------- Header with Logo & Stepper ---------- */
+  header{
+    position:relative;width:100%;text-align:center;padding:16px 20px 0;z-index:10;
+  }
+  .logo{
+    font-family:'Yellowtail',cursive;font-size:clamp(28px,2.6vw,40px);
+    color:var(--plum);position:relative;display:inline-block;line-height:1;
+  }
+  .logo svg{position:absolute;right:-24px;top:-6px;width:22px;height:20px}
+  .tag{
+    margin-top:4px;font-size:clamp(11px,0.9vw,14px);font-weight:600;
+    color:var(--ink);letter-spacing:.3px;
+  }
+  .tag i{color:var(--rose);font-style:normal;margin:0 8px;font-size:.8em}
+
+  /* ---------- Stepper Progress Bar ---------- */
+  .stepper-wrap{
+    display:flex;align-items:center;justify-content:center;
+    width:100%;max-width:620px;margin:18px auto 6px;padding:0 12px;
+  }
+  .stepper{
+    display:flex;align-items:center;justify-content:space-between;
+    width:100%;position:relative;list-style:none;
+  }
+  .stepper::before{
+    content:'';position:absolute;top:15px;left:30px;right:30px;height:2px;
+    background:#eec0d3;z-index:1;
+  }
+  .step-progress-active{
+    position:absolute;top:15px;left:30px;width:50%;height:2px;
+    background:var(--rose);z-index:2;
+  }
+  .step-item{
+    position:relative;z-index:3;display:flex;flex-direction:column;align-items:center;
+  }
+  .step-bubble{
+    width:30px;height:30px;border-radius:50%;background:#ffffff;
+    border:2px solid #eec0d3;display:flex;align-items:center;justify-content:center;
+    font-size:12px;font-weight:700;color:#9e788b;
+    box-shadow:0 2px 8px rgba(0,0,0,0.06);transition:all 0.25s ease;
+  }
+  .step-item.done .step-bubble{
+    background:#a01b4e;border-color:#a01b4e;color:#ffffff;
+  }
+  .step-item.active .step-bubble{
+    background:var(--rose);border-color:var(--rose);color:#ffffff;
+    box-shadow:0 0 0 4px rgba(232,35,111,0.22);
+  }
+  .step-label{
+    margin-top:5px;font-size:12px;font-weight:600;color:#8f6d80;
+  }
+  .step-item.active .step-label{
+    color:var(--rose);font-weight:700;
+  }
+  .step-item.done .step-label{
+    color:var(--ink);
+  }
+
+  /* ---------- Glowing String Lights ---------- */
+  .lights{position:absolute;top:0;width:32%;height:130px;z-index:2;pointer-events:none}
+  .lights.l{left:0}.lights.r{right:0;transform:scaleX(-1)}
+
+  /* ---------- Title Section with Flanking Art ---------- */
+  .header-scene{
+    position:relative;width:100%;max-width:880px;margin:10px auto 12px;
+    display:flex;align-items:center;justify-content:center;z-index:5;
+  }
+
+  .title-content{
+    text-align:center;padding:0 20px;
+  }
+  .title-row{
+    display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  }
+  .quill-icon{
+    width:28px;height:28px;stroke:var(--rose);fill:none;stroke-width:2.4;
+    stroke-linecap:round;stroke-linejoin:round;
+  }
+  h1{
+    font-family:'Kaushan Script',cursive;font-size:clamp(34px,3.8vw,52px);
+    color:#5a1032;font-weight:400;margin:0;line-height:1.15;
+  }
+  .sub{
+    font-size:clamp(13px,1.15vw,16px);color:#5d394e;margin-top:6px;font-weight:600;
+  }
+
+  /* Flanking Bear (Left) & Cake (Right) */
+  .flank-art{position:absolute;bottom:-10px;pointer-events:none;z-index:3}
+  .flank-bear{left:20px;width:130px;height:140px}
+  .flank-cake{right:20px;width:140px;height:140px}
+
+  /* ---------- Main Card with Segmented Tabs ---------- */
+  main{
+    position:relative;z-index:5;width:100%;max-width:820px;margin:0 auto;
+    padding:0 20px;
+  }
+
+  .card-container{
+    background:var(--card-bg);border-radius:28px;
+    box-shadow:0 16px 36px rgba(232,35,111,0.12), 0 2px 8px rgba(0,0,0,0.03);
+    border:1.5px solid rgba(255,255,255,0.9);overflow:hidden;
+    padding:20px 24px 26px;
+  }
+
+  /* Segmented Pill Tabs Header */
+  .tabs-bar{
+    display:flex;align-items:center;justify-content:center;gap:12px;
+    max-width:480px;margin:0 auto 20px;background:#fde9f1;
+    padding:5px;border-radius:999px;border:1px solid #f7c3d7;
+  }
+  .tab-btn{
+    flex:1;display:flex;align-items:center;justify-content:center;gap:8px;
+    padding:10px 18px;border-radius:999px;border:0;background:transparent;
+    font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;
+    color:var(--plum);cursor:pointer;transition:all 0.25s ease;
+  }
+  .tab-btn.active{
+    background:linear-gradient(90deg, #f0286b, #d81b60);
+    color:#ffffff;box-shadow:0 4px 14px rgba(232,35,111,0.35);
+  }
+  .tab-btn svg{
+    width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:2.2;
+    stroke-linecap:round;stroke-linejoin:round;
+  }
+
+  /* Wishes List */
+  .wishes-list{
+    display:flex;flex-direction:column;gap:12px;margin-bottom:20px;
+  }
+  .wish-row{
+    display:flex;align-items:center;justify-content:space-between;gap:16px;
+    padding:14px 20px;border-radius:999px;background:#ffffff;
+    border:1.5px solid #f5c8db;cursor:pointer;
+    transition:all 0.2s ease;user-select:none;
+    box-shadow:0 2px 8px rgba(232,35,111,0.04);
+  }
+  .wish-row:hover{
+    border-color:var(--rose);transform:translateY(-1px);
+    box-shadow:0 4px 12px rgba(232,35,111,0.12);
+  }
+  .wish-row.selected{
+    border-color:var(--rose);background:#fff9fb;
+    box-shadow:0 0 0 2px rgba(232,35,111,0.18), 0 4px 14px rgba(232,35,111,0.1);
+  }
+  .wish-left{
+    display:flex;align-items:center;gap:14px;flex:1;
+  }
+  .radio-circle{
+    width:22px;height:22px;border-radius:50%;border:2px solid #e0b0c6;
+    display:flex;align-items:center;justify-content:center;flex-shrink:0;
+    background:#ffffff;transition:all 0.2s ease;
+  }
+  .wish-row.selected .radio-circle{
+    border-color:var(--rose);background:var(--rose);color:#ffffff;
+  }
+  .radio-check{
+    display:none;width:12px;height:12px;stroke:#ffffff;stroke-width:3;fill:none;
+    stroke-linecap:round;stroke-linejoin:round;
+  }
+  .wish-row.selected .radio-check{display:block}
+
+  .wish-text{
+    font-size:15px;font-weight:600;color:var(--ink);line-height:1.4;
+  }
+  .wish-heart{
+    width:20px;height:20px;stroke:#e8449a;fill:none;stroke-width:2;
+    flex-shrink:0;transition:transform 0.2s ease;
+  }
+  .wish-row:hover .wish-heart{
+    transform:scale(1.15);
+  }
+  .wish-row.selected .wish-heart{
+    fill:#ffeef5;stroke:var(--rose);
+  }
+
+  /* Show More Button */
+  .show-more-wrap{
+    display:flex;justify-content:center;margin-top:6px;
+  }
+  .btn-show-more{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:10px 24px;border-radius:999px;border:1.5px solid #f5bfd5;
+    background:#ffffff;color:var(--plum);font-family:'Nunito',sans-serif;
+    font-size:14px;font-weight:700;cursor:pointer;
+    box-shadow:0 3px 10px rgba(232,35,111,0.08);transition:all 0.2s ease;
+  }
+  .btn-show-more:hover{
+    border-color:var(--rose);background:#fff5f8;transform:translateY(-1px);
+    box-shadow:0 5px 14px rgba(232,35,111,0.15);
+  }
+  .btn-show-more svg{
+    width:16px;height:16px;stroke:var(--rose);fill:none;stroke-width:2.2;
+    stroke-linecap:round;stroke-linejoin:round;
+  }
+
+  /* Custom Write Box View */
+  .custom-write-view{
+    display:none;flex-direction:column;gap:12px;margin-bottom:14px;
+  }
+  .custom-textarea{
+    width:100%;height:140px;padding:16px 20px;border-radius:20px;
+    border:1.5px solid var(--border);background:var(--field);
+    font-family:'Nunito',sans-serif;font-size:15px;font-weight:600;color:var(--ink);
+    outline:none;resize:none;transition:border-color 0.2s;line-height:1.6;
+  }
+  .custom-textarea:focus{
+    border-color:var(--rose);box-shadow:0 0 0 3px rgba(232,35,111,0.15);
+  }
+
+  /* ---------- Bottom Action Buttons ---------- */
+  .actions-row{
+    display:flex;align-items:center;justify-content:center;gap:16px;
+    width:100%;max-width:580px;margin:22px auto 0;
+  }
+  .btn-back{
+    padding:12px 28px;height:50px;border-radius:999px;cursor:pointer;
+    background:#ffffff;border:1.5px solid #d82b6c;color:#7a1646;
+    font-family:'Nunito',sans-serif;font-size:15px;font-weight:700;
+    display:inline-flex;align-items:center;justify-content:center;gap:8px;
+    box-shadow:0 4px 12px rgba(216,43,108,0.12);text-decoration:none;
+    transition:all 0.2s ease;
+  }
+  .btn-back:hover{
+    background:#fff5f8;transform:translateY(-1px);
+    box-shadow:0 6px 16px rgba(216,43,108,0.2);
+  }
+  .btn-next{
+    flex:1;max-width:340px;height:50px;border-radius:999px;cursor:pointer;
+    background:linear-gradient(90deg, #ff3366, #d81b60 60%, #880e4f);
+    border:0;color:#ffffff;
+    font-family:'Nunito',sans-serif;font-size:16px;font-weight:700;
+    display:inline-flex;align-items:center;justify-content:center;gap:10px;
+    box-shadow:0 10px 22px rgba(216,27,96,0.35);text-decoration:none;
+    transition:all 0.2s ease;
+  }
+  .btn-next:hover{
+    transform:translateY(-2px);box-shadow:0 14px 28px rgba(216,27,96,0.45);
+  }
+
+  /* Ambient confetti */
+  .confetti{position:absolute;z-index:3;width:12px;height:18px;border-radius:3px;opacity:.85;animation:fall 7s ease-in-out infinite alternate;pointer-events:none}
+  @keyframes fall{from{transform:translateY(0) rotate(var(--r))}to{transform:translateY(16px) rotate(calc(var(--r) + 30deg))}}
+  .flame{transform-origin:50% 100%;animation:flicker 1.4s ease-in-out infinite alternate}
+  @keyframes flicker{from{transform:scale(1,1)}to{transform:scale(.92,1.08) rotate(2deg)}}
+
+  @media(max-width:768px){
+    .flank-bear, .flank-cake{display:none}
+    .wish-row{border-radius:24px;padding:12px 16px}
+    .wish-text{font-size:14px}
+  }
+</style>
+</head>
+<body>
+<div class="stage">
+
+  <!-- Realistic Glowing String Lights (Left & Right) -->
+  <svg class="lights l" viewBox="0 0 480 140" preserveAspectRatio="none" aria-hidden="true">
+    <defs>
+      <filter id="bulb-glow" x="-60%" y="-60%" width="220%" height="220%">
+        <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="blur1"/>
+        <feGaussianBlur in="SourceGraphic" stdDeviation="14" result="blur2"/>
+        <feMerge>
+          <feMergeNode in="blur2"/>
+          <feMergeNode in="blur1"/>
+          <feMergeNode in="SourceGraphic"/>
+        </feMerge>
+      </filter>
+      <radialGradient id="haloGrad" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#fff8d6" stop-opacity="0.95"/>
+        <stop offset="35%" stop-color="#ffca3a" stop-opacity="0.65"/>
+        <stop offset="70%" stop-color="#ff9233" stop-opacity="0.25"/>
+        <stop offset="100%" stop-color="#ff7b00" stop-opacity="0"/>
+      </radialGradient>
+      <linearGradient id="wireGrad" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stop-color="#6b4a5d"/>
+        <stop offset="100%" stop-color="#9a6b82"/>
+      </linearGradient>
+    </defs>
+    <path d="M0 65 Q130 95 260 55 T480 8" fill="none" stroke="url(#wireGrad)" stroke-width="2.2" stroke-linecap="round"/>
+    
+    <g transform="translate(35, 74)">
+      <circle cx="0" cy="8" r="22" fill="url(#haloGrad)"/>
+      <rect x="-3" y="0" width="6" height="4" rx="1" fill="#4a3728"/>
+      <ellipse cx="0" cy="10" rx="7" ry="10" fill="#fff7d6" filter="url(#bulb-glow)"/>
+      <ellipse cx="0" cy="10" rx="4.5" ry="7" fill="#ffffff"/>
+    </g>
+    <g transform="translate(125, 87)">
+      <circle cx="0" cy="8" r="22" fill="url(#haloGrad)"/>
+      <rect x="-3" y="0" width="6" height="4" rx="1" fill="#4a3728"/>
+      <ellipse cx="0" cy="10" rx="7" ry="10" fill="#fff7d6" filter="url(#bulb-glow)"/>
+      <ellipse cx="0" cy="10" rx="4.5" ry="7" fill="#ffffff"/>
+    </g>
+    <g transform="translate(220, 72)">
+      <circle cx="0" cy="8" r="22" fill="url(#haloGrad)"/>
+      <rect x="-3" y="0" width="6" height="4" rx="1" fill="#4a3728"/>
+      <ellipse cx="0" cy="10" rx="7" ry="10" fill="#fff7d6" filter="url(#bulb-glow)"/>
+      <ellipse cx="0" cy="10" rx="4.5" ry="7" fill="#ffffff"/>
+    </g>
+    <g transform="translate(315, 48)">
+      <circle cx="0" cy="8" r="22" fill="url(#haloGrad)"/>
+      <rect x="-3" y="0" width="6" height="4" rx="1" fill="#4a3728"/>
+      <ellipse cx="0" cy="10" rx="7" ry="10" fill="#fff7d6" filter="url(#bulb-glow)"/>
+      <ellipse cx="0" cy="10" rx="4.5" ry="7" fill="#ffffff"/>
+    </g>
+    <g transform="translate(410, 24)">
+      <circle cx="0" cy="8" r="22" fill="url(#haloGrad)"/>
+      <rect x="-3" y="0" width="6" height="4" rx="1" fill="#4a3728"/>
+      <ellipse cx="0" cy="10" rx="7" ry="10" fill="#fff7d6" filter="url(#bulb-glow)"/>
+      <ellipse cx="0" cy="10" rx="4.5" ry="7" fill="#ffffff"/>
+    </g>
+  </svg>
+
+  <svg class="lights r" viewBox="0 0 480 140" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0 65 Q130 95 260 55 T480 8" fill="none" stroke="url(#wireGrad)" stroke-width="2.2" stroke-linecap="round"/>
+    <g transform="translate(35, 74)">
+      <circle cx="0" cy="8" r="22" fill="url(#haloGrad)"/>
+      <rect x="-3" y="0" width="6" height="4" rx="1" fill="#4a3728"/>
+      <ellipse cx="0" cy="10" rx="7" ry="10" fill="#fff7d6" filter="url(#bulb-glow)"/>
+      <ellipse cx="0" cy="10" rx="4.5" ry="7" fill="#ffffff"/>
+    </g>
+    <g transform="translate(125, 87)">
+      <circle cx="0" cy="8" r="22" fill="url(#haloGrad)"/>
+      <rect x="-3" y="0" width="6" height="4" rx="1" fill="#4a3728"/>
+      <ellipse cx="0" cy="10" rx="7" ry="10" fill="#fff7d6" filter="url(#bulb-glow)"/>
+      <ellipse cx="0" cy="10" rx="4.5" ry="7" fill="#ffffff"/>
+    </g>
+    <g transform="translate(220, 72)">
+      <circle cx="0" cy="8" r="22" fill="url(#haloGrad)"/>
+      <rect x="-3" y="0" width="6" height="4" rx="1" fill="#4a3728"/>
+      <ellipse cx="0" cy="10" rx="7" ry="10" fill="#fff7d6" filter="url(#bulb-glow)"/>
+      <ellipse cx="0" cy="10" rx="4.5" ry="7" fill="#ffffff"/>
+    </g>
+    <g transform="translate(315, 48)">
+      <circle cx="0" cy="8" r="22" fill="url(#haloGrad)"/>
+      <rect x="-3" y="0" width="6" height="4" rx="1" fill="#4a3728"/>
+      <ellipse cx="0" cy="10" rx="7" ry="10" fill="#fff7d6" filter="url(#bulb-glow)"/>
+      <ellipse cx="0" cy="10" rx="4.5" ry="7" fill="#ffffff"/>
+    </g>
+    <g transform="translate(410, 24)">
+      <circle cx="0" cy="8" r="22" fill="url(#haloGrad)"/>
+      <rect x="-3" y="0" width="6" height="4" rx="1" fill="#4a3728"/>
+      <ellipse cx="0" cy="10" rx="7" ry="10" fill="#fff7d6" filter="url(#bulb-glow)"/>
+      <ellipse cx="0" cy="10" rx="4.5" ry="7" fill="#ffffff"/>
+    </g>
+  </svg>
+
+  <!-- Confetti decor -->
+  <span class="confetti" style="--r:20deg;left:8%;top:12%;background:#fbd34d;border-radius:50% 0"></span>
+  <span class="confetti" style="--r:-30deg;left:18%;top:16%;width:12px;height:18px;background:#f45b9a"></span>
+  <span class="confetti" style="--r:40deg;left:89%;top:12%;width:9px;height:9px;background:#fbd34d"></span>
+  <span class="confetti" style="--r:25deg;left:95%;top:18%;width:10px;height:16px;background:#f45b9a"></span>
+
+  <header>
+    <div class="logo">SayByMe
+      <svg viewBox="0 0 26 24" aria-hidden="true"><path d="M13 22C2 14 1 7 6 3.5c3-2 6 0 7 3 1-3 4-5 7-3 5 3.5 4 10.5-7 18.5z" fill="none" stroke="#e8236f" stroke-width="2.4" stroke-linejoin="round"/></svg>
+    </div>
+    <p class="tag"><i>✦</i>Create • Personalize • Surprise<i>✦</i></p>
+
+    <!-- Stepper Navigation (Step 3 active) -->
+    <div class="stepper-wrap">
+      <ol class="stepper" aria-label="Progress">
+        <div class="step-progress-active"></div>
+        <li class="step-item done">
+          <div class="step-bubble">✓</div>
+          <span class="step-label">Details</span>
+        </li>
+        <li class="step-item done">
+          <div class="step-bubble">✓</div>
+          <span class="step-label">Relationship</span>
+        </li>
+        <li class="step-item active">
+          <div class="step-bubble">3</div>
+          <span class="step-label">Wishes</span>
+        </li>
+        <li class="step-item">
+          <div class="step-bubble">4</div>
+          <span class="step-label">Customize</span>
+        </li>
+        <li class="step-item">
+          <div class="step-bubble">5</div>
+          <span class="step-label">Review</span>
+        </li>
+      </ol>
+    </div>
+  </header>
+
+  <!-- Header Scene with Title + Flanking Bear & Cake -->
+  <div class="header-scene">
+    <!-- Flanking Bear (Left) -->
+    <svg class="flank-art flank-bear" viewBox="0 0 300 420" aria-hidden="true">
+      <defs>
+        <radialGradient id="bearFur3" cx="40%" cy="30%" r="75%"><stop offset="0" stop-color="#fff7e4"/><stop offset="1" stop-color="#f5dcb2"/></radialGradient>
+      </defs>
+      <ellipse cx="105" cy="300" rx="92" ry="100" fill="url(#bearFur3)" stroke="#ecd0a0" stroke-width="2"/>
+      <ellipse cx="38" cy="122" r="30" fill="#f3d9ae"/><circle cx="41" cy="124" r="17" fill="#f4b7b3"/>
+      <ellipse cx="172" cy="110" r="30" fill="#f3d9ae"/><circle cx="170" cy="112" r="17" fill="#f4b7b3"/>
+      <ellipse cx="105" cy="178" rx="88" ry="78" fill="url(#bearFur3)" stroke="#ecd0a0" stroke-width="2"/>
+      <ellipse cx="68" cy="208" rx="17" ry="10" fill="#f6a9a6" opacity=".65"/>
+      <ellipse cx="163" cy="198" rx="17" ry="10" fill="#f6a9a6" opacity=".65"/>
+      <ellipse cx="114" cy="212" rx="41" ry="30" fill="#fff9ec" stroke="#f0dcb8" stroke-width="2"/>
+      <g fill="none" stroke="#4a2a22" stroke-width="4.5" stroke-linecap="round">
+        <path d="M58 186q15-19 32 0M130 178q15-19 32 0M114 208v8M114 216q-12 12-24 2M114 216q12 12 24 2"/>
+      </g>
+      <ellipse cx="114" cy="198" rx="14" ry="10" fill="#4d2b22"/>
+      <!-- Party hat -->
+      <g transform="rotate(-14 90 112)">
+        <path d="M48 120L92 26l42 84z" fill="#f6a6c6"/>
+        <circle cx="92" cy="24" r="14" fill="#f3cf6a"/>
+      </g>
+      <!-- Heart held by bear -->
+      <path d="M110 240 C90 220 50 230 65 270 C80 300 110 330 110 330 C110 330 140 300 155 270 C170 230 130 220 110 240 Z" fill="#f0447a"/>
+      <!-- Bear paws -->
+      <ellipse cx="60" cy="290" rx="20" ry="16" fill="url(#bearFur3)" stroke="#ecd0a0" stroke-width="2"/>
+      <ellipse cx="155" cy="290" rx="20" ry="16" fill="url(#bearFur3)" stroke="#ecd0a0" stroke-width="2"/>
+      <!-- Gift box next to bear -->
+      <rect x="-10" y="270" width="60" height="55" rx="5" fill="#f4729b"/>
+      <rect x="14" y="270" width="12" height="55" fill="#f3c86b"/>
+      <rect x="-14" y="260" width="68" height="15" rx="3" fill="#f784a7"/>
+      <circle cx="20" cy="256" r="6" fill="#ffd682"/>
+    </svg>
+
+    <!-- Center Titles -->
+    <div class="title-content">
+      <div class="title-row">
+        <svg class="quill-icon" viewBox="0 0 24 24"><path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"/><line x1="16" y1="8" x2="2" y2="22"/><line x1="17.5" y1="15" x2="9" y2="15"/></svg>
+        <h1>Birthday Wishes</h1>
+      </div>
+      <p class="sub">Pick a wish from our recommendations or write your own from the heart. 💕</p>
+    </div>
+
+    <!-- Flanking Cake (Right) -->
+    <svg class="flank-art flank-cake" viewBox="0 0 440 460" aria-hidden="true">
+      <!-- 3 Candles -->
+      <g stroke-linecap="round">
+        <rect x="180" y="60" width="14" height="110" rx="7" fill="#fff"/><path d="M182 74l10-5M182 98l10-5M182 122l10-5" stroke="#f4709f" stroke-width="6"/>
+        <rect x="230" y="40" width="16" height="130" rx="8" fill="#fff"/><path d="M232 54l12-6M232 80l12-6M232 106l12-6" stroke="#f4a63a" stroke-width="6"/>
+        <rect x="280" y="60" width="14" height="110" rx="7" fill="#fff"/><path d="M282 74l10-5M282 98l10-5M282 122l10-5" stroke="#f4709f" stroke-width="6"/>
+      </g>
+      <g class="flame"><path d="M187 36c-12-12-5-24 0-32 7 9 12 20 0 32z" fill="#ffd45a"/></g>
+      <g class="flame" style="animation-delay:-.4s"><path d="M238 16c-14-14-6-26 0-36 8 10 14 22 0 36z" fill="#ffd45a"/></g>
+      <g class="flame" style="animation-delay:-.8s"><path d="M287 36c-12-12-5-24 0-32 7 9 12 20 0 32z" fill="#ffd45a"/></g>
+      <!-- Cake body & frosting -->
+      <ellipse cx="235" cy="420" rx="180" ry="26" fill="#fbf0ee"/>
+      <path d="M80 230h310v160c0 20-38 26-155 26S80 410 80 390z" fill="#fbd6a0"/>
+      <path d="M70 190c0-20 54-28 165-28s165 8 165 28v45c0 26-20 26-28 10-8-20-28-18-36 4-8 20-30 20-38-2-8-22-34-22-42 0-8 24-34 24-42 0-8-22-30-20-38 4-8 22-32 20-38-4-6-18-22-16-30 6-8 20-32 18-40-8z" fill="#fff0e8"/>
+      <rect x="76" y="320" width="318" height="50" fill="#f7a0c6"/>
+      <!-- Gift box next to cake -->
+      <rect x="360" y="280" width="70" height="65" rx="6" fill="#f4729b"/>
+      <rect x="390" y="280" width="14" height="65" fill="#f3c86b"/>
+      <rect x="355" y="268" width="80" height="18" rx="4" fill="#f784a7"/>
+      <circle cx="397" cy="264" r="7" fill="#ffd682"/>
+    </svg>
+  </div>
+
+  <!-- Main Card with Segmented Tabs -->
+  <main>
+    <div class="card-container">
+      <!-- Tabs Bar -->
+      <div class="tabs-bar">
+        <button id="tab-recommended" class="tab-btn active">
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <span>Recommended Wishes</span>
+        </button>
+        <button id="tab-custom" class="tab-btn">
+          <svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+          <span>Write Your Own</span>
+        </button>
+      </div>
+
+      <!-- Recommended Wishes View -->
+      <div id="view-recommended">
+        <div class="wishes-list" id="wishes-list">
+          <!-- Row 1 -->
+          <div class="wish-row selected" data-msg="You make ordinary days feel like celebrations.">
+            <div class="wish-left">
+              <div class="radio-circle">
+                <svg class="radio-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+              </div>
+              <span class="wish-text">You make ordinary days feel like celebrations.</span>
+            </div>
+            <svg class="wish-heart" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+          </div>
+
+          <!-- Row 2 -->
+          <div class="wish-row" data-msg="“Lucky” isn’t a big enough word, but it’s the one I’ve got.">
+            <div class="wish-left">
+              <div class="radio-circle">
+                <svg class="radio-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+              </div>
+              <span class="wish-text">“Lucky” isn’t a big enough word, but it’s the one I’ve got.</span>
+            </div>
+            <svg class="wish-heart" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+          </div>
+
+          <!-- Row 3 -->
+          <div class="wish-row" data-msg="Here’s to you — and to every year I get to keep you.">
+            <div class="wish-left">
+              <div class="radio-circle">
+                <svg class="radio-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+              </div>
+              <span class="wish-text">Here’s to you — and to every year I get to keep you.</span>
+            </div>
+            <svg class="wish-heart" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+          </div>
+
+          <!-- Row 4 -->
+          <div class="wish-row" data-msg="Happy birthday to my person. 🤍">
+            <div class="wish-left">
+              <div class="radio-circle">
+                <svg class="radio-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+              </div>
+              <span class="wish-text">Happy birthday to my person. 🤍</span>
+            </div>
+            <svg class="wish-heart" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+          </div>
+        </div>
+
+        <!-- Show More Button -->
+        <div class="show-more-wrap">
+          <button id="btn-show-more" class="btn-show-more" type="button">
+            <svg viewBox="0 0 24 24"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/><line x1="4" y1="4" x2="9" y2="9"/></svg>
+            <span>Show More Wishes</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Write Your Own View -->
+      <div id="view-custom" class="custom-write-view">
+        <textarea id="custom-msg" class="custom-textarea" placeholder="Write your heartfelt birthday message here... Let them know how truly special they are to you. 💕"></textarea>
+      </div>
+    </div>
+  </main>
+
+  <!-- Bottom Buttons -->
+  <div class="actions-row">
+    <a id="btn-back" href="step2.html" class="btn-back">
+      <span>← Back</span>
+    </a>
+    <button id="btn-next" class="btn-next">
+      <span>Next: Customize Surprise →</span>
+    </button>
+  </div>
+</div>
+
+<script>
+  // Wishes Pool for Shuffle
+  const WISH_SETS = [
+    [
+      "You make ordinary days feel like celebrations.",
+      "“Lucky” isn’t a big enough word, but it’s the one I’ve got.",
+      "Here’s to you — and to every year I get to keep you.",
+      "Happy birthday to my person. 🤍"
+    ],
+    [
+      "May your day be as radiant and magical as you make my life.",
+      "Another year more charming, wiser, and more loved than ever.",
+      "I hope your birthday cake is half as sweet as you are.",
+      "To the one who holds my heart: Happy Birthday! 💖"
+    ],
+    [
+      "Every moment with you is a gift I cherish deeply.",
+      "Wishing you 365 days of laughter, dreams fulfilled, and endless joy.",
+      "You deserve the universe today and every single day after.",
+      "Thank you for being my constant sunshine. Happy Birthday! ☀️"
+    ]
+  ];
+
+  let currentSetIdx = 0;
+  let selectedWish = "You make ordinary days feel like celebrations.";
+  let isCustom = false;
+
+  // URL Params preservation
+  const params = new URLSearchParams(window.location.search);
+  const fromName = params.get('from') || '';
+  const toName = params.get('to') || '';
+  const rel = params.get('rel') || '';
+  const date = params.get('date') || '';
+
+  // Setup Back link preserving queries
+  document.getElementById('btn-back').href = `step2.html?from=${encodeURIComponent(fromName)}&to=${encodeURIComponent(toName)}&rel=${encodeURIComponent(rel)}&date=${encodeURIComponent(date)}`;
+
+  // Tab switching
+  const tabRec = document.getElementById('tab-recommended');
+  const tabCust = document.getElementById('tab-custom');
+  const viewRec = document.getElementById('view-recommended');
+  const viewCust = document.getElementById('view-custom');
+
+  tabRec.addEventListener('click', () => {
+    tabRec.classList.add('active');
+    tabCust.classList.remove('active');
+    viewRec.style.display = 'block';
+    viewCust.style.display = 'none';
+    isCustom = false;
+  });
+
+  tabCust.addEventListener('click', () => {
+    tabCust.classList.add('active');
+    tabRec.classList.remove('active');
+    viewRec.style.display = 'none';
+    viewCust.style.display = 'flex';
+    isCustom = true;
+    document.getElementById('custom-msg').focus();
+  });
+
+  // Attach click to wish rows
+  function bindWishRows() {
+    const rows = document.querySelectorAll('.wish-row');
+    rows.forEach(row => {
+      row.addEventListener('click', () => {
+        rows.forEach(r => r.classList.remove('selected'));
+        row.classList.add('selected');
+        selectedWish = row.getAttribute('data-msg');
+      });
+    });
+  }
+  bindWishRows();
+
+  // Show More Wishes (Shuffle)
+  document.getElementById('btn-show-more').addEventListener('click', () => {
+    currentSetIdx = (currentSetIdx + 1) % WISH_SETS.length;
+    const set = WISH_SETS[currentSetIdx];
+    const listEl = document.getElementById('wishes-list');
+    
+    listEl.innerHTML = set.map((w, i) => `
+      <div class="wish-row ${i === 0 ? 'selected' : ''}" data-msg="${w.replace(/"/g, '&quot;')}">
+        <div class="wish-left">
+          <div class="radio-circle">
+            <svg class="radio-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <span class="wish-text">${w}</span>
+        </div>
+        <svg class="wish-heart" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+      </div>
+    `).join('');
+
+    selectedWish = set[0];
+    bindWishRows();
+  });
+
+  // Next Button
+  document.getElementById('btn-next').addEventListener('click', () => {
+    let finalMessage = selectedWish;
+    if (isCustom) {
+      const customVal = document.getElementById('custom-msg').value.trim();
+      if (customVal) finalMessage = customVal;
+    }
+
+    const query = new URLSearchParams({
+      from: fromName,
+      to: toName,
+      rel: rel,
+      date: date,
+      msg: finalMessage
+    });
+
+    window.location.href = 'step4.html?' + query.toString();
+  });
+</script>
+</body>
+</html>

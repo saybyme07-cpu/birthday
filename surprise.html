@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>SayByMe – A Magical Birthday Surprise 🎉🎂</title>
+  <meta name="description" content="A magical, interactive birthday surprise experience created with SayByMe.">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Fredoka:wght@500;600;700&family=Kaushan+Script&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Canvas Confetti & Particle Layer -->
+  <canvas id="confetti-canvas"></canvas>
+
+  <!-- Ambient Sound Control -->
+  <div class="audio-control-bar">
+    <button id="music-toggle-btn" class="pill-btn glass" aria-label="Toggle Birthday Melody">
+      <span class="music-icon">🎵</span>
+      <span class="music-text">Play Birthday Melody</span>
+    </button>
+    <button id="customize-btn" class="pill-btn glass" aria-label="Personalize Surprise">
+      <span>✨ Personalize</span>
+    </button>
+  </div>
+
+  <!-- Floating Atmosphere Elements -->
+  <div class="sky-elements" id="sky-elements" aria-hidden="true">
+    <div class="cloud c1"></div>
+    <div class="cloud c2"></div>
+    <div class="cloud c3"></div>
+  </div>
+
+  <!-- Interactive Floating Balloons Container -->
+  <div id="balloons-container" class="balloons-area"></div>
+
+  <!-- Main Container -->
+  <main class="main-wrapper">
+    <!-- Branding Header -->
+    <header class="saybyme-nav">
+      <div class="brand-badge">
+        <span class="brand-sparkle">✨</span>
+        <span class="brand-name">SayByMe</span>
+        <span class="brand-tag">Birthday Edition</span>
+      </div>
+    </header>
+
+    <!-- SECTION 1: Welcoming Hero -->
+    <section id="step-welcome" class="stage-card active">
+      <div class="card-inner">
+        <div class="hero-badge">Special Delivery 💌</div>
+        <h1 class="hero-title">Happy Birthday, <span class="highlight-name recipient-name">Celebrant</span>!</h1>
+        <p class="hero-subtitle">
+          Someone who loves you dearly prepared a little world of smiles, sweet wishes, and magical surprises just for you today.
+        </p>
+
+        <div class="interactive-prompt-card">
+          <div class="sparkle-circle">
+            <span class="big-emoji">🎈</span>
+          </div>
+          <p class="prompt-text">Tap any floating balloon above to pop a secret wish!</p>
+        </div>
+
+        <div class="action-row">
+          <button id="btn-start-surprise" class="btn-primary glow-pulse">
+            <span>Open Birthday Surprise</span>
+            <span class="btn-arrow">🎁 →</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 2: The Interactive Cake & Candle Blow -->
+    <section id="step-cake" class="stage-card">
+      <div class="card-inner text-center">
+        <span class="step-indicator">Step 1 of 3</span>
+        <h2 class="section-title">Make a Wish & Blow the Candles! 🎂</h2>
+        <p class="section-desc">Close your eyes, think of the happiest wish in your heart, and tap the candles to blow them out!</p>
+
+        <!-- Interactive 3D CSS Birthday Cake -->
+        <div class="cake-container" id="cake-box">
+          <div class="candles-rack" id="candles-rack">
+            <!-- Candle 1 -->
+            <div class="candle" data-lit="true">
+              <div class="flame"><div class="flame-inner"></div></div>
+              <div class="wick"></div>
+              <div class="wax"></div>
+            </div>
+            <!-- Candle 2 (Center) -->
+            <div class="candle" data-lit="true">
+              <div class="flame"><div class="flame-inner"></div></div>
+              <div class="wick"></div>
+              <div class="wax"></div>
+            </div>
+            <!-- Candle 3 -->
+            <div class="candle" data-lit="true">
+              <div class="flame"><div class="flame-inner"></div></div>
+              <div class="wick"></div>
+              <div class="wax"></div>
+            </div>
+          </div>
+
+          <div class="cake">
+            <div class="cake-tier top-tier">
+              <div class="icing">
+                <span class="drip d1"></span>
+                <span class="drip d2"></span>
+                <span class="drip d3"></span>
+                <span class="drip d4"></span>
+                <span class="drip d5"></span>
+              </div>
+              <div class="sprinkles"></div>
+            </div>
+            <div class="cake-tier middle-tier">
+              <div class="icing"></div>
+              <div class="sprinkles"></div>
+            </div>
+            <div class="cake-tier bottom-tier">
+              <div class="icing"></div>
+              <div class="sprinkles"></div>
+            </div>
+            <div class="cake-plate"></div>
+          </div>
+        </div>
+
+        <div class="cake-status-box" id="cake-status">
+          <p id="cake-instruction" class="badge-instruction">Tap the flames to blow them out! ✨</p>
+          <button id="blow-all-btn" class="btn-secondary">💨 Blow All Together</button>
+        </div>
+
+        <div id="cake-success-actions" class="hidden-fade">
+          <p class="wish-granted-banner">✨ Your wish has been sent to the universe! ✨</p>
+          <button id="btn-next-gift" class="btn-primary">
+            <span>Unwrap Your Birthday Gift</span>
+            <span class="btn-arrow">🎁 →</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 3: The Mystery Gift Box Unboxing -->
+    <section id="step-gift" class="stage-card">
+      <div class="card-inner text-center">
+        <span class="step-indicator">Step 2 of 3</span>
+        <h2 class="section-title">An Unboxing For You 🎀</h2>
+        <p class="section-desc">Tap the golden gift box to untie the ribbon and see what's inside!</p>
+
+        <div class="gift-box-wrapper" id="gift-box">
+          <div class="gift-lid" id="gift-lid">
+            <div class="gift-bow">
+              <div class="bow-left"></div>
+              <div class="bow-right"></div>
+              <div class="bow-knot"></div>
+            </div>
+            <div class="ribbon-vertical"></div>
+          </div>
+          <div class="gift-body">
+            <div class="ribbon-vertical"></div>
+            <div class="ribbon-horizontal"></div>
+            <div class="gift-sparkles">🌟</div>
+          </div>
+        </div>
+
+        <p id="gift-prompt" class="badge-instruction">Click the gift box to open!</p>
+      </div>
+    </section>
+
+    <!-- SECTION 4: The Heartfelt Birthday Letter & Polaroids -->
+    <section id="step-letter" class="stage-card">
+      <div class="card-inner">
+        <span class="step-indicator">Step 3 of 3</span>
+        <div class="letter-paper">
+          <div class="letter-stamp">
+            <span>🎂 SayByMe</span>
+            <small>Express Love</small>
+          </div>
+
+          <h2 class="letter-greeting">Dearest <span class="recipient-name">Celebrant</span>,</h2>
+
+          <div class="letter-body">
+            <p id="letter-content" class="letter-text">
+              On this extraordinary day, the stars shine just a little brighter because another wonderful year of your warmth, laughter, and kindness has blessed everyone around you.
+              <br><br>
+              May your upcoming year be packed with spontaneous adventures, dreams fulfilled, heartfelt chuckles, and love beyond measure. You are one of a kind, and you deserve nothing short of the world.
+            </p>
+          </div>
+
+          <!-- Polaroid Memory Cards Carousel -->
+          <div class="memories-container">
+            <div class="polaroid-card rotate-neg">
+              <div class="polaroid-img-wrapper gradient-bg-1">
+                <span class="polaroid-emoji">✨🥂</span>
+              </div>
+              <p class="polaroid-caption">Infinite Celebrations</p>
+            </div>
+            <div class="polaroid-card rotate-pos">
+              <div class="polaroid-img-wrapper gradient-bg-2">
+                <span class="polaroid-emoji">💖🌟</span>
+              </div>
+              <p class="polaroid-caption">Golden Memories</p>
+            </div>
+            <div class="polaroid-card rotate-slight">
+              <div class="polaroid-img-wrapper gradient-bg-3">
+                <span class="polaroid-emoji">🎉🧁</span>
+              </div>
+              <p class="polaroid-caption">Best Year Yet</p>
+            </div>
+          </div>
+
+          <div class="letter-footer">
+            <p class="with-love">With all my love & warmest wishes,</p>
+            <p class="letter-signature" id="sender-signature">Forever Yours, <span class="sender-name">Your Best Friend</span> 💌</p>
+          </div>
+        </div>
+
+        <!-- Finale Action Options -->
+        <div class="finale-actions">
+          <button id="btn-burst-confetti" class="btn-primary">
+            <span>More Fireworks & Confetti! 🎆</span>
+          </button>
+          <button id="btn-replay" class="btn-secondary">
+            <span>🔄 Replay Surprise</span>
+          </button>
+          <button id="btn-share-modal" class="btn-secondary">
+            <span>🔗 Share This Link</span>
+          </button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- CUSTOMIZATION MODAL -->
+  <div id="customize-modal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>✨ Customize This Birthday Surprise</h3>
+        <button id="modal-close-btn" class="close-btn" aria-label="Close Modal">&times;</button>
+      </div>
+      <form id="customize-form" class="modal-body">
+        <label for="input-recipient">Who is this surprise for?</label>
+        <input type="text" id="input-recipient" placeholder="e.g. Sarah / My Love" required>
+
+        <label for="input-sender">Who is it from?</label>
+        <input type="text" id="input-sender" placeholder="e.g. Alex / Your Favorite Human" required>
+
+        <label for="input-message">Custom Birthday Message</label>
+        <textarea id="input-message" rows="4" placeholder="Write a warm, customized note..."></textarea>
+
+        <div class="modal-actions">
+          <button type="submit" class="btn-primary">Save & Apply ✨</button>
+          <button type="button" id="copy-custom-link-btn" class="btn-secondary">Copy Shareable Link 🔗</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast">Wish popped! 🎈</div>
+
+  <script src="script.js"></script>
+</body>
+</html>

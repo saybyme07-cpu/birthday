@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SayByMe – Choose Your Surprise Features 🎁</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Kaushan+Script&family=Yellowtail&family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --plum: #7a1646;
+    --rose: #e8236f;
+    --rose-dark: #a01b4e;
+    --rose-deep: #5a1032;
+    --pink-1: #fde3ee;
+    --pink-2: #f9c9dd;
+    --pink-light: #fff0f6;
+    --ink: #3d1630;
+    --text-muted: #6d3852;
+    --field: #fff6fa;
+    --border: #f3a9c6;
+    --card-bg: #ffffff;
+    --shadow-soft: 0 10px 30px rgba(160, 27, 78, 0.08);
+    --shadow-hover: 0 16px 36px rgba(232, 35, 111, 0.16);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { min-height: 100%; }
+  body {
+    font-family: 'Nunito', system-ui, -apple-system, sans-serif;
+    color: var(--ink);
+    background:
+      radial-gradient(ellipse at 30% 20%, #fff2f7 0%, transparent 55%),
+      radial-gradient(ellipse at 80% 65%, #fbd5e5 0%, transparent 60%),
+      linear-gradient(160deg, #fde7f1 0%, #f7c9de 100%);
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .stage {
+    position: relative;
+    min-height: 100vh;
+    width: 100%;
+    max-width: 1360px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 16px 24px 28px;
+    z-index: 5;
+  }
+
+  /* ---------- Glowing Festoon String Lights ---------- */
+  .lights {
+    position: absolute;
+    top: 0;
+    width: 32%;
+    height: 120px;
+    z-index: 2;
+    pointer-events: none;
+    opacity: 0.95;
+  }
+  .lights.l { left: 0; }
+  .lights.r { right: 0; transform: scaleX(-1); }
+
+  /* Floating background confetti / sparkles */
+  .floating-confetti {
+    position: absolute;
+    pointer-events: none;
+    z-index: 1;
+    border-radius: 2px;
+    opacity: 0.65;
+    animation: confettiFloat 7s ease-in-out infinite alternate;
+  }
+  @keyframes confettiFloat {
+    0% { transform: translateY(0) rotate(0deg); }
+    100% { transform: translateY(-18px) rotate(25deg); }
+  }
+
+  /* Floating 3D Balloons decor */
+  .balloons-decor {
+    position: absolute;
+    left: 20px;
+    top: 130px;
+    z-index: 2;
+    pointer-events: none;
+    animation: balloonDrift 5s ease-in-out infinite alternate;
+  }
+  @keyframes balloonDrift {
+    0% { transform: translateY(0) rotate(-1deg); }
+    100% { transform: translateY(-14px) rotate(2deg); }
+  }
+  @media (max-width: 1100px) {
+    .balloons-decor { display: none; }
+  }
+
+  /* ---------- Header with Logo & Stepper ---------- */
+  header {
+    position: relative;
+    width: 100%;
+    text-align: center;
+    padding: 4px 16px 0;
+    z-index: 10;
+  }
+  .logo {
+    font-family: 'Yellowtail', cursive;
+    font-size: clamp(32px, 3vw, 44px);
+    color: var(--rose-deep);
+    position: relative;
+    display: inline-block;
+    line-height: 1;
+  }
+  .logo svg {
+    position: absolute;
+    right: -24px;
+    top: -4px;
+    width: 22px;
+    height: 20px;
+  }
+  .tag {
+    margin-top: 4px;
+    font-size: clamp(12px, 1vw, 14.5px);
+    font-weight: 600;
+    color: var(--ink);
+    letter-spacing: .4px;
+  }
+  .tag i {
+    color: var(--rose);
+    font-style: normal;
+    margin: 0 8px;
+    font-size: .85em;
+  }
+
+  /* ---------- Stepper Progress Bar (Step 5 Active) ---------- */
+  .stepper-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 680px;
+    margin: 18px auto 6px;
+    padding: 0 16px;
+  }
+  .stepper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    position: relative;
+    list-style: none;
+  }
+  /* Background grey/pink line */
+  .stepper::before {
+    content: '';
+    position: absolute;
+    top: 15px;
+    left: 24px;
+    right: 24px;
+    height: 2px;
+    background: #eec0d3;
+    z-index: 1;
+  }
+  /* Active line covering Steps 1 to 5 */
+  .step-progress-active {
+    position: absolute;
+    top: 15px;
+    left: 24px;
+    width: 80%;
+    height: 2px;
+    background: var(--rose-dark);
+    z-index: 2;
+  }
+  .step-item {
+    position: relative;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .step-bubble {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #ffffff;
+    border: 2px solid #eec0d3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    color: #9e788b;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    transition: all 0.25s ease;
+  }
+  .step-item.done .step-bubble {
+    background: var(--rose-dark);
+    border-color: var(--rose-dark);
+    color: #ffffff;
+  }
+  .step-item.active .step-bubble {
+    background: var(--rose);
+    border-color: var(--rose);
+    color: #ffffff;
+    box-shadow: 0 0 0 4px rgba(232, 35, 111, 0.22);
+  }
+  .step-label {
+    margin-top: 6px;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: #8f6d80;
+  }
+  .step-item.done .step-label {
+    color: var(--ink);
+  }
+  .step-item.active .step-label {
+    color: var(--rose);
+    font-weight: 700;
+  }
+
+  /* ---------- Title Section ---------- */
+  .title-section {
+    text-align: center;
+    margin: 16px auto 14px;
+    z-index: 5;
+  }
+  .title-row {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+  }
+  .gift-title-icon {
+    width: 32px;
+    height: 32px;
+    color: var(--rose);
+  }
+  .sparkle-decor {
+    color: var(--rose);
+    font-size: 20px;
+    font-weight: 700;
+    opacity: 0.85;
+  }
+  h1 {
+    font-family: 'Kaushan Script', cursive;
+    font-size: clamp(30px, 3.2vw, 46px);
+    color: var(--rose-dark);
+    font-weight: 400;
+    margin: 0;
+    line-height: 1.15;
+  }
+  .sub {
+    font-size: clamp(14px, 1.1vw, 16px);
+    color: var(--text-muted);
+    margin-top: 6px;
+    font-weight: 600;
+  }
+
+  /* ---------- Cards Grid Section ---------- */
+  .features-container {
+    width: 100%;
+    max-width: 1140px;
+    margin: 8px auto 20px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    z-index: 10;
+  }
+
+  .feature-card {
+    background: var(--card-bg);
+    border: 1.5px solid #f6d1e1;
+    border-radius: 26px;
+    padding: 16px 16px 20px;
+    box-shadow: var(--shadow-soft);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+    user-select: none;
+  }
+  .feature-card:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-hover);
+    border-color: #f19ec1;
+  }
+  .feature-card.selected {
+    border-color: var(--rose);
+    box-shadow: 0 12px 30px rgba(232, 35, 111, 0.18);
+  }
+
+  /* Checkbox at top right */
+  .card-checkbox {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 26px;
+    height: 26px;
+    border-radius: 7px;
+    border: 2px solid #e3b2c7;
+    background: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    z-index: 5;
+  }
+  .card-checkbox svg {
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: #ffffff;
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    opacity: 0;
+    transform: scale(0.6);
+    transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .feature-card.selected .card-checkbox {
+    background: var(--rose);
+    border-color: var(--rose);
+    box-shadow: 0 2px 8px rgba(232, 35, 111, 0.35);
+  }
+  .feature-card.selected .card-checkbox svg {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  /* Card Image */
+  .card-img-wrap {
+    width: 100%;
+    aspect-ratio: 1.18 / 1;
+    border-radius: 20px;
+    overflow: hidden;
+    background: #fff4f8;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .card-img-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+  }
+  .feature-card:hover .card-img-wrap img {
+    transform: scale(1.04);
+  }
+
+  /* Card Content */
+  .card-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    flex-grow: 1;
+  }
+  .card-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+  .card-title-icon {
+    font-size: 19px;
+    line-height: 1;
+  }
+  .card-title {
+    font-size: clamp(17px, 1.3vw, 20px);
+    font-weight: 800;
+    color: var(--ink);
+  }
+  .card-desc {
+    font-size: clamp(13px, 0.95vw, 14.5px);
+    color: var(--text-muted);
+    line-height: 1.45;
+    margin-bottom: 16px;
+    max-width: 290px;
+    font-weight: 500;
+  }
+
+  /* Tag / Badge Pill */
+  .card-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 18px;
+    background: var(--pink-light);
+    border: 1px solid var(--pink-2);
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--rose);
+    margin-top: auto;
+    transition: all 0.2s ease;
+  }
+  .feature-card.selected .card-tag {
+    background: #ffe3ee;
+    border-color: #f7a9c8;
+  }
+
+  /* ---------- Bottom Navigation & Corner Accents ---------- */
+  .bottom-row {
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10px;
+    z-index: 20;
+  }
+  .btn-group {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    z-index: 25;
+  }
+  .btn-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 28px;
+    background: #ffffff;
+    border: 1.8px solid var(--rose-dark);
+    border-radius: 999px;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--rose-dark);
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.22s ease;
+    box-shadow: 0 4px 12px rgba(160, 27, 78, 0.08);
+  }
+  .btn-back:hover {
+    background: #fff0f6;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(160, 27, 78, 0.14);
+  }
+
+  .btn-next {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 13px 38px;
+    background: linear-gradient(90deg, #e8236f 0%, #a01b4e 100%);
+    border: none;
+    border-radius: 999px;
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 700;
+    color: #ffffff;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.24s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 8px 24px rgba(232, 35, 111, 0.38);
+  }
+  .btn-next:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 12px 30px rgba(232, 35, 111, 0.48);
+  }
+
+  /* Corner Accents */
+  .corner-decor {
+    position: absolute;
+    bottom: -15px;
+    pointer-events: none;
+    z-index: 15;
+  }
+  .corner-decor.teddy {
+    left: 10px;
+    width: clamp(120px, 15vw, 190px);
+    animation: gentleSway 6s ease-in-out infinite alternate;
+  }
+  .corner-decor.gifts {
+    right: 10px;
+    width: clamp(110px, 14vw, 180px);
+    animation: gentleBob 5s ease-in-out infinite alternate;
+  }
+  .corner-decor img {
+    width: 100%;
+    height: auto;
+    display: block;
+    filter: drop-shadow(0 10px 18px rgba(160, 27, 78, 0.14));
+  }
+  @keyframes gentleSway {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(2.5deg); }
+  }
+  @keyframes gentleBob {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-6px); }
+  }
+
+  /* Toast Notification */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: #3d1630;
+    color: #ffffff;
+    padding: 10px 22px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 600;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    z-index: 100;
+    pointer-events: none;
+  }
+  .toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  /* Responsive styling */
+  @media (max-width: 960px) {
+    .features-container {
+      grid-template-columns: repeat(2, 1fr);
+      max-width: 720px;
+    }
+    .corner-decor.teddy {
+      left: -20px;
+      opacity: 0.7;
+    }
+    .corner-decor.gifts {
+      right: -20px;
+      opacity: 0.7;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .stage {
+      padding: 12px 14px 20px;
+    }
+    .features-container {
+      grid-template-columns: 1fr;
+      max-width: 360px;
+      gap: 16px;
+    }
+    .corner-decor {
+      display: none;
+    }
+    .btn-group {
+      width: 100%;
+      flex-direction: column-reverse;
+      gap: 10px;
+    }
+    .btn-back, .btn-next {
+      width: 100%;
+      justify-content: center;
+    }
+    .stepper-wrap {
+      padding: 0 4px;
+    }
+    .step-label {
+      font-size: 11px;
+    }
+    .step-bubble {
+      width: 28px;
+      height: 28px;
+      font-size: 11.5px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- Festoon lights across top -->
+<svg class="lights l" viewBox="0 0 400 120" preserveAspectRatio="none">
+  <path d="M0,20 Q100,70 200,30 T400,35" fill="none" stroke="#e08da8" stroke-width="1.8"/>
+  <circle cx="50" cy="42" r="5" fill="#ffe599" filter="drop-shadow(0 0 6px #ffd966)"/>
+  <circle cx="100" cy="55" r="5" fill="#ffe599" filter="drop-shadow(0 0 6px #ffd966)"/>
+  <circle cx="150" cy="45" r="5" fill="#ffe599" filter="drop-shadow(0 0 6px #ffd966)"/>
+  <circle cx="210" cy="30" r="5" fill="#ffe599" filter="drop-shadow(0 0 6px #ffd966)"/>
+  <circle cx="280" cy="34" r="5" fill="#ffe599" filter="drop-shadow(0 0 6px #ffd966)"/>
+  <circle cx="350" cy="38" r="5" fill="#ffe599" filter="drop-shadow(0 0 6px #ffd966)"/>
+</svg>
+<svg class="lights r" viewBox="0 0 400 120" preserveAspectRatio="none">
+  <path d="M0,20 Q100,70 200,30 T400,35" fill="none" stroke="#e08da8" stroke-width="1.8"/>
+  <circle cx="50" cy="42" r="5" fill="#ffe599" filter="drop-shadow(0 0 6px #ffd966)"/>
+  <circle cx="100" cy="55" r="5" fill="#ffe599" filter="drop-shadow(0 0 6px #ffd966)"/>
+  <circle cx="150" cy="45" r="5" fill="#ffe599" filter="drop-shadow(0 0 6px #ffd966)"/>
+  <circle cx="210" cy="30" r="5" fill="#ffe599" filter="drop-shadow(0 0 6px #ffd966)"/>
+  <circle cx="280" cy="34" r="5" fill="#ffe599" filter="drop-shadow(0 0 6px #ffd966)"/>
+  <circle cx="350" cy="38" r="5" fill="#ffe599" filter="drop-shadow(0 0 6px #ffd966)"/>
+</svg>
+
+<!-- Floating 3D Balloons Decor (Top-Left) -->
+<div class="balloons-decor" aria-hidden="true">
+  <svg width="100" height="150" viewBox="0 0 100 150" fill="none">
+    <defs>
+      <radialGradient id="balloonGrad" cx="35%" cy="30%" r="65%">
+        <stop offset="0%" stop-color="#ffffff" stop-opacity="0.9"/>
+        <stop offset="25%" stop-color="#ffb3d1"/>
+        <stop offset="100%" stop-color="#e8236f"/>
+      </radialGradient>
+      <radialGradient id="balloonGrad2" cx="35%" cy="30%" r="65%">
+        <stop offset="0%" stop-color="#ffffff" stop-opacity="0.85"/>
+        <stop offset="30%" stop-color="#ffd5e5"/>
+        <stop offset="100%" stop-color="#f06292"/>
+      </radialGradient>
+    </defs>
+    <!-- Balloon 1 (Heart shape) -->
+    <path d="M60 15 C60 0, 85 0, 85 22 C85 40, 60 55, 60 62 C60 55, 35 40, 35 22 C35 0, 60 0, 60 15 Z" fill="url(#balloonGrad)" filter="drop-shadow(0 6px 12px rgba(232,35,111,0.25))"/>
+    <path d="M60 62 Q58 100 52 140" stroke="#f0a8c2" stroke-width="1.2" fill="none"/>
+    <!-- Balloon 2 (Round) -->
+    <ellipse cx="28" cy="70" rx="22" ry="26" fill="url(#balloonGrad2)" filter="drop-shadow(0 4px 10px rgba(240,98,146,0.2))"/>
+    <path d="M28 96 Q32 120 40 145" stroke="#f0a8c2" stroke-width="1.2" fill="none"/>
+  </svg>
+</div>
+
+<!-- Floating confetti shapes -->
+<div class="floating-confetti" style="top:18%; left:12%; width:10px; height:10px; background:#f06292; border-radius:50%;"></div>
+<div class="floating-confetti" style="top:26%; right:14%; width:12px; height:6px; background:#ffb74d; transform:rotate(40deg); animation-delay:1s;"></div>
+<div class="floating-confetti" style="top:45%; left:6%; width:8px; height:12px; background:#ba68c8; transform:rotate(-20deg); animation-delay:2s;"></div>
+<div class="floating-confetti" style="top:52%; right:8%; width:10px; height:10px; background:#e8236f; border-radius:50%; animation-delay:1.5s;"></div>
+<div class="floating-confetti" style="top:70%; left:15%; width:12px; height:7px; background:#ffd54f; transform:rotate(60deg); animation-delay:2.5s;"></div>
+
+<div class="stage">
+  <!-- Top Header -->
+  <header>
+    <div class="logo">
+      SayByMe
+      <svg viewBox="0 0 24 24" fill="none" stroke="#e8236f" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+      </svg>
+    </div>
+    <p class="tag"><i>✦</i>Create • Personalize • Surprise<i>✦</i></p>
+
+    <!-- Stepper Navigation (Step 5 Active) -->
+    <div class="stepper-wrap">
+      <ol class="stepper" aria-label="Progress">
+        <div class="step-progress-active"></div>
+        <li class="step-item done">
+          <div class="step-bubble">✓</div>
+          <span class="step-label">Details</span>
+        </li>
+        <li class="step-item done">
+          <div class="step-bubble">✓</div>
+          <span class="step-label">Relationship</span>
+        </li>
+        <li class="step-item done">
+          <div class="step-bubble">✓</div>
+          <span class="step-label">Wishes</span>
+        </li>
+        <li class="step-item done">
+          <div class="step-bubble">✓</div>
+          <span class="step-label">Letter</span>
+        </li>
+        <li class="step-item active">
+          <div class="step-bubble">5</div>
+          <span class="step-label">Features</span>
+        </li>
+        <li class="step-item">
+          <div class="step-bubble">6</div>
+          <span class="step-label">Review</span>
+        </li>
+      </ol>
+    </div>
+  </header>
+
+  <!-- Title section -->
+  <div class="title-section">
+    <div class="title-row">
+      <span class="sparkle-decor">˗ˋˏ</span>
+      <!-- Pink gift box icon -->
+      <svg class="gift-title-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="20 12 20 22 4 22 4 12"></polyline>
+        <rect x="2" y="7" width="20" height="5"></rect>
+        <line x1="12" y1="22" x2="12" y2="7"></line>
+        <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path>
+        <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path>
+      </svg>
+      <h1>Choose Your Surprise Features</h1>
+      <span class="sparkle-decor">ˎˊ˗</span>
+    </div>
+    <p class="sub">Pick the interactive experiences you want to include in your birthday surprise! 💖</p>
+  </div>
+
+  <!-- Cards Section: 3 Features -->
+  <main class="features-container">
+    <!-- Card 1: Blow Out the Candles (Selected by default) -->
+    <div class="feature-card selected" data-feature="candles" id="card-candles">
+      <div class="card-checkbox" aria-label="Toggle Blow Out the Candles">
+        <svg viewBox="0 0 24 24">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+      </div>
+      <div class="card-img-wrap">
+        <img src="assets/feature_candles.jpg" alt="Blow Out the Candles birthday cake" loading="lazy">
+      </div>
+      <div class="card-body">
+        <div class="card-title-row">
+          <span class="card-title-icon">🕯️</span>
+          <h2 class="card-title">Blow Out the Candles</h2>
+        </div>
+        <p class="card-desc">Long press on the cake to blow out the candles.</p>
+        <div class="card-tag">
+          <span>👆</span> Interactive Experience
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 2: Cut the Cake -->
+    <div class="feature-card" data-feature="cake" id="card-cake">
+      <div class="card-checkbox" aria-label="Toggle Cut the Cake">
+        <svg viewBox="0 0 24 24">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+      </div>
+      <div class="card-img-wrap">
+        <img src="assets/feature_cake_slice.jpg" alt="Cut the Cake slice" loading="lazy">
+      </div>
+      <div class="card-body">
+        <div class="card-title-row">
+          <span class="card-title-icon">🍰</span>
+          <h2 class="card-title">Cut the Cake</h2>
+        </div>
+        <p class="card-desc">Slice the birthday cake and reveal a special surprise.</p>
+        <div class="card-tag">
+          <span>✨</span> Fun Interaction
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 3: Celebration -->
+    <div class="feature-card" data-feature="celebration" id="card-celebration">
+      <div class="card-checkbox" aria-label="Toggle Celebration">
+        <svg viewBox="0 0 24 24">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+      </div>
+      <div class="card-img-wrap">
+        <img src="assets/feature_celebration.jpg" alt="Joyful Celebration with fireworks" loading="lazy">
+      </div>
+      <div class="card-body">
+        <div class="card-title-row">
+          <span class="card-title-icon">🎉</span>
+          <h2 class="card-title">Celebration</h2>
+        </div>
+        <p class="card-desc">End with a joyful celebration with balloons, confetti and fireworks.</p>
+        <div class="card-tag">
+          <span>🎆</span> Grand Finale
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Bottom Navigation Row -->
+  <footer class="bottom-row">
+    <!-- Corner Decor: Sitting Teddy Bear -->
+    <div class="corner-decor teddy" aria-hidden="true">
+      <img src="assets/teddy_bear.png" alt="Cute 3D Teddy Bear with party hat">
+    </div>
+
+    <!-- Center Navigation Buttons -->
+    <div class="btn-group">
+      <button class="btn-back" id="btn-back" type="button">
+        <span>←</span> Back
+      </button>
+      <button class="btn-next" id="btn-next" type="button">
+        Next: Review Surprise <span>→</span>
+      </button>
+    </div>
+
+    <!-- Corner Decor: Stack of Gift Boxes -->
+    <div class="corner-decor gifts" aria-hidden="true">
+      <img src="assets/gifts_stack.png" alt="Pink and Gold Gift Boxes stack">
+    </div>
+  </footer>
+</div>
+
+<div class="toast" id="toast">Feature updated!</div>
+
+<script>
+  // Parse incoming query parameters
+  const params = new URLSearchParams(window.location.search);
+  const fromName = params.get('from') || 'Rohan';
+  const toName = params.get('to') || 'Sanjana';
+  const rel = params.get('rel') || 'Girlfriend';
+  const date = params.get('date') || '';
+  const msg = params.get('msg') || '';
+  const initialFeatures = (params.get('features') || 'candles').split(',').filter(Boolean);
+
+  // Feature cards setup
+  const cards = document.querySelectorAll('.feature-card');
+  const toast = document.getElementById('toast');
+  let toastTimer = null;
+
+  function showToast(text) {
+    clearTimeout(toastTimer);
+    toast.textContent = text;
+    toast.classList.add('show');
+    toastTimer = setTimeout(() => toast.classList.remove('show'), 1800);
+  }
+
+  // Restore state if passed in URL
+  if (initialFeatures.length > 0) {
+    cards.forEach(card => {
+      const feat = card.getAttribute('data-feature');
+      if (initialFeatures.includes(feat)) {
+        card.classList.add('selected');
+      } else {
+        card.classList.remove('selected');
+      }
+    });
+  }
+
+  // Toggle card on click
+  cards.forEach(card => {
+    card.addEventListener('click', (e) => {
+      card.classList.toggle('selected');
+      const isSelected = card.classList.contains('selected');
+      const title = card.querySelector('.card-title').textContent;
+      showToast(isSelected ? `✨ Included "${title}"` : `Removed "${title}"`);
+    });
+  });
+
+  // Back button: Return to step4 with query params
+  document.getElementById('btn-back').addEventListener('click', () => {
+    const selectedFeatures = getSelectedFeatures();
+    const query = new URLSearchParams({
+      from: fromName,
+      to: toName,
+      rel: rel,
+      date: date,
+      msg: msg,
+      features: selectedFeatures.join(',')
+    });
+    window.location.href = 'step4.html?' + query.toString();
+  });
+
+  function getSelectedFeatures() {
+    const selected = [];
+    document.querySelectorAll('.feature-card.selected').forEach(c => {
+      selected.push(c.getAttribute('data-feature'));
+    });
+    return selected;
+  }
+
+  // Next button: Navigate to surprise.html (or review)
+  document.getElementById('btn-next').addEventListener('click', () => {
+    const selectedFeatures = getSelectedFeatures();
+    const query = new URLSearchParams({
+      from: fromName,
+      to: toName,
+      rel: rel,
+      date: date,
+      msg: msg,
+      features: selectedFeatures.join(',')
+    });
+    window.location.href = 'step6.html?' + query.toString();
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<title>SayByMe – Cut the Cake</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kaushan+Script&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{--crimson:#9b1c4a;--rose:#e8236f;--mauve:#5c4a57;--pill:#b0194f}
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  html,body{height:100%;overflow:hidden;background:#f9cfe0;touch-action:none}
+  body{display:flex;align-items:center;justify-content:center;font-family:'Nunito',system-ui,sans-serif}
+  .screen{
+    position:relative;width:min(100vw,430px);height:min(100dvh,900px);overflow:hidden;
+    display:flex;flex-direction:column;
+    background:radial-gradient(ellipse at 50% 38%,#fff0f6 0%,transparent 60%),linear-gradient(180deg,#fcdce9,#f8c8dc 70%,#f9cde0);
+    user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;cursor:grab;
+  }
+  .screen.busy{cursor:grabbing}
+  @media(min-width:520px){.screen{border-radius:44px;box-shadow:0 30px 80px rgba(160,40,90,.28)}}
+
+  /* Top Navigation Bar */
+  .top-nav {
+    position: absolute;
+    top: 14px;
+    left: 16px;
+    right: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 10;
+  }
+  .btn-nav-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(232, 35, 111, 0.25);
+    border-radius: 999px;
+    padding: 6px 14px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--crimson);
+    cursor: pointer;
+    text-decoration: none;
+    box-shadow: 0 4px 12px rgba(160, 40, 90, 0.08);
+    transition: transform 0.2s ease, background 0.2s ease;
+  }
+  .btn-nav-back:hover {
+    background: #ffffff;
+    transform: scale(1.04);
+  }
+
+  .lights{position:absolute;top:0;left:0;width:100%;height:auto;z-index:3;pointer-events:none}
+  .bulb{animation:twinkle 2.4s ease-in-out infinite alternate}
+  @keyframes twinkle{from{opacity:.75}to{opacity:1}}
+
+  .top{position:relative;z-index:4;text-align:center;padding:clamp(96px,14vh,138px) 20px 0}
+  .kicon{width:54px;height:54px;fill:none;stroke:var(--crimson);stroke-width:2.2;stroke-linejoin:round;stroke-linecap:round;display:block;margin:0 auto -2px;animation:sway 3s ease-in-out infinite}
+  @keyframes sway{0%,100%{transform:rotate(-4deg)}50%{transform:rotate(5deg)}}
+  h1{font-family:'Kaushan Script',cursive;font-weight:400;color:var(--crimson);font-size:clamp(42px,13vw,56px);line-height:1.1;text-wrap:balance;transition:opacity .25s,transform .25s}
+  .sub{margin-top:8px;font-size:clamp(18px,5.6vw,24px);font-weight:600;color:var(--mauve);transition:opacity .25s,transform .25s}
+  .swap{opacity:0;transform:translateY(8px)}
+  .divider{display:flex;align-items:center;justify-content:center;gap:14px;margin-top:24px}
+  .divider i{display:block;width:34%;height:1.5px;background:var(--crimson);opacity:.7}
+  .divider svg{width:30px;height:28px;fill:var(--crimson);animation:beat 1.6s ease-in-out infinite}
+  @keyframes beat{0%,100%{transform:scale(1)}15%{transform:scale(1.18)}30%{transform:scale(1)}45%{transform:scale(1.12)}}
+
+  .deco{position:absolute;z-index:1;pointer-events:none;filter:blur(1.6px);opacity:.9}
+  .balloon{right:-34px;top:36%;width:100px}
+  .balloon.b2{left:-40px;right:auto;top:33%;width:90px;opacity:.85}
+  .gift{left:-26px;top:50%;width:104px}
+  .bit{position:absolute;z-index:2;border-radius:2px;pointer-events:none}
+
+  .stageWrap{position:relative;flex:1;min-height:0;display:flex;align-items:center;justify-content:center;z-index:3;padding:8px 4px 0}
+  .glow{position:absolute;left:50%;top:40%;width:115%;aspect-ratio:1;transform:translate(-50%,-50%);
+        background:radial-gradient(circle,rgba(255,226,150,.5),rgba(255,226,150,0) 60%);pointer-events:none}
+  #cake{position:relative;width:100%;height:100%;overflow:visible}
+
+  .flick{animation:flick 1.1s ease-in-out infinite alternate}
+  @keyframes flick{
+    0%{transform:scale(1,1) rotate(-1.5deg)}
+    35%{transform:scale(.94,1.07) rotate(1.8deg)}
+    70%{transform:scale(1.04,.96) rotate(-.6deg)}
+    100%{transform:scale(.97,1.05) rotate(1.2deg)}
+  }
+  .guide{fill:none;stroke:#fff;stroke-width:3;stroke-dasharray:2 8;stroke-linecap:round;opacity:.9;animation:dash 1s linear infinite;transition:opacity .25s}
+  @keyframes dash{to{stroke-dashoffset:-10}}
+  .busy .guide{opacity:0}
+
+  .bottom-actions-wrap{
+    position:relative;z-index:4;align-self:center;
+    display:flex;flex-direction:column;align-items:center;gap:12px;
+    width:100%;margin-bottom:clamp(30px,6vh,60px);
+  }
+
+  .pill{
+    position:relative;overflow:hidden;
+    display:flex;align-items:center;gap:20px;width:min(82%,340px);padding:14px 26px 14px 30px;
+    border-radius:999px;border:1.5px solid #f4a3c2;color:var(--pill);font:700 clamp(17px,5vw,21px)/1.25 'Nunito',sans-serif;
+    background:linear-gradient(180deg,rgba(255,255,255,.55),rgba(253,215,230,.6));box-shadow:0 10px 24px rgba(220,80,130,.18);
+    transition:transform .2s;cursor:pointer;
+  }
+  .pill::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(255,150,190,.35),rgba(240,48,111,.35));
+    transform:scaleX(var(--p,0));transform-origin:left;pointer-events:none}
+  .pill>*{position:relative}
+  .pill svg{flex:none;width:42px;height:46px;fill:none;stroke:var(--pill);stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round;animation:drag 1.8s ease-in-out infinite}
+  @keyframes drag{0%,100%{transform:translateY(-3px)}50%{transform:translateY(5px)}}
+  .busy .pill{transform:scale(.97)}
+  .busy .pill svg{animation:none}
+  .pill:focus-visible{outline:3px solid var(--crimson);outline-offset:3px}
+
+  /* Continue to next surprise button (appears when cake is cut) */
+  .btn-next-surprise {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 13px 34px;
+    background: linear-gradient(90deg, #e8236f 0%, #9b1c4a 100%);
+    color: #ffffff;
+    border: none;
+    border-radius: 999px;
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 8px 24px rgba(232, 35, 111, 0.45);
+    animation: popIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: all 0.2s ease;
+  }
+  @keyframes popIn {
+    from { opacity: 0; transform: scale(0.85); }
+    to { opacity: 1; transform: scale(1); }
+  }
+  .btn-next-surprise:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(232, 35, 111, 0.55);
+  }
+
+  #fx{position:absolute;inset:0;width:100%;height:100%;z-index:6;pointer-events:none}
+  @media(prefers-reduced-motion:reduce){.bulb,.divider svg,.pill svg,.kicon,.guide{animation:none}}
+
+  /* Embedded Mode inside Phone Mockup */
+  body.embedded {
+    background: transparent !important;
+  }
+  body.embedded .screen {
+    width: 100% !important;
+    height: 100% !important;
+    max-width: 100% !important;
+    max-height: 100% !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    background: radial-gradient(ellipse at 50% 38%,#fff0f6 0%,transparent 60%),linear-gradient(180deg,#fcdce9,#f8c8dc 70%,#f9cde0) !important;
+  }
+  body.embedded .top-nav {
+    display: none !important;
+  }
+  body.embedded .top {
+    padding: 68px 16px 0 !important;
+  }
+  body.embedded h1 {
+    font-size: 38px !important;
+  }
+  body.embedded .sub {
+    font-size: 16px !important;
+    margin-top: 4px !important;
+  }
+  body.embedded .kicon {
+    width: 44px !important;
+    height: 44px !important;
+  }
+  body.embedded .divider {
+    margin-top: 12px !important;
+  }
+  body.embedded .stageWrap {
+    padding: 0 !important;
+  }
+  body.embedded .bottom-actions-wrap {
+    margin-bottom: 22px !important;
+    gap: 8px !important;
+  }
+  body.embedded .pill {
+    width: min(86%, 280px) !important;
+    padding: 10px 18px !important;
+    font-size: 15px !important;
+  }
+  body.embedded .pill svg {
+    width: 32px !important;
+    height: 36px !important;
+  }
+  body.embedded .btn-next-surprise {
+    padding: 10px 24px !important;
+    font-size: 14px !important;
+  }
+</style>
+</head>
+<body>
+<div class="screen" id="screen">
+
+  <!-- Top Nav Bar -->
+  <div class="top-nav">
+    <button type="button" class="btn-nav-back" id="btn-back">
+      <span>←</span> Candles
+    </button>
+  </div>
+
+  <svg class="lights" viewBox="0 0 430 130" aria-hidden="true">
+    <defs><filter id="bl"><feGaussianBlur stdDeviation="5"/></filter></defs>
+    <path d="M0 92Q90 78 160 18M430 92Q340 78 270 18" fill="none" stroke="#d9a35e" stroke-width="1.6" opacity=".8"/>
+    <g id="bulbs"></g>
+  </svg>
+
+  <svg class="deco balloon" viewBox="0 0 100 150" aria-hidden="true"><ellipse cx="50" cy="55" rx="46" ry="54" fill="#f27fb0"/><ellipse cx="32" cy="34" rx="9" ry="16" fill="#fff" opacity=".4"/></svg>
+  <svg class="deco balloon b2" viewBox="0 0 100 150" aria-hidden="true"><ellipse cx="50" cy="55" rx="46" ry="54" fill="#f6a0c6"/></svg>
+  <svg class="deco gift" viewBox="0 0 110 130" aria-hidden="true">
+    <rect x="6" y="40" width="104" height="90" rx="4" fill="#fff4ee"/><rect x="40" y="40" width="22" height="90" fill="#f27fa7"/>
+    <path d="M51 40C30 8 4 16 18 34c8 8 28 6 33 6zM51 40c21-32 47-24 33-6-8 8-28 6-33 6z" fill="#f48fb5"/>
+  </svg>
+  <span class="bit" style="left:7%;top:80%;width:16px;height:9px;background:#f7b24a;transform:rotate(-12deg)"></span>
+  <span class="bit" style="left:18%;top:86%;width:14px;height:8px;background:#f06a9b;transform:rotate(18deg)"></span>
+  <span class="bit" style="left:84%;top:78%;width:15px;height:8px;background:#f06a9b;transform:rotate(-14deg)"></span>
+  <span class="bit" style="left:91%;top:68%;width:14px;height:8px;background:#f7b24a;transform:rotate(8deg)"></span>
+
+  <div class="top">
+    <svg class="kicon" viewBox="0 0 60 60" aria-hidden="true"><g transform="rotate(40 30 30)"><rect x="24" y="4" width="12" height="28" rx="5"/><path d="M30 57C37 48 37 39 35 32H25C23 39 23 48 30 57Z"/><circle cx="30" cy="13" r="1.600" fill="#9b1c4a"/></g></svg>
+    <h1 id="title">Cut the Cake</h1>
+    <p class="sub" id="sub">Make it official!</p>
+    <div class="divider"><i></i>
+      <svg viewBox="0 0 30 28" aria-hidden="true"><path d="M15 27C2 18 0 8 6 3.500c4-3 8-1 9 3 1-4 5-6 9-3 6 4.500 4 14.500-9 23.500z"/></svg><i></i></div>
+  </div>
+
+  <div class="stageWrap">
+    <div class="glow"></div>
+    <svg id="cake" viewBox="0 -10 400 430" aria-label="Birthday cake and a pink knife" role="img">
+      <defs>
+        <linearGradient id="bodyG" x1="0" x2="1"><stop offset="0" stop-color="#f7d3c6"/><stop offset=".45" stop-color="#fff1e8"/><stop offset="1" stop-color="#f4cdbf"/></linearGradient>
+        <linearGradient id="icingG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fbb9d2"/><stop offset="1" stop-color="#f48db4"/></linearGradient>
+        <linearGradient id="flameG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffab2e"/><stop offset=".5" stop-color="#ffd85a"/><stop offset="1" stop-color="#fff3b8"/></linearGradient>
+        <radialGradient id="glowG"><stop offset="0" stop-color="#ffd778" stop-opacity=".8"/><stop offset="1" stop-color="#ffd778" stop-opacity="0"/></radialGradient>
+        <linearGradient id="spongeG" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#f48db4"/><stop offset=".07" stop-color="#f48db4"/><stop offset=".075" stop-color="#fbe4bc"/>
+          <stop offset=".3" stop-color="#fbe4bc"/><stop offset=".31" stop-color="#fff7ee"/><stop offset=".4" stop-color="#fff7ee"/>
+          <stop offset=".41" stop-color="#fbe4bc"/><stop offset=".66" stop-color="#fbe4bc"/><stop offset=".67" stop-color="#ee5f88"/>
+          <stop offset=".75" stop-color="#ee5f88"/><stop offset=".76" stop-color="#fbe4bc"/><stop offset="1" stop-color="#f3cf9a"/>
+        </linearGradient>
+        <linearGradient id="shadeG" x1="0" x2="1"><stop offset="0" stop-color="#7a1646" stop-opacity=".16"/><stop offset=".6" stop-color="#7a1646" stop-opacity="0"/></linearGradient>
+        <linearGradient id="steelG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f6f7fb"/><stop offset=".5" stop-color="#cfd2de"/><stop offset="1" stop-color="#9ea3b6"/></linearGradient>
+        <linearGradient id="handleG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fa92bf"/><stop offset="1" stop-color="#dd4584"/></linearGradient>
+        <pattern id="stripe" width="12" height="12" patternUnits="userSpaceOnUse" patternTransform="rotate(40)"><rect width="12" height="12" fill="#fff"/><rect width="6" height="12" fill="#f26aa0"/></pattern>
+        <filter id="soft"><feGaussianBlur stdDeviation="6"/></filter>
+
+        <!-- the removable wedge: left-front slice -->
+        <clipPath id="sliceClip"><path d="M200 178H30V280A170 38 0 0 0 176.3 317.6V221.6Z"/></clipPath>
+        <clipPath id="mainClip"><path clip-rule="evenodd" d="M-200 -200H700V700H-200ZM200 178H30V280A170 38 0 0 0 176.3 317.6V221.6Z"/></clipPath>
+
+        <!-- cake body artwork (used for the whole cake and for the slice) -->
+        <g id="art">
+          <path d="M30 180V280A170 38 0 0 0 370 280V180Z" fill="url(#bodyG)"/>
+          <g id="spr"></g>
+          <ellipse cx="200" cy="178" rx="170" ry="44" fill="url(#icingG)"/>
+          <rect x="30" y="178" width="340" height="26" fill="#f79cc0"/>
+          <g fill="#f79cc0" id="drips"></g>
+          <ellipse cx="150" cy="168" rx="80" ry="11" fill="#fff" opacity=".22"/>
+        </g>
+      </defs>
+
+      <!-- plate -->
+      <ellipse cx="200" cy="306" rx="196" ry="50" fill="#f6c3d0"/>
+      <ellipse cx="200" cy="302" rx="186" ry="43" fill="#ffe9ef"/>
+      <ellipse cx="200" cy="323" rx="168" ry="26" fill="#c9708f" opacity=".3" filter="url(#soft)"/>
+
+      <!-- interior face revealed after the slice leaves -->
+      <rect x="31" y="178" width="169" height="102" fill="url(#spongeG)"/>
+      <rect x="31" y="178" width="169" height="102" fill="url(#shadeG)"/>
+
+      <!-- main cake -->
+      <use id="mainUse" href="#art"/>
+      <g id="sticks"></g>
+      <g id="swirlsMain"></g>
+      <g id="flames"></g>
+
+      <!-- the slice -->
+      <g id="slice" style="display:none">
+        <ellipse id="sliceShadow" cx="100" cy="322" rx="92" ry="14" fill="#c9708f" opacity="0" filter="url(#soft)"/>
+        <path id="sliceFace" d="M200 178L176.300 221.600V317.600L200 280Z" fill="url(#spongeG)" opacity="0"/>
+        <use href="#art" clip-path="url(#sliceClip)"/>
+        <path d="M176.300 221.600V317.600L170.300 317.400V221.300Z" fill="#fbe4bc" opacity=".9"/>
+        <g id="swirlsSlice"></g>
+      </g>
+
+      <!-- cut lines -->
+      <g id="seams" fill="none" stroke-linejoin="round">
+        <path class="s1s" d="M200 178L176.300 221.600V317.600" pathLength="1" stroke="#7a1646" stroke-opacity=".28" stroke-width="6" stroke-dasharray="1 2" stroke-dashoffset="1"/>
+        <path class="s1" d="M200 178L176.300 221.600V317.600" pathLength="1" stroke="#c64b78" stroke-width="2.400" stroke-dasharray="1 2" stroke-dashoffset="1"/>
+        <path class="s2s" d="M200 178H30" pathLength="1" stroke="#7a1646" stroke-opacity=".28" stroke-width="6" stroke-dasharray="1 2" stroke-dashoffset="1"/>
+        <path class="s2" d="M200 178H30" pathLength="1" stroke="#c64b78" stroke-width="2.400" stroke-dasharray="1 2" stroke-dashoffset="1"/>
+      </g>
+      <path class="guide" d="M200 152V178L176.300 221.600V317.600"/>
+
+      <!-- knife: tip at origin, blade pointing along +x -->
+      <g id="knife">
+        <g id="kn" transform="translate(200 150) rotate(41) scale(.72)">
+          <path d="M0 0C16-9 34-12 104-12V13C42 13 16 9 0 0Z" fill="#7a1646" opacity=".18" transform="translate(5 9)"/>
+          <path d="M0 0C16-9 34-12 104-12V13C42 13 16 9 0 0Z" fill="url(#steelG)" stroke="#aeb2c2" stroke-width="1"/>
+          <path d="M12-2C36-6 70-8 100-8" stroke="#fff" stroke-width="2" opacity=".75" fill="none" stroke-linecap="round"/>
+          <rect x="102" y="-15" width="12" height="30" rx="4" fill="#e9e6ee" stroke="#b9b4c4"/>
+          <rect x="112" y="-15" width="90" height="30" rx="15" fill="url(#handleG)"/>
+          <circle cx="132" cy="0" r="4" fill="#ffd3e5"/><circle cx="184" cy="0" r="4" fill="#ffd3e5"/>
+          <path d="M120-9H192" stroke="#fff" stroke-opacity=".45" stroke-width="3" stroke-linecap="round"/>
+        </g>
+      </g>
+    </svg>
+  </div>
+
+  <div class="bottom-actions-wrap">
+    <button class="pill" id="pill" type="button" aria-live="polite">
+      <svg viewBox="0 0 48 52" aria-hidden="true"><path d="M13 9a10.500 10.500 0 0 1 21 0M20 32V13a3.500 3.500 0 0 1 7 0v13M27 25a3 3 0 0 1 6 0v3M33 27a3 3 0 0 1 6 0v6c0 8-5 13-12 13h-3c-5 0-8-3-11-8l-4-6a3 3 0 0 1 5-3l3 3"/></svg>
+      <span id="pillText">Drag the Knife<br>to Cut the Cake</span>
+    </button>
+
+    <button class="btn-next-surprise" id="btn-next-surprise" type="button">
+      Next: Read Your Letter 💌 →
+    </button>
+  </div>
+
+  <canvas id="fx"></canvas>
+</div>
+
+<script>
+(() => {
+  const $ = s => document.querySelector(s);
+  const screen = $('#screen'), pill = $('#pill'), cake = $('#cake');
+  const cv = $('#fx'), ctx = cv.getContext('2d');
+  const nextSurpriseBtn = $('#btn-next-surprise');
+  const add = (id, html) => $(id).insertAdjacentHTML('beforeend', html);
+  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+
+  /* ---------- URL params & embedded mode ---------- */
+  const params = new URLSearchParams(location.search);
+  const name = params.get('to') || 'Sanjana';
+  const fromName = params.get('from') || 'Rohan';
+  const isEmbedded = params.get('embedded') === '1' || (window.parent && window.parent !== window);
+  if (isEmbedded) {
+    document.body.classList.add('embedded');
+  }
+
+  // Back button handling
+  const btnBack = $('#btn-back');
+  if (btnBack) {
+    btnBack.addEventListener('click', () => {
+      if (window.parent && window.parent !== window) {
+        if (typeof window.parent.switchToCandleView === 'function') {
+          window.parent.switchToCandleView();
+          return;
+        }
+      }
+      location.href = 'candle.html?' + params.toString();
+    });
+  }
+
+  // Next surprise button handling (Goes to Personal Letter)
+  if (nextSurpriseBtn) {
+    nextSurpriseBtn.addEventListener('click', () => {
+      if (window.parent && window.parent !== window) {
+        if (typeof window.parent.switchToMessageView === 'function') {
+          window.parent.switchToMessageView();
+          return;
+        }
+        window.parent.postMessage({ type: 'SAYBYME_SWITCH_VIEW', view: 'message' }, '*');
+        return;
+      }
+      location.href = 'message.html?' + params.toString();
+    });
+  }
+
+  /* ---------- geometry of the cut ---------- */
+  const TOP = 150, CY = 178, FX = 176.3, FY = 221.6, FB = 317.6;
+  const LTOP = 49.63, TOTAL = LTOP + (FB - FY);
+  const tipFor = y => y <= CY ? [200, y] : y <= FY ? [200 - (y - CY) * (23.7 / 43.6), y] : [FX, y];
+  const frac1  = y => y <= CY ? 0 : clamp((y <= FY ? (y - CY) * (LTOP / 43.6) : LTOP + (y - FY)) / TOTAL, 0, 1);
+
+  /* ---------- build artwork ---------- */
+  let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+
+  [[0,92],[43.8,82.1],[85,66.5],[123.8,45.1],[160,18]].forEach(([x,y],i) =>
+    [x, 430 - x].forEach((px, k) => add('#bulbs',
+      `<g class="bulb" style="animation-delay:-${(i*.5+k*.8).toFixed(1)}s"><circle cx="${px}" cy="${y}" r="15" fill="#ffe27a" opacity=".5" filter="url(#bl)"/><circle cx="${px}" cy="${y}" r="7" fill="#fff8d6"/></g>`)));
+
+  [[36,28,246],[104,30,240],[186,30,266],[262,30,244],[336,26,250]].forEach(([x,w,e]) =>
+    add('#drips', `<rect x="${x}" y="190" width="${w}" height="${e-190}" rx="${w/2}"/>`));
+
+  const cols = ['#f45b9a','#f7b24a','#5bc0e8','#a77ad8','#ffffff','#7ccf8a'];
+  for (let i = 0; i < 110; i++) {
+    const x = 38 + rnd() * 324, yb = 280 + 38 * Math.sqrt(1 - ((x - 200) / 170) ** 2);
+    const y = yb - 6 - rnd() * 34, c = cols[(rnd() * cols.length) | 0], r = (rnd() * 180) | 0;
+    add('#spr', `<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="3.600" height="9" rx="1.800" fill="${c}" transform="rotate(${r} ${x.toFixed(1)} ${y.toFixed(1)})"/>`);
+  }
+
+  const X = [110, 155, 203, 251, 291], BASE = [172, 168, 164, 168, 172], H = [96, 104, 116, 100, 96];
+  X.forEach((x, i) => {
+    const top = BASE[i] - H[i];
+    add('#sticks',
+      `<rect x="${x-7}" y="${top}" width="14" height="${H[i]}" rx="7" fill="url(#stripe)" stroke="#f3a0c0" stroke-width=".8"/>
+       <ellipse cx="${x}" cy="${BASE[i]}" rx="14" ry="4.500" fill="#f9a8c8"/>
+       <path d="M${x} ${top} v-6" stroke="#4a2a22" stroke-width="2" stroke-linecap="round"/>`);
+    add('#flames',
+      `<g transform="translate(${x} ${top-5})"><g class="flick" style="animation-delay:-${(i*.27).toFixed(2)}s">
+         <circle r="40" cy="-22" fill="url(#glowG)"/>
+         <path d="M0 3C-11-8-10-25 0-45 10-25 11-8 0 3Z" fill="url(#flameG)"/>
+         <path d="M0 1C-5-4-5-13 0-23 5-13 5-4 0 1Z" fill="#fff8d6"/>
+       </g></g>`);
+  });
+
+  const swirl = (x, y, s) =>
+    `<g transform="translate(${x} ${y}) scale(${s})">
+       <ellipse cy="5" rx="33" ry="13" fill="#e9cdb8" opacity=".55"/>
+       <ellipse rx="30" ry="12" fill="#fffaf2"/><ellipse cy="-8" rx="23" ry="10" fill="#fffdf8"/><ellipse cy="-15" rx="14" ry="8" fill="#fff"/>
+       <path d="M-24-4q12 6 24 0t24 0M-18-12q9 5 18 0t18 0" stroke="#f2e0cf" stroke-width="2" fill="none"/>
+       <g transform="translate(0 -27)">
+         <path d="M-13-9Q0-18 13-9Q11 9 0 17Q-11 9-13-9Z" fill="#e5322d"/>
+         <path d="M-9-8Q-5-13 0-12" stroke="#ff9a90" stroke-width="3" fill="none" stroke-linecap="round" opacity=".7"/>
+         <g fill="#ffd9a0"><circle cx="-5" cy="-1" r="1.200"/><circle cx="4" cy="-2" r="1.200"/><circle cx="0" cy="5" r="1.200"/><circle cx="-4" cy="9" r="1"/><circle cx="5" cy="8" r="1"/></g>
+         <path d="M-8-12l8 4 8-4-4-5-4 3-4-3z" fill="#58a845"/>
+       </g></g>`;
+  [[332,184,.8],[288,204,1],[228,214,1.1]].forEach(a => add('#swirlsMain', swirl(...a)));
+  [[135,208,1],[65,184,.8]].forEach(a => add('#swirlsSlice', swirl(...a)));
+
+  /* ---------- state ---------- */
+  const mainUse = $('#mainUse'), slice = $('#slice'), face = $('#sliceFace'), sShadow = $('#sliceShadow');
+  const kn = $('#kn'), knife = $('#knife'), seams = $('#seams');
+  const s1 = [...document.querySelectorAll('.s1,.s1s')], s2 = [...document.querySelectorAll('.s2,.s2s')];
+  const K = { x: 200, y: TOP, a: 41, o: 1 };
+  let state = 'idle', S1 = 0, S2 = 0, ty = TOP, startY = 0, lastY = TOP, parts = [], W = 0, Hh = 0, dpr = 1;
+
+  const drawKnife = () => { kn.setAttribute('transform', `translate(${K.x.toFixed(2)} ${K.y.toFixed(2)}) rotate(${K.a}) scale(.72)`); knife.setAttribute('opacity', K.o); };
+  const drawSeams = () => { s1.forEach(p => p.setAttribute('stroke-dashoffset', 1 - S1)); s2.forEach(p => p.setAttribute('stroke-dashoffset', 1 - S2)); };
+  const setBusy = b => screen.classList.toggle('busy', b);
+
+  const ease = { out: t => 1 - (1 - t) ** 3, io: t => t < .5 ? 4 * t * t * t : 1 - (-2 * t + 2) ** 3 / 2,
+                 back: t => { const c1 = 1.5, c3 = c1 + 1; return 1 + c3 * (t - 1) ** 3 + c1 * (t - 1) ** 2; } };
+  const tween = (ms, fn, e = ease.io) => new Promise(res => {
+    const t0 = performance.now();
+    const step = now => { const k = Math.min(1, (now - t0) / ms); fn(e(k), k); k < 1 ? requestAnimationFrame(step) : res(); };
+    requestAnimationFrame(step);
+  });
+
+  function resize() {
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    W = screen.clientWidth; Hh = screen.clientHeight; cv.width = W * dpr; cv.height = Hh * dpr;
+  }
+  addEventListener('resize', resize); resize();
+
+  const toScreen = (x, y) => { const m = cake.getScreenCTM(), r = screen.getBoundingClientRect(); return [x * m.a + m.e - r.left, y * m.d + m.f - r.top]; };
+  const relBox = el => { const a = el.getBoundingClientRect(), b = screen.getBoundingClientRect(); return { x: a.left - b.left, y: a.top - b.top, w: a.width, h: a.height }; };
+
+  function crumbs(n) {
+    const [x, y] = toScreen(K.x, K.y), c = ['#f9d6a8', '#fff3e3', '#f48db4', '#ffffff'];
+    for (let i = 0; i < n; i++) parts.push({ k: 'm', x, y, vx: (Math.random() - .5) * 90, vy: -20 - Math.random() * 90, r0: 1.5 + Math.random() * 2, col: c[(Math.random() * 4) | 0], life: .6 + Math.random() * .4, age: 0 });
+  }
+  function burst(ox, oy, n, spread) {
+    const c = ['#f45b9a','#f7b24a','#ffd95a','#5bc0e8','#a77ad8','#ff7aa8','#ffffff'];
+    for (let i = 0; i < n; i++) {
+      const a = -Math.PI / 2 + (Math.random() - .5) * spread, sp = 300 + Math.random() * 520;
+      parts.push({ k: 'c', x: ox, y: oy, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, r: Math.random() * 6.3, vr: (Math.random() - .5) * 14,
+                   w: 6 + Math.random() * 6, h: 3 + Math.random() * 5, col: c[(Math.random() * c.length) | 0], life: 2.2 + Math.random() * 1.2, age: 0 });
+    }
+  }
+  function hearts(ox, oy, n) {
+    for (let i = 0; i < n; i++)
+      parts.push({ k: 'h', x: ox + (Math.random() - .5) * 120, y: oy + (Math.random() - .5) * 30, vx: (Math.random() - .5) * 40, vy: -60 - Math.random() * 90,
+                   s: .8 + Math.random() * .9, col: Math.random() < .5 ? '#f0306f' : '#ff8fb8', life: 1.8 + Math.random() * 1, age: -Math.random() * .5 });
+  }
+
+  function setText(t, s, pt) {
+    const T = $('#title'), S = $('#sub');
+    T.classList.add('swap'); S.classList.add('swap');
+    setTimeout(() => { T.textContent = t; S.textContent = s; $('#pillText').innerHTML = pt; T.classList.remove('swap'); S.classList.remove('swap'); }, 250);
+  }
+
+  /* ---------- cutting ---------- */
+  function applyCut(y) {
+    ty = y; const t = tipFor(y); K.x = t[0]; K.y = t[1]; S1 = frac1(y);
+    if (y > CY && Math.abs(y - lastY) > .6 && Math.random() < .7) crumbs(1 + (Math.random() * 2 | 0));
+    lastY = y; drawKnife(); drawSeams();
+  }
+  const sliceSep = s => {
+    slice.setAttribute('transform', `translate(${-23 * s} ${30 * s}) rotate(${-3.5 * s} 100 250)`);
+    face.setAttribute('opacity', clamp(s * 4, 0, 1)); sShadow.setAttribute('opacity', clamp(s * 3, 0, 1) * .8);
+  };
+
+  async function retract() {
+    state = 'auto'; const from = ty;
+    await tween(320, e => applyCut(from + (TOP - from) * e), ease.out);
+    S1 = 0; drawSeams(); setBusy(false); state = 'idle';
+  }
+
+  async function finishCut1() {
+    state = 'auto'; setBusy(true); const from = ty;
+    await tween(260, e => applyCut(from + (FB - from) * e), ease.out);
+    // lift the knife out and bring it back to the top centre
+    await tween(420, e => { K.x = FX + (200 - FX) * e; K.y = FB + (TOP - FB) * e - Math.sin(Math.PI * e) * 10; drawKnife(); });
+    await tween(200, e => { K.x = 200; K.y = TOP + (CY - TOP) * e; drawKnife(); }, ease.out);
+    // second cut: slide along the back edge of the wedge
+    await tween(700, e => { K.x = 200 - 170 * e; K.y = CY; S2 = e; if (Math.random() < .6) crumbs(1); drawKnife(); drawSeams(); });
+    await tween(260, e => { K.y = CY - 26 * e; K.x = 30 - 6 * e; drawKnife(); }, ease.out);
+    await tween(260, e => { K.o = 1 - e; K.x = 24 - 12 * e; drawKnife(); }, ease.io);
+    separate();
+  }
+
+  async function separate() {
+    mainUse.setAttribute('clip-path', 'url(#mainClip)');
+    slice.style.display = ''; sliceSep(0); seams.style.opacity = 0;
+    const c = relBox(cake);
+    burst(c.x + c.w * .5, c.y + c.h * .38, 130, Math.PI * 1.1);
+    setTimeout(() => { burst(c.x + c.w * .25, c.y + c.h * .5, 50, 1.2); burst(c.x + c.w * .75, c.y + c.h * .5, 50, 1.2); hearts(c.x + c.w * .3, c.y + c.h * .62, 14); }, 280);
+    setText(name ? 'Happy Birthday, ' + name + '!' : 'Happy Birthday!', 'The first slice is yours 🍰', 'Tap to<br>Cut Again');
+    try { navigator.vibrate && navigator.vibrate([40, 40, 90]); } catch (e) {}
+    await tween(950, sliceSep, ease.back);
+    setBusy(false); state = 'done';
+
+    // Show Continue button
+    if (nextSurpriseBtn) {
+      nextSurpriseBtn.style.display = 'inline-flex';
+    }
+  }
+
+  async function reset() {
+    state = 'auto';
+    if (nextSurpriseBtn) nextSurpriseBtn.style.display = 'none';
+    await tween(450, e => sliceSep(1 - e), ease.io);
+    mainUse.removeAttribute('clip-path'); slice.style.display = 'none';
+    S1 = S2 = 0; seams.style.opacity = 1; drawSeams();
+    ty = lastY = TOP; K.x = 200; K.y = TOP; K.o = 0; drawKnife();
+    setText('Cut the Cake', 'Make it official!', 'Drag the Knife<br>to Cut the Cake');
+    await tween(350, e => { K.o = e; drawKnife(); }, ease.out);
+    state = 'idle';
+  }
+
+  /* ---------- input ---------- */
+  const toSvg = (() => { const pt = cake.createSVGPoint(); return e => { pt.x = e.clientX; pt.y = e.clientY; return pt.matrixTransform(cake.getScreenCTM().inverse()); }; })();
+
+  screen.addEventListener('pointerdown', e => {
+    if (state === 'done') { if (e.target.closest('#pill')) reset(); return; }
+    if (state !== 'idle') return;
+    state = 'drag'; setBusy(true); startY = toSvg(e).y - (ty - TOP);
+  });
+  addEventListener('pointermove', e => { if (state === 'drag') applyCut(clamp(TOP + (toSvg(e).y - startY), TOP, FB)); });
+  const release = () => { if (state !== 'drag') return; ty >= TOP + (FB - TOP) * .8 ? finishCut1() : retract(); };
+  addEventListener('pointerup', release); addEventListener('pointercancel', release);
+  addEventListener('contextmenu', e => e.preventDefault());
+  addEventListener('keydown', e => {
+    if ((e.key === ' ' || e.key === 'Enter') && !e.repeat) { e.preventDefault(); if (state === 'done') reset(); else if (state === 'idle') finishCut1(); }
+  });
+
+  /* ---------- main loop ---------- */
+  let last = 0;
+  function frame(t) {
+    const dt = Math.min(.05, (t - last) / 1000 || 0); last = t;
+    if (state === 'idle') { K.y = TOP + Math.sin(t / 320) * 4; K.x = 200; drawKnife(); }
+    pill.style.setProperty('--p', state === 'done' ? 0 : (S1 * .55 + S2 * .45).toFixed(3));
+
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, W, Hh);
+    parts = parts.filter(q => (q.age += dt) < q.life && q.y < Hh + 30);
+    for (const q of parts) {
+      if (q.age < 0) continue;
+      q.x += q.vx * dt; q.y += q.vy * dt;
+      if (q.k === 'm') {
+        q.vy += 700 * dt; ctx.globalAlpha = 1 - q.age / q.life; ctx.fillStyle = q.col;
+        ctx.beginPath(); ctx.arc(q.x, q.y, q.r0, 0, 6.283); ctx.fill();
+      } else if (q.k === 'h') {
+        ctx.globalAlpha = Math.min(1, (q.life - q.age) * 1.5); ctx.fillStyle = q.col;
+        ctx.save(); ctx.translate(q.x + Math.sin(q.age * 4) * 6, q.y); ctx.scale(q.s * 2, q.s * 2);
+        ctx.beginPath(); ctx.moveTo(0, 4); ctx.bezierCurveTo(-9, -2, -5, -10, 0, -5); ctx.bezierCurveTo(5, -10, 9, -2, 0, 4); ctx.fill(); ctx.restore();
+      } else {
+        q.vy += 900 * dt; q.vx *= .992; q.r += q.vr * dt; ctx.globalAlpha = Math.min(1, (q.life - q.age) * 2);
+        ctx.save(); ctx.translate(q.x, q.y); ctx.rotate(q.r); ctx.fillStyle = q.col; ctx.fillRect(-q.w / 2, -q.h / 2, q.w, q.h); ctx.restore();
+      }
+    }
+    ctx.globalAlpha = 1;
+    requestAnimationFrame(frame);
+  }
+  drawKnife(); drawSeams();
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
