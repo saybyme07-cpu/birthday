@@ -112,49 +112,59 @@
   }
   .pill{
     position:relative;overflow:hidden;
-    display:flex;align-items:center;gap:18px;width:min(84%,330px);padding:13px 24px;
-    border-radius:999px;border:1.5px solid #f4a3c2;color:var(--pill);font:700 clamp(16px,4.6vw,19px)/1.25 'Nunito',sans-serif;
-    background:linear-gradient(180deg,rgba(255,255,255,.65),rgba(253,215,230,.7));box-shadow:0 10px 24px rgba(220,80,130,.18);
-    transition:transform .2s;
+    display:flex;align-items:center;gap:12px;width:min(80%,280px);padding:9px 20px;
+    border-radius:999px;border:1px solid rgba(244,163,194,0.7);color:var(--pill);font:700 14px/1.25 'Nunito',sans-serif;
+    background:rgba(255,255,255,0.88);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);box-shadow:0 4px 14px rgba(220,80,130,.12);
+    cursor:pointer;transition:all .2s ease;
   }
   .pill::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(255,150,190,.38),rgba(240,48,111,.4));
     transform:scaleX(var(--p,0));transform-origin:left;pointer-events:none}
   .pill>*{position:relative}
-  .pill svg{flex:none;width:38px;height:42px;fill:none;stroke:var(--pill);stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round;animation:tap 1.8s ease-in-out infinite}
-  @keyframes tap{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(3px) scale(.92)}}
-  .blowing .pill{transform:scale(.96)}
-  .blowing .pill svg{animation:none;transform:scale(.9)}
-  .pill:focus-visible{outline:3px solid var(--crimson);outline-offset:3px}
+  .pill svg{flex:none;width:28px;height:32px;fill:none;stroke:var(--pill);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;animation:tap 1.8s ease-in-out infinite}
+  @keyframes tap{0%,100%{transform:translateY(0)}50%{transform:translateY(2px)}}
+  .blowing .pill{transform:scale(.98)}
+  .blowing .pill svg{animation:none}
+  .pill:focus-visible{outline:2px solid var(--crimson);outline-offset:2px}
 
-  /* Continue to next surprise button (appears when candles are out) */
+  /* Continue to next surprise button - Minimalist */
   .btn-next-surprise {
     display: none;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-    padding: 13px 34px;
-    background: linear-gradient(90deg, #e8236f 0%, #9b1c4a 100%);
+    gap: 7px;
+    padding: 9px 22px;
+    background: linear-gradient(135deg, #e8236f 0%, #c2185b 100%);
     color: #ffffff;
     border: none;
     border-radius: 999px;
     font-family: inherit;
-    font-size: 16px;
-    font-weight: 800;
+    font-size: 13.5px;
+    font-weight: 700;
     cursor: pointer;
-    box-shadow: 0 8px 24px rgba(232, 35, 111, 0.45);
-    animation: popIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 4px 14px rgba(232, 35, 111, 0.24);
+    animation: popIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: all 0.2s ease;
   }
   @keyframes popIn {
-    from { opacity: 0; transform: scale(0.85); }
+    from { opacity: 0; transform: scale(0.9); }
     to { opacity: 1; transform: scale(1); }
   }
   .btn-next-surprise:hover {
-    transform: translateY(-2px) scale(1.03);
-    box-shadow: 0 12px 28px rgba(232, 35, 111, 0.55);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(232, 35, 111, 0.32);
   }
 
   #fx{position:absolute;inset:0;width:100%;height:100%;z-index:6;pointer-events:none}
   @media(prefers-reduced-motion:reduce){.bulb,.divider svg,.pill svg{animation:none}}
+
+  @media (max-width: 480px) {
+    .top { padding: clamp(56px, 10vh, 80px) 16px 0; }
+    h1 { font-size: clamp(30px, 8.5vw, 40px); }
+    .sub { font-size: 15px; margin-top: 4px; }
+    .divider { margin-top: 10px; }
+    .bottom-actions-wrap { margin-bottom: 20px; gap: 8px; }
+    .pill { padding: 8px 16px; font-size: 13.5px; width: min(88%, 270px); }
+  }
 
   /* When inside phone preview iframe */
   body.embedded {
@@ -186,14 +196,14 @@
     box-shadow: 0 2px 8px rgba(0,0,0,0.06) !important;
   }
   body.embedded .top {
-    padding: 62px 14px 0 !important;
+    padding: 54px 12px 0 !important;
   }
   body.embedded h1 {
-    font-size: 38px !important;
+    font-size: 32px !important;
   }
   body.embedded .sub {
-    font-size: 16px !important;
-    margin-top: 4px !important;
+    font-size: 14px !important;
+    margin-top: 3px !important;
   }
   body.embedded .divider {
     margin-top: 8px !important;
@@ -202,16 +212,17 @@
     padding: 4px 0 0 !important;
   }
   body.embedded .bottom-actions-wrap {
-    margin-bottom: 22px !important;
+    margin-bottom: 20px !important;
+    gap: 8px !important;
   }
   body.embedded .pill {
-    width: min(86%, 280px) !important;
-    padding: 10px 18px !important;
-    font-size: 15px !important;
+    width: min(86%, 260px) !important;
+    padding: 8px 16px !important;
+    font-size: 14px !important;
   }
   body.embedded .pill svg {
-    width: 32px !important;
-    height: 36px !important;
+    width: 28px !important;
+    height: 32px !important;
   }
 
 </style>
@@ -319,6 +330,10 @@
   // If running inside iframe preview, add embedded class
   if (window.self !== window.top || params.get('embedded') === '1') {
     document.body.classList.add('embedded');
+  } else {
+    // Standalone recipient webapp mode: hide preview-only back button
+    const backBtn = $('#btn-back');
+    if (backBtn) backBtn.style.display = 'none';
   }
 
   // Back button: returns to gift box view inside the phone preview!
@@ -535,5 +550,6 @@
   requestAnimationFrame(frame);
 })();
 </script>
+<script src="bg-music.js"></script>
 </body>
 </html>

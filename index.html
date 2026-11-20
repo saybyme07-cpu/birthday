@@ -174,13 +174,30 @@
 
   /* ---------- responsive ---------- */
   @media (max-width:600px){
-    main{padding:75px 16px 20px}
-    .art{max-width:290px;height:155px}
-    .cake{width:160px}
-    .bear{width:110px}
-    .gift-s{width:56px}
-    .spark{display:none}
-    .burst.a{left:-28px}.burst.b{right:-28px}
+    body { overflow-x: hidden; }
+    .stage { overflow-x: hidden; }
+    header { top: 12px; padding: 0 45px; }
+    .logo { font-size: clamp(26px, 7vw, 34px); }
+    .tag { font-size: 11px; margin-top: 3px; }
+    main { padding: 68px 16px 20px; width: 100%; box-sizing: border-box; }
+    .art { max-width: 260px; height: 140px; }
+    .cake { width: 145px; }
+    .bear { width: 100px; }
+    .gift-s { width: 48px; }
+    h1 { font-size: clamp(32px, 8.5vw, 44px); }
+    h1 .h1a { right: -16px; top: -6px; width: 22px; }
+    h1 .h1b { right: -14px; width: 20px; }
+    h1 .h1c { right: 0; bottom: -6px; width: 18px; }
+    .spark { display: none; }
+    .underline { width: 85%; }
+    .sub { font-size: 14px; margin: 10px auto 16px; }
+    .field { height: 48px; padding: 0 18px; font-size: 14px; }
+    .field input { font-size: 15px; }
+    .cta-wrap { max-width: 100%; margin: 18px auto 0; }
+    .cta { height: 48px; font-size: 16px; }
+    .burst.a { left: -14px; width: 18px; }
+    .burst.b { right: -14px; width: 18px; }
+    .deco { display: none; }
   }
 </style>
 </head>
@@ -464,5 +481,6 @@
     window.location.href = 'step2.html?from=' + encodeURIComponent(from) + '&to=' + encodeURIComponent(to);
   }
 </script>
+<script src="bg-music.js"></script>
 </body>
 </html>

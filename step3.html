@@ -280,6 +280,35 @@
     .wish-row{border-radius:24px;padding:12px 16px}
     .wish-text{font-size:14px}
   }
+
+  @media(max-width:540px){
+    header{padding:10px 12px 0}
+    .stepper-wrap{margin:10px auto 4px;padding:0 6px}
+    .stepper::before{left:16px;right:16px;top:13px}
+    .step-progress-active{left:16px;top:13px}
+    .step-bubble{width:26px;height:26px;font-size:11px}
+    .step-label{font-size:10px;margin-top:3px}
+    .header-scene{margin:6px auto 10px}
+    h1{font-size:26px}
+    .sub{font-size:13px}
+    main{padding:0 12px}
+    .card-container{padding:16px 14px 20px;border-radius:20px;width:100%}
+    .tabs-bar{padding:4px;gap:6px;margin-bottom:14px;width:100%}
+    .tab-btn{padding:8px 12px;font-size:13px}
+    .wishes-list{gap:9px;margin-bottom:14px}
+    .wish-row{padding:11px 13px;border-radius:18px;gap:10px}
+    .wish-left{gap:10px}
+    .wish-text{font-size:13.5px;line-height:1.4}
+    .radio-circle{width:18px;height:18px}
+    .radio-inner{width:8px;height:8px}
+    .wish-heart{width:18px;height:18px}
+    .btn-show-more{padding:8px 18px;font-size:13px}
+    .custom-textarea{padding:12px 14px;font-size:14px;height:120px}
+    .actions-row{flex-direction:column-reverse;gap:10px;width:100%;margin-top:16px}
+    .btn-back,.btn-next{width:100%;max-width:100%;height:46px;justify-content:center}
+    .confetti{display:none}
+    .lights{height:80px;width:45%}
+  }
 </style>
 </head>
 <body>
@@ -688,5 +717,6 @@
     window.location.href = 'step4.html?' + query.toString();
   });
 </script>
+<script src="bg-music.js"></script>
 </body>
 </html>

@@ -49,6 +49,22 @@
     }
   }
 
+  @media (max-width: 480px) {
+    .screen {
+      padding: 16px 14px 14px;
+    }
+    .wish-title {
+      font-size: 24px;
+    }
+    .gif-stage-container {
+      width: clamp(170px, 48vw, 210px);
+      height: clamp(170px, 48vw, 210px);
+    }
+    .celebration-cheer {
+      font-size: 21px;
+    }
+  }
+
   /* Embedded Mode (inside phone preview mockup) */
   body.embedded {
     background: transparent !important;
@@ -63,7 +79,20 @@
     height: 100% !important;
     border-radius: 38px !important;
     box-shadow: none !important;
-    padding: 24px 16px 18px !important;
+    padding: 18px 14px 14px !important;
+  }
+  body.embedded .wish-title {
+    font-size: 24px !important;
+  }
+  body.embedded .gif-stage-container {
+    width: clamp(160px, 44vw, 195px) !important;
+    height: clamp(160px, 44vw, 195px) !important;
+  }
+  body.embedded .celebration-banner {
+    margin: 2px 0 6px !important;
+  }
+  body.embedded .celebration-cheer {
+    font-size: 19px !important;
   }
 
   /* Top Nav Bar */
@@ -138,61 +167,91 @@
   }
 
   /* Animated Tenor GIF Card */
+  .celebration-center {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 8px 0 14px;
+  }
   .gif-stage-container {
     position: relative;
-    width: 180px;
-    height: 180px;
-    border-radius: 22px;
-    overflow: hidden;
+    width: 220px;
+    height: 220px;
+    border-radius: 26px;
+    overflow: visible;
     box-shadow:
-      0 12px 28px rgba(160, 27, 78, 0.22),
-      0 0 0 3px rgba(255, 255, 255, 0.85);
+      0 16px 36px rgba(160, 27, 78, 0.22),
+      0 0 0 4px rgba(255, 255, 255, 0.9),
+      0 0 20px rgba(232, 35, 111, 0.2);
     background: #ffffff;
-    margin-bottom: 12px;
     cursor: pointer;
-    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+    animation: celebrationFloat 4s ease-in-out infinite alternate;
   }
   .gif-stage-container:hover {
-    transform: scale(1.04);
+    transform: scale(1.05);
+    box-shadow:
+      0 20px 42px rgba(160, 27, 78, 0.28),
+      0 0 0 5px rgba(255, 255, 255, 0.95),
+      0 0 28px rgba(232, 35, 111, 0.35);
+  }
+  .gif-stage-container:active {
+    transform: scale(0.97);
   }
   .birthday-gif {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    border-radius: 22px;
     display: block;
   }
 
-  /* Chosen Wish Display Card */
-  .wish-quote-card {
-    position: relative;
+  /* Micro-sparkle accents */
+  .spk {
+    position: absolute;
+    pointer-events: none;
+    user-select: none;
+    z-index: 5;
+    line-height: 1;
+    filter: drop-shadow(0 2px 6px rgba(247, 178, 74, 0.6));
+    animation: sparkleTwinkle 2.6s ease-in-out infinite alternate;
+  }
+  .spk-1 { top: -14px; left: -14px; font-size: 22px; color: #ff6b8b; animation-delay: 0s; }
+  .spk-2 { top: -12px; right: -14px; font-size: 20px; color: #ffd166; animation-delay: 0.8s; }
+  .spk-3 { bottom: -14px; left: -12px; font-size: 20px; color: #f45b9a; animation-delay: 1.4s; }
+  .spk-4 { bottom: -12px; right: -12px; font-size: 24px; color: #ffd166; animation-delay: 2s; }
+
+  @keyframes sparkleTwinkle {
+    0%, 100% { transform: scale(0.85) rotate(0deg); opacity: 0.7; }
+    50% { transform: scale(1.3) rotate(20deg); opacity: 1; }
+  }
+
+  @keyframes celebrationFloat {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-7px); }
+  }
+
+  /* Celebration Cheer Banner */
+  .celebration-banner {
     width: 100%;
-    max-width: 310px;
-    background: rgba(255, 255, 255, 0.82);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1.5px solid rgba(246, 192, 214, 0.8);
-    border-radius: 20px;
-    padding: 14px 16px 12px;
+    max-width: 320px;
     text-align: center;
-    box-shadow: 0 6px 20px rgba(160, 27, 78, 0.08);
+    margin: 4px 0 10px;
+    padding: 0 10px;
   }
-  .quote-sparkle {
-    font-size: 16px;
-    color: #f7b24a;
-    margin-bottom: 2px;
-  }
-  .wish-quote-text {
+  .celebration-cheer {
     font-family: 'Caveat', cursive;
-    font-size: 18px;
+    font-size: clamp(20px, 5.5vw, 24px);
     font-weight: 700;
-    color: #4a122e;
-    line-height: 1.35;
-    margin-bottom: 6px;
+    color: var(--crimson);
+    line-height: 1.25;
+    text-shadow: 0 1px 4px rgba(255, 255, 255, 0.8);
+    animation: cheerPulse 3s ease-in-out infinite alternate;
   }
-  .wish-sender-line {
-    font-size: 12px;
-    font-weight: 700;
-    color: var(--rose);
+  @keyframes cheerPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.03); color: var(--rose); }
   }
 
   /* Balloon Hint Pill */
@@ -200,51 +259,76 @@
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    margin-top: 10px;
-    padding: 4px 12px;
-    background: rgba(255, 255, 255, 0.7);
+    margin-top: 4px;
+    padding: 6px 16px;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     border-radius: 999px;
-    font-size: 11.5px;
-    font-weight: 700;
+    font-size: 12px;
+    font-weight: 800;
     color: #6b3f55;
-    border: 1px dashed rgba(232, 35, 111, 0.3);
-    animation: gentlePulse 2s ease-in-out infinite;
+    border: 1px dashed rgba(232, 35, 111, 0.35);
+    box-shadow: 0 3px 10px rgba(232, 35, 111, 0.1);
+    animation: gentlePulse 2.4s ease-in-out infinite;
   }
   @keyframes gentlePulse {
-    0%, 100% { transform: scale(1); opacity: 0.9; }
-    50% { transform: scale(1.03); opacity: 1; }
+    0%, 100% { transform: scale(1); opacity: 0.92; }
+    50% { transform: scale(1.04); opacity: 1; }
   }
 
-  /* Bottom Actions */
-  .bottom-actions {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    z-index: 20;
-    margin-top: 8px;
-  }
-  .btn-blow-candles {
-    display: inline-flex;
+  /* Celebration Finale Card (Appears after popping all balloons) */
+  .celebration-finale {
+    display: none;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
-    gap: 8px;
-    width: 86%;
-    max-width: 270px;
-    padding: 12px 24px;
-    background: linear-gradient(90deg, #e8236f 0%, #b3124d 100%);
-    border: none;
-    border-radius: 999px;
-    font-family: inherit;
-    font-size: 15px;
-    font-weight: 800;
-    color: #ffffff;
-    cursor: pointer;
-    box-shadow: 0 8px 22px rgba(232, 35, 111, 0.42);
-    transition: all 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+    width: 92%;
+    max-width: 320px;
+    margin: 8px auto 0;
+    padding: 14px 18px 12px;
+    background: rgba(255, 255, 255, 0.94);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 22px;
+    border: 2px solid rgba(232, 35, 111, 0.35);
+    box-shadow: 0 12px 32px rgba(232, 35, 111, 0.22), 0 0 20px rgba(247, 178, 74, 0.25);
+    text-align: center;
+    z-index: 25;
+    animation: finalePop 0.65s cubic-bezier(0.34, 1.56, 0.64, 1) both;
   }
-  .btn-blow-candles:hover {
-    transform: translateY(-2px) scale(1.03);
-    box-shadow: 0 12px 28px rgba(232, 35, 111, 0.55);
+  .celebration-finale.show {
+    display: flex;
+  }
+  .finale-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #e8236f, #b3124d);
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    box-shadow: 0 4px 12px rgba(232, 35, 111, 0.25);
+    margin-bottom: 4px;
+  }
+  .finale-title {
+    font-family: 'Kaushan Script', cursive;
+    font-size: 23px;
+    color: var(--crimson);
+    line-height: 1.2;
+    margin: 3px 0;
+  }
+  .finale-text {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: #5a1d3a;
+    line-height: 1.35;
+    margin-bottom: 2px;
+  }
+  @keyframes finalePop {
+    0% { transform: scale(0.65) translateY(24px); opacity: 0; }
+    100% { transform: scale(1) translateY(0); opacity: 1; }
   }
 
   /* Interactive Floating Balloons Layer */
@@ -363,50 +447,54 @@
 
   <!-- Header Section -->
   <div class="header-wrap">
-    <div class="wish-badge">✨ Birthday Wish ✨</div>
+    <div class="wish-badge">🎉 Birthday Celebration 🎉</div>
     <h1 class="wish-title">Happy Birthday, <span class="highlight-name" id="name-display">Sanjana</span>! 🎂</h1>
   </div>
 
   <!-- Interactive Floating Balloons Layer -->
   <div class="balloons-layer" id="balloons-layer">
-    <div class="balloon balloon-1" title="Tap balloon to blow the candles!" data-color="#f27fb0">
+    <div class="balloon balloon-1" title="Tap balloon to celebrate!" data-color="#f27fb0">
       <div class="balloon-string"></div>
     </div>
-    <div class="balloon balloon-2" title="Tap balloon to blow the candles!" data-color="#ffb703">
+    <div class="balloon balloon-2" title="Tap balloon to celebrate!" data-color="#ffb703">
       <div class="balloon-string"></div>
     </div>
-    <div class="balloon balloon-3" title="Tap balloon to blow the candles!" data-color="#a77ad8">
+    <div class="balloon balloon-3" title="Tap balloon to celebrate!" data-color="#a77ad8">
       <div class="balloon-string"></div>
     </div>
-    <div class="balloon balloon-4" title="Tap balloon to blow the candles!" data-color="#e8236f">
+    <div class="balloon balloon-4" title="Tap balloon to celebrate!" data-color="#e8236f">
       <div class="balloon-string"></div>
     </div>
   </div>
 
-  <!-- Main Stage: Tenor GIF & Chosen Wish Card -->
+  <!-- Main Stage: Celebration Center -->
   <div class="main-stage">
-    <!-- Animated Tenor GIF -->
-    <div class="gif-stage-container" id="gif-card" title="Tap to blow the candles!">
-      <img src="assets/birthday_tenor.gif" onerror="this.src='https://media1.tenor.com/m/8-dHMrnA-XgAAAAC/birthday-happy-birthday.gif'" alt="Happy Birthday Celebration GIF" class="birthday-gif">
+    <div class="celebration-center">
+      <div class="gif-stage-container" id="gif-card" title="Tap for celebration confetti!">
+        <img src="assets/birthday_tenor.gif" onerror="this.src='https://media1.tenor.com/m/8-dHMrnA-XgAAAAC/birthday-happy-birthday.gif'" alt="Happy Birthday Celebration GIF" class="birthday-gif">
+        <!-- Floating sparkle accents -->
+        <span class="spk spk-1">✦</span>
+        <span class="spk spk-2">✨</span>
+        <span class="spk spk-3">★</span>
+        <span class="spk spk-4">✦</span>
+      </div>
     </div>
 
-    <!-- Chosen Wish Card (from entry) -->
-    <div class="wish-quote-card">
-      <div class="quote-sparkle">✨ 💖 ✨</div>
-      <p class="wish-quote-text" id="wish-text-content">"You make ordinary days feel like celebrations."</p>
-      <div class="wish-sender-line">— With love, <span id="sender-name">Rohan</span> 💕</div>
+    <!-- Celebration Cheer Line -->
+    <div class="celebration-banner">
+      <p class="celebration-cheer">Sending you the warmest smiles & sweetest wishes! 💖</p>
     </div>
 
-    <div class="balloon-prompt">
-      <span class="pulse-icon">🎈</span> Tap balloons to pop them! 🎈
+    <div class="balloon-prompt" id="balloon-prompt">
+      <span class="pulse-icon">🎈</span> Tap balloons to pop celebrations! 🎈
     </div>
-  </div>
 
-  <!-- Bottom Action Button -->
-  <div class="bottom-actions">
-    <button class="btn-blow-candles" id="btn-blow-candles" type="button">
-      <span>Blow the Candles</span> 🎂 →
-    </button>
+    <!-- Celebration Finale Card (Reveals after popping all balloons) -->
+    <div class="celebration-finale" id="celebration-finale">
+      <div class="finale-badge">🎊 Best Birthday Ever! 🎊</div>
+      <h2 class="finale-title">Happy Birthday, <span class="finale-name"></span>! 🎂</h2>
+      <p class="finale-text">May all your wishes come true and your year be filled with nonstop joy! 💖</p>
+    </div>
   </div>
 
   <!-- Particle Confetti Canvas -->
@@ -427,9 +515,9 @@
   const chosenWish = params.get('wish') || params.get('msg') || 'You make ordinary days feel like celebrations.';
 
   // Populate dynamic text
-  $('#name-display').textContent = toName;
-  $('#wish-text-content').textContent = `"${chosenWish}"`;
-  $('#sender-name').textContent = fromName || 'Someone special';
+  if ($('#name-display')) $('#name-display').textContent = toName;
+  if ($('#wish-text-content')) $('#wish-text-content').textContent = `"${chosenWish}"`;
+  if ($('#sender-name')) $('#sender-name').textContent = fromName || 'Someone special';
 
   // Back button: returns to personal letter view
   $('#btn-back').addEventListener('click', (e) => {
@@ -472,18 +560,43 @@
       // Show floating reaction text
       showFloatingText(popReactions[index % popReactions.length], originX, originY);
 
-      // Update prompt text - STAYS ON THIS PAGE!
-      if (promptEl) {
-        if (poppedCount < totalBalloons) {
+      // Update prompt text or trigger grand celebration finale
+      if (poppedCount < totalBalloons) {
+        if (promptEl) {
           promptEl.innerHTML = `<span class="pulse-icon">🎈</span> Popped ${poppedCount} of ${totalBalloons}! Tap more! ✨`;
-        } else {
-          promptEl.innerHTML = `<span class="pulse-icon">🎉</span> All balloons popped! Tap below to blow candles 🎂`;
-          promptEl.style.background = 'rgba(255, 230, 240, 0.95)';
-          promptEl.style.borderColor = '#e8236f';
         }
+      } else {
+        triggerGrandFinale();
       }
     });
   });
+
+  // Grand Celebration Finale when all balloons popped
+  function triggerGrandFinale() {
+    if (promptEl) promptEl.style.display = 'none';
+    const finale = $('#celebration-finale');
+    if (finale) {
+      finale.classList.add('show');
+      const nameSpan = finale.querySelector('.finale-name');
+      if (nameSpan) nameSpan.textContent = toName;
+    }
+
+    playFanfareChime();
+
+    // Celebration cannon confetti bursts
+    burstConfetti(W * 0.25, H * 0.45, 50);
+    burstConfetti(W * 0.75, H * 0.45, 50);
+    burstConfetti(W * 0.5, H * 0.35, 60);
+
+    setTimeout(() => {
+      burstConfetti(W * 0.35, H * 0.5, 45);
+      burstConfetti(W * 0.65, H * 0.5, 45);
+    }, 320);
+
+    setTimeout(() => {
+      burstConfetti(W * 0.5, H * 0.4, 50);
+    }, 650);
+  }
 
   // Floating text feedback on pop
   function showFloatingText(text, x, y) {
@@ -510,37 +623,29 @@
     setTimeout(() => el.remove(), 700);
   }
 
-  // Navigation to Candle page ONLY when clicking the bottom button!
-  let isNavigating = false;
-  function goToCandlesPage() {
-    if (isNavigating) return;
-    isNavigating = true;
+  /* ---------- Web Audio Pop Chime & Fanfare ---------- */
+  function playFanfareChime() {
+    try {
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      if (!AudioContext) return;
+      const ctx = new AudioContext();
+      if (ctx.state === 'suspended') ctx.resume();
 
-    // Pop any remaining balloons in celebratory wave
-    $$('.balloon:not(.popped)').forEach((b, idx) => {
-      setTimeout(() => b.classList.add('popped'), idx * 50);
-    });
-
-    playPopChime();
-    burstConfetti(window.innerWidth / 2, window.innerHeight * 0.45, 50);
-
-    setTimeout(() => {
-      if (window.parent && window.parent !== window) {
-        if (typeof window.parent.switchToCandleView === 'function') {
-          window.parent.switchToCandleView();
-          isNavigating = false;
-          return;
-        }
-        window.parent.postMessage({ type: 'SAYBYME_SWITCH_VIEW', view: 'candle' }, '*');
-        isNavigating = false;
-        return;
-      }
-      location.href = 'candle.html?' + params.toString();
-    }, 280);
+      const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+      notes.forEach((freq, idx) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(freq, ctx.currentTime + idx * 0.1);
+        gain.gain.setValueAtTime(0.22, ctx.currentTime + idx * 0.1);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + idx * 0.1 + 0.35);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(ctx.currentTime + idx * 0.1);
+        osc.stop(ctx.currentTime + idx * 0.1 + 0.35);
+      });
+    } catch (e) {}
   }
-
-  // Bottom action button: explicitly navigates to candle blowout
-  $('#btn-blow-candles').addEventListener('click', goToCandlesPage);
 
   /* ---------- Web Audio Pop Chime ---------- */
   function playPopChime() {
@@ -578,6 +683,22 @@
   const particles = [];
   const colors = ['#f45b9a', '#f7b24a', '#5bc0e8', '#a77ad8', '#ffffff', '#ff6b8b'];
 
+  // Ambient gentle celebratory drifting particles
+  const ambientConfetti = [];
+  for (let i = 0; i < 22; i++) {
+    ambientConfetti.push({
+      x: Math.random() * (W || 360),
+      y: Math.random() * (H || 680),
+      vx: (Math.random() - 0.5) * 0.45,
+      vy: 0.35 + Math.random() * 0.55,
+      size: 2.5 + Math.random() * 3.5,
+      color: colors[(Math.random() * colors.length) | 0],
+      alpha: 0.25 + Math.random() * 0.35,
+      rotation: Math.random() * 360,
+      rotSpeed: (Math.random() - 0.5) * 2
+    });
+  }
+
   function burstConfetti(ox, oy, count) {
     for (let i = 0; i < count; i++) {
       const angle = Math.random() * Math.PI * 2;
@@ -595,13 +716,41 @@
         rotSpeed: (Math.random() - 0.5) * 12
       });
     }
-    if (!animating) requestAnimationFrame(renderConfetti);
   }
 
-  let animating = false;
+  // Tapping central GIF also creates a celebratory burst
+  const gifCard = $('#gif-card');
+  if (gifCard) {
+    gifCard.addEventListener('click', () => {
+      const rect = gifCard.getBoundingClientRect();
+      burstConfetti(rect.left + rect.width / 2, rect.top + rect.height / 2, 35);
+      playPopChime();
+    });
+  }
+
+  function renderAmbient() {
+    for (let p of ambientConfetti) {
+      p.x += p.vx;
+      p.y += p.vy;
+      p.rotation += p.rotSpeed;
+      if (p.y > H + 10) {
+        p.y = -10;
+        p.x = Math.random() * W;
+      }
+      ctx.save();
+      ctx.globalAlpha = p.alpha;
+      ctx.translate(p.x, p.y);
+      ctx.rotate((p.rotation * Math.PI) / 180);
+      ctx.fillStyle = p.color;
+      ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+      ctx.restore();
+    }
+  }
+
   function renderConfetti() {
     ctx.clearRect(0, 0, W, H);
-    let alive = false;
+    renderAmbient();
+
     for (let i = particles.length - 1; i >= 0; i--) {
       const p = particles[i];
       p.x += p.vx;
@@ -611,7 +760,6 @@
       p.rotation += p.rotSpeed;
 
       if (p.alpha > 0) {
-        alive = true;
         ctx.save();
         ctx.globalAlpha = p.alpha;
         ctx.translate(p.x, p.y);
@@ -623,13 +771,9 @@
         particles.splice(i, 1);
       }
     }
-    if (alive) {
-      animating = true;
-      requestAnimationFrame(renderConfetti);
-    } else {
-      animating = false;
-    }
+    requestAnimationFrame(renderConfetti);
   }
+  requestAnimationFrame(renderConfetti);
 
   // Embedded mode detection
   if (window.self !== window.top || params.get('embedded') === '1') {
@@ -637,5 +781,6 @@
   }
 })();
 </script>
+<script src="bg-music.js"></script>
 </body>
 </html>

@@ -158,6 +158,51 @@
     padding: 6px 0;
   }
 
+  /* Replay Preview Button below Phone Mockup */
+  .phone-replay-wrap {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 14px;
+    z-index: 20;
+  }
+  .btn-replay-preview {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 22px;
+    background: rgba(255, 255, 255, 0.94);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1.5px solid rgba(232, 35, 111, 0.35);
+    border-radius: 999px;
+    font-family: 'Nunito', system-ui, sans-serif;
+    font-size: 13.5px;
+    font-weight: 800;
+    color: var(--plum);
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(122, 22, 70, 0.12);
+    transition: all 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .btn-replay-preview:hover {
+    background: #ffffff;
+    transform: translateY(-2px) scale(1.05);
+    border-color: var(--rose);
+    box-shadow: 0 6px 20px rgba(232, 35, 111, 0.25);
+    color: var(--rose);
+  }
+  .btn-replay-preview:active {
+    transform: scale(0.96);
+  }
+  .btn-replay-preview .replay-icon {
+    width: 16px;
+    height: 16px;
+    transition: transform 0.4s ease;
+  }
+  .btn-replay-preview:hover .replay-icon {
+    transform: rotate(-180deg);
+  }
+
 
 
   /* Realistic iPhone Hardware Frame */
@@ -491,39 +536,43 @@
     100% { transform: scale(0.7) rotate(90deg); opacity: 0.4; }
   }
 
-  /* Tap to Open main pill button */
+  /* Tap to Open main pill button - Minimalist */
   .btn-tap-open-main {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-    width: 84%;
-    max-width: 260px;
-    padding: 14px 26px;
-    margin: 0 auto 10px;
-    background: linear-gradient(90deg, #e8236f 0%, #b3124d 100%);
+    gap: 7px;
+    width: auto;
+    min-width: 160px;
+    padding: 10px 22px;
+    margin: 4px auto 10px;
+    background: linear-gradient(135deg, #e8236f 0%, #c2185b 100%);
     border: none;
     border-radius: 999px;
     font-family: inherit;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 700;
+    letter-spacing: 0.3px;
     color: #ffffff;
     cursor: pointer;
     text-decoration: none;
-    box-shadow: 0 8px 24px rgba(232, 35, 111, 0.42);
-    transition: all 0.24s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 4px 14px rgba(232, 35, 111, 0.24);
+    transition: all 0.2s ease;
     z-index: 25;
   }
   .btn-tap-open-main:hover {
-    transform: translateY(-2px) scale(1.03);
-    box-shadow: 0 12px 30px rgba(232, 35, 111, 0.55);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(232, 35, 111, 0.32);
+  }
+  .btn-tap-open-main:active {
+    transform: scale(0.97);
   }
   .btn-arrow {
-    font-size: 18px;
+    font-size: 15px;
     transition: transform 0.2s ease;
   }
   .btn-tap-open-main:hover .btn-arrow {
-    transform: translateX(4px);
+    transform: translateX(3px);
   }
 
   /* Bottom Sound Toggle */
@@ -935,23 +984,90 @@
 
   @media (max-width: 600px) {
     .stage {
-      padding: 12px 14px 20px;
+      padding: 10px 10px 24px;
+      overflow-x: hidden;
+    }
+    .header-center h1 {
+      font-size: clamp(22px, 5.5vw, 26px);
+      line-height: 1.2;
+    }
+    .header-center .sub {
+      font-size: 13px;
+    }
+    .main-layout {
+      width: 100%;
+      padding: 0;
+      gap: 20px;
+    }
+    .phone-container {
+      width: 100%;
+      max-width: 100%;
+      padding: 0;
     }
     .phone-mockup {
+      width: min(100%, 320px);
+      height: 580px;
+      border-radius: 40px;
+      padding: 4px;
+      margin: 0 auto;
+    }
+    .phone-screen {
+      border-radius: 34px;
+      border-width: 3px;
+    }
+    .dynamic-island {
+      width: 78px;
+      height: 18px;
+      top: 7px;
+    }
+    .phone-gift-stage {
+      width: clamp(160px, 45vw, 195px);
+      height: clamp(160px, 45vw, 195px);
+      margin: 4px auto;
+    }
+    .btn-phone-open {
+      padding: 9px 20px;
+      font-size: 13px;
+      height: 38px;
+    }
+    .btn-replay-preview {
+      margin-top: 10px;
+      font-size: 12px;
+      padding: 6px 14px;
+    }
+    .floating-heart {
+      display: none !important;
+    }
+    .review-card {
+      padding: 16px 14px 20px;
+      border-radius: 20px;
       width: 100%;
-      max-width: 340px;
-      height: 620px;
-      padding: 6px;
+      box-sizing: border-box;
     }
     .mini-cards-grid {
       grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+    .mini-card {
+      padding: 8px 6px 10px;
+      border-radius: 14px;
+    }
+    .mini-card-img {
+      width: 48px;
+      height: 48px;
+      margin-bottom: 6px;
+    }
+    .mini-card-label {
+      font-size: 11px;
     }
     .action-buttons-wrap {
       flex-direction: column-reverse;
-      gap: 12px;
+      gap: 10px;
+      width: 100%;
     }
     .btn-back-edit, .btn-continue {
       width: 100%;
+      height: 46px;
       justify-content: center;
     }
   }
@@ -1048,8 +1164,12 @@
 
             <!-- Bottom Sound Toggle -->
             <div class="phone-bottom-bar">
-              <button class="btn-phone-sound" id="btn-sound-toggle" aria-label="Toggle Sound" type="button">
-                🔊
+              <button class="btn-phone-sound" id="btn-sound-toggle" aria-label="Toggle Sound" type="button" title="Toggle Sound">
+                <svg class="speaker-svg" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <path d="M13 6.8 L7.6 10.6 H4 C3.45 10.6 3 11.05 3 11.6 V16.4 C3 16.95 3.45 17.4 4 17.4 H7.6 L13 21.2 Z" stroke="#671038" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                  <path d="M16.8 10.6 C18.1 11.6 18.8 12.7 18.8 14 C18.8 15.3 18.1 16.4 16.8 17.4" stroke="#671038" stroke-width="2.3" stroke-linecap="round" fill="none"/>
+                  <path d="M20.4 7.6 C22.6 9.5 23.8 11.6 23.8 14 C23.8 16.4 22.6 18.5 20.4 20.4" stroke="#671038" stroke-width="2.3" stroke-linecap="round" fill="none"/>
+                </svg>
               </button>
             </div>
           </div>
@@ -1073,6 +1193,17 @@
             <iframe id="phone-message-frame" src="message.html?embedded=1" title="Interactive Personal Letter Preview" allow="autoplay"></iframe>
           </div>
         </div>
+      </div>
+
+      <!-- Replay Preview Button right below the mockup -->
+      <div class="phone-replay-wrap">
+        <button type="button" class="btn-replay-preview" id="btn-replay-preview" title="Restart Preview from Beginning">
+          <svg class="replay-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="1 4 1 10 7 10"></polyline>
+            <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+          </svg>
+          <span>Replay Preview</span>
+        </button>
       </div>
     </div>
 
@@ -1181,6 +1312,29 @@
       </div>
     </div>
   </main>
+</div>
+
+<!-- Share & WebApp Link Generator Modal -->
+<div class="share-modal-backdrop" id="share-modal" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="modal-title-heading">
+  <div class="share-modal-card">
+    <button class="btn-close-modal" id="btn-close-modal" type="button" aria-label="Close modal">✕</button>
+    
+    <div class="modal-badge-icon">🎁✨</div>
+    <h3 class="modal-title" id="modal-title-heading">Your Birthday WebApp is Ready!</h3>
+    <p class="modal-desc">
+      Share this magical link with <strong id="modal-recipient-name">Sanjana</strong>. When they open it on their phone, their interactive birthday surprise experience will begin!
+    </p>
+
+    <div class="share-link-box">
+      <input type="text" id="share-link-input" readonly spellcheck="false" value="">
+      <button type="button" class="btn-copy-link" id="btn-copy-link">Copy Link</button>
+    </div>
+
+    <div class="modal-actions-row">
+      <button type="button" class="btn-modal-test" id="btn-modal-test">Test WebApp ↗</button>
+      <button type="button" class="btn-modal-done" id="btn-modal-done">Done ✨</button>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -1372,6 +1526,33 @@
   document.getElementById('btn-tap-to-open').addEventListener('click', triggerGiftOpening);
   document.getElementById('phone-gift-box').addEventListener('click', triggerGiftOpening);
 
+  // Replay Preview button listener: Restarts the entire preview from beginning
+  const btnReplayPreview = document.getElementById('btn-replay-preview');
+  if (btnReplayPreview) {
+    btnReplayPreview.addEventListener('click', () => {
+      // Reload iframe sources to reset all animations & states
+      const candleFrame = document.getElementById('phone-candle-frame');
+      const cakeFrame = document.getElementById('phone-cake-frame');
+      const messageFrame = document.getElementById('phone-message-frame');
+      const wishesFrame = document.getElementById('phone-wishes-frame');
+
+      if (candleFrame) candleFrame.src = candleFrame.src;
+      if (cakeFrame) cakeFrame.src = cakeFrame.src;
+      if (messageFrame) messageFrame.src = messageFrame.src;
+      if (wishesFrame) wishesFrame.src = wishesFrame.src;
+
+      // Reset gift box image & styles
+      const giftImg = document.getElementById('phone-gift-img');
+      if (giftImg) {
+        giftImg.src = 'assets/gift_box_perfect.png';
+        giftImg.style.transform = '';
+        giftImg.style.opacity = '1';
+      }
+
+      switchToGiftView();
+    });
+  }
+
 
 
   // Back to Edit button: Return to step5.html
@@ -1387,55 +1568,112 @@
     window.location.href = 'step5.html?' + query.toString();
   });
 
-  // Sound toggle button in phone gift view
-  let soundOn = true;
-  const soundBtn = document.getElementById('btn-sound-toggle');
-  if (soundBtn) {
-    soundBtn.addEventListener('click', () => {
-      soundOn = !soundOn;
-      soundBtn.textContent = soundOn ? '🔊' : '🔇';
-    });
-  }
-
-  // Share Modal Logic
+  // Share Modal & WebApp Link Generation Logic
   const shareModal = document.getElementById('share-modal');
   const shareLinkInput = document.getElementById('share-link-input');
-  const recipientUrl = window.location.origin + window.location.pathname.replace('step6.html', 'wishes.html').replace('review.html', 'candle.html') + '?' + candleQuery.toString();
+
+  // Build the complete webapp recipient URL targeting the start of the surprise (candle.html)
+  const recipientParams = new URLSearchParams({
+    to: toName,
+    from: fromName,
+    rel: rel,
+    date: date,
+    msg: msg,
+    wish: wish,
+    features: features
+  });
+
+  let targetPath = window.location.pathname;
+  if (targetPath.includes('step6.html')) {
+    targetPath = targetPath.replace('step6.html', 'candle.html');
+  } else if (targetPath.includes('review.html')) {
+    targetPath = targetPath.replace('review.html', 'candle.html');
+  } else {
+    const lastSlash = targetPath.lastIndexOf('/');
+    targetPath = targetPath.substring(0, lastSlash + 1) + 'candle.html';
+  }
+
+  const recipientUrl = window.location.origin + targetPath + '?' + recipientParams.toString();
   if (shareLinkInput) {
     shareLinkInput.value = recipientUrl;
   }
 
   function openShareModal() {
-    shareModal.style.display = 'flex';
+    if (shareLinkInput) {
+      shareLinkInput.value = recipientUrl;
+    }
+    const modalRecipient = document.getElementById('modal-recipient-name');
+    if (modalRecipient && toName) {
+      modalRecipient.textContent = toName;
+    }
+    if (shareModal) {
+      shareModal.style.display = 'flex';
+    }
   }
+
   function closeShareModal() {
-    shareModal.style.display = 'none';
+    if (shareModal) {
+      shareModal.style.display = 'none';
+    }
   }
 
-  document.getElementById('btn-continue').addEventListener('click', openShareModal);
-  document.getElementById('btn-close-modal').addEventListener('click', closeShareModal);
-  document.getElementById('btn-modal-done').addEventListener('click', closeShareModal);
-  shareModal.addEventListener('click', (e) => {
-    if (e.target === shareModal) closeShareModal();
-  });
+  const btnContinue = document.getElementById('btn-continue');
+  if (btnContinue) {
+    btnContinue.addEventListener('click', openShareModal);
+  }
 
-  document.getElementById('btn-copy-link').addEventListener('click', () => {
-    shareLinkInput.select();
-    navigator.clipboard.writeText(shareLinkInput.value).then(() => {
-      const copyBtn = document.getElementById('btn-copy-link');
-      const origText = copyBtn.textContent;
-      copyBtn.textContent = 'Copied! ✓';
-      copyBtn.style.background = '#28a745';
-      setTimeout(() => {
-        copyBtn.textContent = origText;
-        copyBtn.style.background = '';
-      }, 2000);
+  const btnCloseModal = document.getElementById('btn-close-modal');
+  if (btnCloseModal) {
+    btnCloseModal.addEventListener('click', closeShareModal);
+  }
+
+  const btnModalDone = document.getElementById('btn-modal-done');
+  if (btnModalDone) {
+    btnModalDone.addEventListener('click', closeShareModal);
+  }
+
+  if (shareModal) {
+    shareModal.addEventListener('click', (e) => {
+      if (e.target === shareModal) closeShareModal();
     });
-  });
+  }
 
-  document.getElementById('btn-modal-test').addEventListener('click', () => {
-    window.open(recipientUrl, '_blank');
-  });
+  // Copy link with clipboard API + fallback
+  const btnCopyLink = document.getElementById('btn-copy-link');
+  if (btnCopyLink && shareLinkInput) {
+    btnCopyLink.addEventListener('click', () => {
+      shareLinkInput.select();
+      shareLinkInput.setSelectionRange(0, 99999);
+      
+      const copySuccess = () => {
+        const origText = btnCopyLink.textContent;
+        btnCopyLink.textContent = 'Copied! ✓';
+        btnCopyLink.style.background = '#28a745';
+        setTimeout(() => {
+          btnCopyLink.textContent = origText;
+          btnCopyLink.style.background = '';
+        }, 2200);
+      };
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(shareLinkInput.value).then(copySuccess).catch(() => {
+          document.execCommand('copy');
+          copySuccess();
+        });
+      } else {
+        document.execCommand('copy');
+        copySuccess();
+      }
+    });
+  }
+
+  const btnModalTest = document.getElementById('btn-modal-test');
+  if (btnModalTest) {
+    btnModalTest.addEventListener('click', () => {
+      window.open(recipientUrl, '_blank');
+    });
+  }
 </script>
+<script src="bg-music.js"></script>
 </body>
 </html>

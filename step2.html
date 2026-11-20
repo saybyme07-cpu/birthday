@@ -255,6 +255,34 @@
     .art-gift{width:65px}
     .pills-grid{grid-template-columns:repeat(2, 1fr)}
   }
+
+  @media(max-width:540px){
+    header{padding:10px 12px 0}
+    .stepper-wrap{margin:10px auto 4px;padding:0 6px}
+    .stepper::before{left:16px;right:16px;top:13px}
+    .step-progress-active{left:16px;top:13px}
+    .step-bubble{width:26px;height:26px;font-size:11px}
+    .step-label{font-size:10px;margin-top:3px}
+    .title-section{margin:6px auto 10px}
+    h1{font-size:26px}
+    .sub{font-size:13px}
+    main{padding:0 12px;gap:12px}
+    .art-box{height:135px;max-width:230px;margin:0 auto 4px}
+    .art-cake{width:125px;bottom:4px}
+    .art-bear{width:100px;bottom:2px}
+    .art-gift{width:46px;bottom:6px}
+    .card{padding:18px 14px 20px;border-radius:20px;box-shadow:0 8px 24px rgba(232,35,111,0.1);width:100%}
+    .section-header{margin-bottom:10px}
+    .section-title{font-size:14.5px}
+    .pills-grid{grid-template-columns:repeat(2, 1fr);gap:8px;margin-bottom:16px}
+    .pill-option{padding:9px 8px;font-size:12.5px}
+    .input-row{height:46px;padding:0 14px}
+    .input-row input{font-size:14px}
+    .actions-row{flex-direction:column-reverse;gap:10px;width:100%;margin-top:16px}
+    .btn-back,.btn-next{width:100%;max-width:100%;height:46px;justify-content:center}
+    .deco{display:none}
+    .lights{height:80px;width:45%}
+  }
 </style>
 </head>
 <body>
@@ -605,5 +633,6 @@
     window.location.href = 'step3.html?' + query.toString();
   });
 </script>
+<script src="bg-music.js"></script>
 </body>
 </html>

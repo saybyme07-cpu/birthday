@@ -108,40 +108,54 @@
   }
 
   .cta{
-    position:relative;z-index:4;align-self:center;width:min(58%,250px);height:clamp(50px,6vh,60px);
-    border:0;border-radius:999px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:14px;
-    background:linear-gradient(180deg,#e45f86,#b9305a);color:#fff;font:600 clamp(17px,4.8vw,21px) 'Nunito',sans-serif;
-    box-shadow:0 12px 24px rgba(185,48,90,.38);transition:transform .15s, box-shadow .2s;
+    position:relative;z-index:4;align-self:center;width:auto;min-width:150px;padding:10px 22px;height:auto;
+    border:0;border-radius:999px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;
+    background:linear-gradient(135deg,#e8236f,#c2185b);color:#fff;font:700 14px 'Nunito',sans-serif;letter-spacing:0.3px;
+    box-shadow:0 4px 14px rgba(185,48,90,.26);transition:all .2s ease;
   }
-  .cta:hover{transform:translateY(-2px);box-shadow:0 16px 28px rgba(185,48,90,.48)}
+  .cta:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(185,48,90,.38)}
   .cta:active{transform:scale(.97)}
-  .cta:focus-visible{outline:3px solid var(--crimson);outline-offset:3px}
-  .cta svg{width:24px;height:24px;stroke:#fff;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;animation:nudge 1.6s ease-in-out infinite}
-  @keyframes nudge{0%,100%{transform:translateX(0)}50%{transform:translateX(5px)}}
+  .cta:focus-visible{outline:2px solid var(--crimson);outline-offset:2px}
+  .cta svg{width:18px;height:18px;stroke:#fff;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;animation:nudge 1.6s ease-in-out infinite}
+  @keyframes nudge{0%,100%{transform:translateX(0)}50%{transform:translateX(3px)}}
 
   .btn-celebrate-next{
-    display:none;align-items:center;justify-content:center;gap:8px;
-    padding:10px 24px;background:linear-gradient(90deg, #e8236f, #9b1c4a);color:#ffffff;
-    border:0;border-radius:999px;font:700 14px 'Nunito',sans-serif;cursor:pointer;
-    box-shadow:0 6px 18px rgba(232,35,111,0.35);animation:fadeIn 0.4s ease forwards;
+    display:none;align-items:center;justify-content:center;gap:7px;
+    padding:9px 20px;background:linear-gradient(135deg, #e8236f, #c2185b);color:#ffffff;
+    border:0;border-radius:999px;font:700 13.5px 'Nunito',sans-serif;cursor:pointer;
+    box-shadow:0 4px 14px rgba(232,35,111,0.24);animation:fadeIn 0.3s ease forwards;
+    transition:all 0.2s ease;
   }
-  @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+  .btn-celebrate-next:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(232,35,111,0.32)}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
 
   /* full letter sheet */
   .sheet{position:absolute;inset:0;z-index:8;display:flex;align-items:flex-end;background:rgba(122,22,70,0);pointer-events:none;transition:background .4s}
   .sheet.show{background:rgba(122,22,70,.35);pointer-events:auto}
-  .paper{width:100%;max-height:88%;overflow:auto;padding:30px 28px 28px;border-radius:30px 30px 0 0;background:linear-gradient(170deg,#fffaf0,#fdecdc);
-         transform:translateY(105%);transition:transform .55s cubic-bezier(.2,.85,.25,1);box-shadow:0 -14px 40px rgba(122,22,70,.25)}
+  .paper{width:100%;max-height:88%;overflow:auto;padding:26px 22px 22px;border-radius:26px 26px 0 0;background:linear-gradient(170deg,#fffaf0,#fdecdc);
+         transform:translateY(105%);transition:transform .55s cubic-bezier(.2,.85,.25,1);box-shadow:0 -12px 36px rgba(122,22,70,.22)}
   .show .paper{transform:translateY(0)}
-  .paper h2{font-family:'Kaushan Script',cursive;font-weight:400;color:var(--crimson);font-size:30px;margin-bottom:14px}
-  .paper .hand{transform:none;font-size:clamp(22px,6.4vw,27px)}
+  .paper h2{font-family:'Kaushan Script',cursive;font-weight:400;color:var(--crimson);font-size:26px;margin-bottom:12px}
+  .paper .hand{transform:none;font-size:clamp(19px,5.8vw,23px)}
   .paper .hand p{margin-bottom:.7em;white-space:pre-wrap}
   
-  .sheet-btn-row{display:flex;align-items:center;justify-content:center;gap:12px;margin-top:20px}
-  .close{display:inline-block;padding:12px 26px;border:0;border-radius:999px;background:#f9d3e1;color:#9b1c4a;font:700 16px 'Nunito',sans-serif;cursor:pointer}
-  .btn-sheet-celebrate{display:inline-block;padding:12px 28px;border:0;border-radius:999px;background:linear-gradient(90deg,#e8236f,#9b1c4a);color:#ffffff;font:700 16px 'Nunito',sans-serif;cursor:pointer;box-shadow:0 6px 18px rgba(232,35,111,0.35)}
+  .sheet-btn-row{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:16px}
+  .close{display:inline-block;padding:8px 18px;border:1px solid rgba(155,28,74,0.25);border-radius:999px;background:#ffffff;color:#9b1c4a;font:700 13px 'Nunito',sans-serif;cursor:pointer;transition:all 0.2s ease}
+  .close:hover{background:#fcebf2}
+  .btn-sheet-celebrate{display:inline-block;padding:9px 22px;border:0;border-radius:999px;background:linear-gradient(135deg,#e8236f,#c2185b);color:#ffffff;font:700 13.5px 'Nunito',sans-serif;cursor:pointer;box-shadow:0 4px 14px rgba(232,35,111,0.24);transition:all 0.2s ease}
+  .btn-sheet-celebrate:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(232,35,111,0.32)}
 
   @media(prefers-reduced-motion:reduce){.mail,.divider svg,.seal,.cta svg{animation:none}}
+
+  @media (max-width: 480px) {
+    .top { padding: clamp(52px, 9vh, 75px) 16px 0; }
+    .mail { width: 44px; height: 36px; margin-bottom: 8px; }
+    h1 { font-size: clamp(30px, 8.5vw, 40px); }
+    .sub { font-size: 15px; margin-top: 4px; }
+    .divider { margin-top: 10px; }
+    .bottom-actions { margin-bottom: 20px; }
+    .cta { width: min(76%, 220px); height: 44px; font-size: 14px; }
+  }
 
   /* Embedded Mode inside Phone Mockup */
   body.embedded {
@@ -160,35 +174,35 @@
     display: none !important;
   }
   body.embedded .top {
-    padding: 68px 16px 0 !important;
+    padding: 52px 14px 0 !important;
   }
   body.embedded h1 {
-    font-size: 36px !important;
+    font-size: 30px !important;
   }
   body.embedded .sub {
-    font-size: 16px !important;
-    margin-top: 4px !important;
+    font-size: 14px !important;
+    margin-top: 3px !important;
   }
   body.embedded .mail {
-    width: 44px !important;
-    height: 38px !important;
-    margin-bottom: 8px !important;
+    width: 36px !important;
+    height: 30px !important;
+    margin-bottom: 6px !important;
   }
   body.embedded .divider {
-    margin-top: 14px !important;
+    margin-top: 8px !important;
   }
   body.embedded .bottom-actions {
-    margin-bottom: 22px !important;
+    margin-bottom: 20px !important;
     gap: 8px !important;
   }
   body.embedded .cta {
-    width: min(72%, 220px) !important;
-    height: 48px !important;
-    font-size: 15px !important;
+    width: min(72%, 200px) !important;
+    height: 42px !important;
+    font-size: 13.5px !important;
   }
   body.embedded .cta svg {
-    width: 20px !important;
-    height: 20px !important;
+    width: 16px !important;
+    height: 16px !important;
   }
 </style>
 </head>
@@ -385,5 +399,6 @@
   setTimeout(openEnv, 700);
 })();
 </script>
+<script src="bg-music.js"></script>
 </body>
 </html>

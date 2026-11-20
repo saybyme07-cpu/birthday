@@ -453,6 +453,30 @@
     .letter-paper{width:300px;top:-75px;left:20px;height:240px}
     .bear-accent{display:none}
   }
+
+  @media(max-width:540px){
+    header{padding:10px 12px 0}
+    .stepper-wrap{margin:10px auto 4px;padding:0 6px}
+    .stepper::before{left:16px;right:16px;top:13px}
+    .step-progress-active{left:16px;top:13px}
+    .step-bubble{width:26px;height:26px;font-size:11px}
+    .step-label{font-size:10px;margin-top:3px}
+    .title-section{margin:6px auto 10px}
+    h1{font-size:26px}
+    .sub{font-size:13px}
+    main{padding:0 12px;gap:16px}
+    .editor-card{padding:16px 14px 18px;border-radius:20px;width:100%}
+    .tabs-bar{padding:3px;gap:4px;margin-bottom:12px;width:100%}
+    .tab-btn{padding:7px 10px;font-size:12.5px}
+    .envelope-stage{height:250px;width:100%;display:flex;align-items:center;justify-content:center;margin:0 auto}
+    .envelope-wrap{width:min(100%, 290px);height:180px;margin:0 auto}
+    .letter-paper{width:min(calc(100% - 24px), 254px);top:-55px;left:12px;height:195px;padding:12px 14px}
+    .letter-paper .paper-body{font-size:14px;line-height:1.45}
+    .actions-row{flex-direction:column-reverse;gap:10px;width:100%;margin-top:16px}
+    .btn-back,.btn-next{width:100%;max-width:100%;height:46px;justify-content:center}
+    .floating-petal{display:none}
+    .lights{height:80px;width:45%}
+  }
 </style>
 </head>
 <body>
@@ -1056,5 +1080,6 @@
     window.location.href = 'step5.html?' + query.toString();
   });
 </script>
+<script src="bg-music.js"></script>
 </body>
 </html>
