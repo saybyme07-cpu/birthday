@@ -7,6 +7,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Kaushan+Script&family=Nunito:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&display=swap" rel="stylesheet">
+<!-- Razorpay Standard Checkout SDK -->
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <style>
   :root {
     --plum: #7a1646;
@@ -698,8 +700,14 @@
     background: #fdf2f7;
     border: 1.5px solid #f6c0d6;
     border-radius: 999px;
-    padding: 5px 6px 5px 16px;
-    margin-bottom: 24px;
+    padding: 6px 8px 6px 18px;
+    margin-bottom: 20px;
+    box-shadow: inset 0 2px 4px rgba(160, 27, 78, 0.04);
+  }
+  .share-link-box .link-icon {
+    font-size: 15px;
+    color: var(--rose);
+    user-select: none;
   }
   .share-link-box input {
     flex: 1;
@@ -708,6 +716,7 @@
     outline: none;
     font-family: inherit;
     font-size: 13.5px;
+    font-weight: 600;
     color: #5c203b;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -717,46 +726,123 @@
     color: #ffffff;
     border: none;
     border-radius: 999px;
-    padding: 9px 18px;
+    padding: 10px 22px;
+    font-family: inherit;
     font-size: 13.5px;
-    font-weight: 700;
+    font-weight: 800;
     cursor: pointer;
     white-space: nowrap;
-    transition: all 0.2s;
+    box-shadow: 0 4px 14px rgba(232, 35, 111, 0.3);
+    transition: all 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
-  .btn-copy-link:hover { transform: scale(1.03); }
+  .btn-copy-link:hover {
+    transform: translateY(-1px) scale(1.03);
+    box-shadow: 0 6px 18px rgba(232, 35, 111, 0.42);
+  }
+  .btn-copy-link.copied {
+    background: #28a745 !important;
+    box-shadow: 0 4px 14px rgba(40, 167, 69, 0.35) !important;
+  }
   .modal-actions-row {
     display: flex;
-    gap: 12px;
+    gap: 10px;
     justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .btn-whatsapp-share {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 11px 22px;
+    background: #25d366;
+    color: #ffffff;
+    border: none;
+    border-radius: 999px;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 800;
+    cursor: pointer;
+    text-decoration: none;
+    box-shadow: 0 4px 14px rgba(37, 211, 102, 0.32);
+    transition: all 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .btn-whatsapp-share:hover {
+    background: #20ba59;
+    transform: translateY(-1px) scale(1.03);
+    box-shadow: 0 6px 18px rgba(37, 211, 102, 0.44);
   }
   .btn-modal-test {
-    padding: 12px 20px;
-    background: #fff;
+    padding: 11px 20px;
+    background: #ffffff;
     border: 1.5px solid #e8236f;
     color: #e8236f;
     border-radius: 999px;
     font-family: inherit;
-    font-size: 14.5px;
+    font-size: 14px;
     font-weight: 700;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all 0.2s ease;
   }
-  .btn-modal-test:hover { background: #fdf2f7; }
+  .btn-modal-test:hover {
+    background: #fdf2f7;
+    transform: translateY(-1px);
+  }
   .btn-modal-done {
-    padding: 12px 28px;
+    padding: 11px 24px;
     background: linear-gradient(90deg, #e8236f 0%, #b3124d 100%);
     border: none;
     color: #ffffff;
     border-radius: 999px;
     font-family: inherit;
-    font-size: 14.5px;
-    font-weight: 700;
+    font-size: 14px;
+    font-weight: 800;
     cursor: pointer;
-    box-shadow: 0 4px 14px rgba(232, 35, 111, 0.35);
-    transition: all 0.2s;
+    box-shadow: 0 4px 14px rgba(232, 35, 111, 0.32);
+    transition: all 0.2s ease;
   }
-  .btn-modal-done:hover { transform: scale(1.03); }
+  .btn-modal-done:hover {
+    transform: translateY(-1px) scale(1.03);
+  }
+
+  /* Unlocked State Inside Review Card */
+  .unlock-state-paid {
+    animation: fadeIn 0.35s ease;
+  }
+  .paid-badge-pill {
+    display: inline-block;
+    padding: 5px 16px;
+    background: linear-gradient(90deg, #e8236f 0%, #b3124d 100%);
+    color: #ffffff;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    margin-bottom: 10px;
+    box-shadow: 0 4px 12px rgba(232, 35, 111, 0.25);
+  }
+  .paid-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 23px;
+    font-weight: 700;
+    color: #5c0931;
+    margin: 0 0 8px;
+  }
+  .paid-sub {
+    font-size: 14px;
+    line-height: 1.5;
+    color: #634352;
+    margin: 0 auto 18px;
+    max-width: 380px;
+  }
+  .paid-actions-row {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+  }
 
   /* ========== Right Column: Confirmation Card ========== */
   .review-card {
@@ -1458,58 +1544,88 @@
         </div>
 
         <!-- NEW: Unlock Your Private Link Section (Birthday Theme) -->
-        <div class="unlock-section-card">
-          <!-- Top Right Decorative Envelope with Floating Hearts -->
-          <div class="unlock-deco-envelope" aria-hidden="true">
-            <svg viewBox="0 0 110 90" width="88" height="74" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <!-- Floating Hearts -->
-              <path d="M88 13 C88 9.5 85 7.5 82.5 7.5 C80.3 7.5 78.8 8.8 78 10.2 C77.2 8.8 75.7 7.5 73.5 7.5 C71 7.5 68 9.5 68 13 C68 17 72 20 78 24.5 C84 20 88 17 88 13 Z" fill="#e8236f"/>
-              <path d="M100 23 C100 20.8 98 19.2 96.2 19.2 C94.6 19.2 93.5 20.1 93 21 C92.5 20.1 91.4 19.2 89.8 19.2 C88 19.2 86 20.8 86 23 C86 25.8 89 28 93 31 C97 28 100 25.8 100 23 Z" fill="#ff4d8d"/>
-              
-              <!-- Envelope Rotated Wrapper -->
-              <g transform="rotate(-8 46 48)">
-                <rect x="8" y="20" width="76" height="52" rx="10" fill="#fbb0cd"/>
-                <!-- Letter sticking out -->
-                <path d="M14 24 L46 8 L78 24 L78 38 L14 38 Z" fill="#ffffff" filter="drop-shadow(0 2px 4px rgba(0,0,0,0.06))"/>
-                <line x1="24" y1="22" x2="44" y2="22" stroke="#f498bc" stroke-width="2" stroke-linecap="round"/>
-                <line x1="24" y1="28" x2="54" y2="28" stroke="#f498bc" stroke-width="2" stroke-linecap="round"/>
-                <!-- Envelope Body -->
-                <path d="M8 72 L8 26 C8 23 10 20.5 13 20.5 L46 46 L79 20.5 C82 20.5 84 23 84 26 L84 72 Z" fill="#ff99bd"/>
-                <!-- Lower Flap Triangle -->
-                <path d="M8 72 L46 44 L84 72 Z" fill="#ff85af"/>
-                <!-- Side Flaps -->
-                <path d="M8 26 L46 46 L8 72 Z" fill="#f87aa7" opacity="0.35"/>
-                <path d="M84 26 L46 46 L84 72 Z" fill="#f87aa7" opacity="0.35"/>
-                <!-- Heart Seal in center -->
-                <path d="M46 54 C46 54 40 48.5 40 44.5 C40 42 42 40 44.2 40 C45.5 40 46 41 46 41 C46 41 46.5 40 47.8 40 C50 40 52 42 52 44.5 C52 48.5 46 54 46 54 Z" fill="#e8236f"/>
-              </g>
-            </svg>
-          </div>
-
-          <!-- Lock Badge in Center -->
-          <div class="unlock-badge-wrap">
-            <div class="unlock-lock-box">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="5" y="11" width="14" height="10" rx="3" stroke="#b3124d" stroke-width="2.3" fill="none"/>
-                <path d="M8 11V7C8 4.79 9.79 3 12 3C14.21 3 16 4.79 16 7V11" stroke="#b3124d" stroke-width="2.3" stroke-linecap="round"/>
-                <circle cx="12" cy="16" r="1.3" fill="#b3124d"/>
+        <div class="unlock-section-card" id="unlock-section-card">
+          <!-- State 1: Locked (Before Payment) -->
+          <div class="unlock-state-locked" id="unlock-state-locked">
+            <!-- Top Right Decorative Envelope with Floating Hearts -->
+            <div class="unlock-deco-envelope" aria-hidden="true">
+              <svg viewBox="0 0 110 90" width="88" height="74" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <!-- Floating Hearts -->
+                <path d="M88 13 C88 9.5 85 7.5 82.5 7.5 C80.3 7.5 78.8 8.8 78 10.2 C77.2 8.8 75.7 7.5 73.5 7.5 C71 7.5 68 9.5 68 13 C68 17 72 20 78 24.5 C84 20 88 17 88 13 Z" fill="#e8236f"/>
+                <path d="M100 23 C100 20.8 98 19.2 96.2 19.2 C94.6 19.2 93.5 20.1 93 21 C92.5 20.1 91.4 19.2 89.8 19.2 C88 19.2 86 20.8 86 23 C86 25.8 89 28 93 31 C97 28 100 25.8 100 23 Z" fill="#ff4d8d"/>
+                
+                <!-- Envelope Rotated Wrapper -->
+                <g transform="rotate(-8 46 48)">
+                  <rect x="8" y="20" width="76" height="52" rx="10" fill="#fbb0cd"/>
+                  <!-- Letter sticking out -->
+                  <path d="M14 24 L46 8 L78 24 L78 38 L14 38 Z" fill="#ffffff" filter="drop-shadow(0 2px 4px rgba(0,0,0,0.06))"/>
+                  <line x1="24" y1="22" x2="44" y2="22" stroke="#f498bc" stroke-width="2" stroke-linecap="round"/>
+                  <line x1="24" y1="28" x2="54" y2="28" stroke="#f498bc" stroke-width="2" stroke-linecap="round"/>
+                  <!-- Envelope Body -->
+                  <path d="M8 72 L8 26 C8 23 10 20.5 13 20.5 L46 46 L79 20.5 C82 20.5 84 23 84 26 L84 72 Z" fill="#ff99bd"/>
+                  <!-- Lower Flap Triangle -->
+                  <path d="M8 72 L46 44 L84 72 Z" fill="#ff85af"/>
+                  <!-- Side Flaps -->
+                  <path d="M8 26 L46 46 L8 72 Z" fill="#f87aa7" opacity="0.35"/>
+                  <path d="M84 26 L46 46 L84 72 Z" fill="#f87aa7" opacity="0.35"/>
+                  <!-- Heart Seal in center -->
+                  <path d="M46 54 C46 54 40 48.5 40 44.5 C40 42 42 40 44.2 40 C45.5 40 46 41 46 41 C46 41 46.5 40 47.8 40 C50 40 52 42 52 44.5 C52 48.5 46 54 46 54 Z" fill="#e8236f"/>
+                </g>
               </svg>
             </div>
+
+            <!-- Lock Badge in Center -->
+            <div class="unlock-badge-wrap">
+              <div class="unlock-lock-box">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="5" y="11" width="14" height="10" rx="3" stroke="#b3124d" stroke-width="2.3" fill="none"/>
+                  <path d="M8 11V7C8 4.79 9.79 3 12 3C14.21 3 16 4.79 16 7V11" stroke="#b3124d" stroke-width="2.3" stroke-linecap="round"/>
+                  <circle cx="12" cy="16" r="1.3" fill="#b3124d"/>
+                </svg>
+              </div>
+            </div>
+
+            <h3 class="unlock-title">Unlock Your Private Link</h3>
+            <p class="unlock-sub">
+              Make it live and share this special birthday surprise with <strong id="unlock-recipient-name">the one you love</strong>.
+            </p>
+
+            <button class="btn-unlock-link" id="btn-unlock-link" type="button">
+              <svg class="unlock-btn-lock" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="5" y="11" width="14" height="10" rx="3" stroke="#ffffff" stroke-width="2.4" fill="none"/>
+                <path d="M8 11V7C8 4.79 9.79 3 12 3C14.21 3 16 4.79 16 7V11" stroke="#ffffff" stroke-width="2.4" stroke-linecap="round"/>
+              </svg>
+              <span>Unlock Private Link • ₹99</span>
+              <span class="unlock-btn-arrow">→</span>
+            </button>
           </div>
 
-          <h3 class="unlock-title">Unlock Your Private Link</h3>
-          <p class="unlock-sub">
-            Make it live and share this special birthday surprise with <strong id="unlock-recipient-name">the one you love</strong>.
-          </p>
+          <!-- State 2: Unlocked Post-Payment (Minimal & Client Attractive) -->
+          <div class="unlock-state-paid" id="unlock-state-paid" style="display: none;">
+            <div class="paid-badge-pill">✨ Private Surprise Link Active ✨</div>
+            <h3 class="paid-title">Your Birthday WebApp is Live! 🎂</h3>
+            <p class="paid-sub">
+              Share this private link with <strong id="card-recipient-name">Sanjana</strong>. One tap and their interactive celebration begins!
+            </p>
+            
+            <div class="share-link-box">
+              <span class="link-icon">🔗</span>
+              <input type="text" id="card-share-link-input" readonly spellcheck="false" value="">
+              <button type="button" class="btn-copy-link" id="btn-copy-card">Copy Link</button>
+            </div>
 
-          <button class="btn-unlock-link" id="btn-unlock-link" type="button">
-            <svg class="unlock-btn-lock" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect x="5" y="11" width="14" height="10" rx="3" stroke="#ffffff" stroke-width="2.4" fill="none"/>
-              <path d="M8 11V7C8 4.79 9.79 3 12 3C14.21 3 16 4.79 16 7V11" stroke="#ffffff" stroke-width="2.4" stroke-linecap="round"/>
-            </svg>
-            <span>Unlock Private Link • ₹99</span>
-            <span class="unlock-btn-arrow">→</span>
-          </button>
+            <div class="paid-actions-row">
+              <button type="button" class="btn-whatsapp-share" id="btn-whatsapp-card">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2z"/>
+                </svg>
+                <span>Share via WhatsApp</span>
+              </button>
+              <button type="button" class="btn-modal-test" id="btn-test-card">
+                Test WebApp ↗
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -1538,11 +1654,18 @@
     </p>
 
     <div class="share-link-box">
+      <span class="link-icon">🔗</span>
       <input type="text" id="share-link-input" readonly spellcheck="false" value="">
       <button type="button" class="btn-copy-link" id="btn-copy-link">Copy Link</button>
     </div>
 
     <div class="modal-actions-row">
+      <button type="button" class="btn-whatsapp-share" id="btn-whatsapp-modal">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2z"/>
+        </svg>
+        <span>Share via WhatsApp</span>
+      </button>
       <button type="button" class="btn-modal-test" id="btn-modal-test">Test WebApp ↗</button>
       <button type="button" class="btn-modal-done" id="btn-modal-done">Done ✨</button>
     </div>
@@ -1810,9 +1933,49 @@
     shareLinkInput.value = recipientUrl;
   }
 
+  // Razorpay Live Configuration
+  const RAZORPAY_KEY_ID = 'rzp_live_U40IbdT5uMc3ZW';
+  const RAZORPAY_AMOUNT_PAISE = 9900; // ₹99 in paise
+
+  // Unique key to persist unlock state per surprise
+  const surpriseKey = 'saybyme_paid_' + encodeURIComponent(toName + '_' + fromName);
+
+  function isSurpriseUnlocked() {
+    return localStorage.getItem(surpriseKey) === 'true' || localStorage.getItem('saybyme_paid') === 'true';
+  }
+
+  function setSurpriseUnlocked(paymentId) {
+    localStorage.setItem(surpriseKey, 'true');
+    localStorage.setItem('saybyme_paid', 'true');
+    if (paymentId) {
+      localStorage.setItem('saybyme_payment_id', paymentId);
+    }
+  }
+
+  function applyUnlockedUI() {
+    const lockedState = document.getElementById('unlock-state-locked');
+    const paidState = document.getElementById('unlock-state-paid');
+    const cardInput = document.getElementById('card-share-link-input');
+    const cardRecipient = document.getElementById('card-recipient-name');
+
+    if (lockedState) lockedState.style.display = 'none';
+    if (paidState) paidState.style.display = 'block';
+    if (cardInput) cardInput.value = recipientUrl;
+    if (cardRecipient && toName) cardRecipient.textContent = toName;
+  }
+
+  // If already unlocked previously, reflect immediately on page load
+  if (isSurpriseUnlocked()) {
+    applyUnlockedUI();
+  }
+
   function openShareModal() {
     if (shareLinkInput) {
       shareLinkInput.value = recipientUrl;
+    }
+    const cardInput = document.getElementById('card-share-link-input');
+    if (cardInput) {
+      cardInput.value = recipientUrl;
     }
     const modalRecipient = document.getElementById('modal-recipient-name');
     if (modalRecipient && toName) {
@@ -1829,6 +1992,48 @@
     }
   }
 
+  // Handle Checkout & Unlock
+  function handleUnlockAction() {
+    if (isSurpriseUnlocked()) {
+      openShareModal();
+      return;
+    }
+
+    if (typeof Razorpay === 'undefined') {
+      alert('Razorpay payment gateway is loading. Please check your internet connection.');
+      return;
+    }
+
+    const options = {
+      key: RAZORPAY_KEY_ID,
+      amount: RAZORPAY_AMOUNT_PAISE,
+      currency: 'INR',
+      name: 'SayByMe',
+      description: 'Private Birthday WebApp for ' + (toName || 'Someone Special'),
+      image: 'assets/gift_box_perfect.png',
+      prefill: {
+        name: fromName || '',
+      },
+      theme: {
+        color: '#e8236f'
+      },
+      handler: function(response) {
+        // Payment Successful!
+        setSurpriseUnlocked(response.razorpay_payment_id);
+        applyUnlockedUI();
+        openShareModal();
+      },
+      modal: {
+        ondismiss: function() {
+          console.log('Payment checkout closed');
+        }
+      }
+    };
+
+    const rzp = new Razorpay(options);
+    rzp.open();
+  }
+
   const unlockRecipient = document.getElementById('unlock-recipient-name');
   if (unlockRecipient && toName) {
     unlockRecipient.textContent = toName;
@@ -1836,12 +2041,12 @@
 
   const btnUnlockLink = document.getElementById('btn-unlock-link');
   if (btnUnlockLink) {
-    btnUnlockLink.addEventListener('click', openShareModal);
+    btnUnlockLink.addEventListener('click', handleUnlockAction);
   }
 
   const btnContinue = document.getElementById('btn-continue');
   if (btnContinue) {
-    btnContinue.addEventListener('click', openShareModal);
+    btnContinue.addEventListener('click', handleUnlockAction);
   }
 
   const btnCloseModal = document.getElementById('btn-close-modal');
@@ -1860,25 +2065,38 @@
     });
   }
 
-  // Copy link with clipboard API + fallback
-  const btnCopyLink = document.getElementById('btn-copy-link');
-  if (btnCopyLink && shareLinkInput) {
-    btnCopyLink.addEventListener('click', () => {
-      shareLinkInput.select();
-      shareLinkInput.setSelectionRange(0, 99999);
-      
+  // WhatsApp Share function
+  function shareViaWhatsApp() {
+    const text = `Hey ${toName}! 🎂💖 I crafted a special birthday surprise webapp just for you! Tap to open: ${recipientUrl}`;
+    window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
+  }
+
+  const btnWhatsAppModal = document.getElementById('btn-whatsapp-modal');
+  if (btnWhatsAppModal) btnWhatsAppModal.addEventListener('click', shareViaWhatsApp);
+  const btnWhatsAppCard = document.getElementById('btn-whatsapp-card');
+  if (btnWhatsAppCard) btnWhatsAppCard.addEventListener('click', shareViaWhatsApp);
+
+  // Copy Link function helper
+  function setupCopyButton(btnId, inputId) {
+    const btn = document.getElementById(btnId);
+    const input = document.getElementById(inputId);
+    if (!btn || !input) return;
+
+    btn.addEventListener('click', () => {
+      input.select();
+      input.setSelectionRange(0, 99999);
       const copySuccess = () => {
-        const origText = btnCopyLink.textContent;
-        btnCopyLink.textContent = 'Copied! ✓';
-        btnCopyLink.style.background = '#28a745';
+        const origText = btn.textContent;
+        btn.textContent = 'Copied! ✓';
+        btn.classList.add('copied');
         setTimeout(() => {
-          btnCopyLink.textContent = origText;
-          btnCopyLink.style.background = '';
+          btn.textContent = origText;
+          btn.classList.remove('copied');
         }, 2200);
       };
 
       if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(shareLinkInput.value).then(copySuccess).catch(() => {
+        navigator.clipboard.writeText(input.value).then(copySuccess).catch(() => {
           document.execCommand('copy');
           copySuccess();
         });
@@ -1889,9 +2107,19 @@
     });
   }
 
+  setupCopyButton('btn-copy-link', 'share-link-input');
+  setupCopyButton('btn-copy-card', 'card-share-link-input');
+
+  // Test WebApp buttons
   const btnModalTest = document.getElementById('btn-modal-test');
   if (btnModalTest) {
     btnModalTest.addEventListener('click', () => {
+      window.open(recipientUrl, '_blank');
+    });
+  }
+  const btnTestCard = document.getElementById('btn-test-card');
+  if (btnTestCard) {
+    btnTestCard.addEventListener('click', () => {
       window.open(recipientUrl, '_blank');
     });
   }
