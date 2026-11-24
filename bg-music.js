@@ -1,23 +1,10 @@
 /**
  * SayByMe - Background Music Controller
  * Exact Circular Button UI matching design specs (Play/Mute SVG states)
- * Supports main floating button and preview phone sound toggle.
+ * Continuous music across all pages and preview transitions.
+ * Full sync between parent page, preview mockups, and embedded views.
  */
 (function() {
-  // Prevent duplicate playback or duplicate fixed button inside iframes
-  if (window.self !== window.top) {
-    return;
-  }
-
-  // Resolve audio path relative to this script
-  const scriptTag = document.currentScript;
-  let basePath = '';
-  if (scriptTag && scriptTag.src) {
-    basePath = scriptTag.src.substring(0, scriptTag.src.lastIndexOf('/') + 1);
-  }
-  const AUDIO_SRC = basePath ? basePath + 'assets/sub_clair-happy-birthday-592177.mp3' : 'assets/sub_clair-happy-birthday-592177.mp3';
-  const DEFAULT_VOLUME = 0.55;
-
   // Exact SVGs matching design
   const SVG_PLAYING = `
     <svg class="speaker-svg" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -43,6 +30,70 @@
       <line x1="22.2" y1="11.2" x2="16.8" y2="16.8" stroke="#671038" stroke-width="2.5" stroke-linecap="round"/>
     </svg>
   `;
+
+  // ==========================================
+  // CASE A: IF RUNNING INSIDE AN IFRAME (e.g. Phone Preview)
+  // ==========================================
+  if (window.self !== window.top) {
+    function setupIframeSoundControls() {
+      const soundBtns = document.querySelectorAll('.btn-phone-sound, .sound-toggle-btn, #btn-sound-toggle');
+      soundBtns.forEach(function(b) {
+        b.onclick = function(e) {
+          if (e) {
+            e.stopPropagation();
+            e.preventDefault();
+          }
+          try {
+            window.parent.postMessage({ type: 'SAYBYME_TOGGLE_MUSIC' }, '*');
+          } catch(err) {}
+        };
+      });
+    }
+
+    // Forward first user interaction inside iframe to parent to unlock browser autoplay if needed
+    function notifyParentInteraction() {
+      try {
+        window.parent.postMessage({ type: 'SAYBYME_USER_INTERACTION' }, '*');
+      } catch(_) {}
+    }
+    ['click', 'touchstart', 'pointerdown'].forEach(function(evt) {
+      document.addEventListener(evt, notifyParentInteraction, { once: true, passive: true });
+    });
+
+    window.addEventListener('message', function(e) {
+      if (e.data && e.data.type === 'SAYBYME_MUSIC_STATE') {
+        const svg = e.data.isPlaying ? SVG_PLAYING : SVG_MUTED;
+        const soundBtns = document.querySelectorAll('.btn-phone-sound, .sound-toggle-btn, #btn-sound-toggle');
+        soundBtns.forEach(function(b) {
+          b.innerHTML = svg;
+          b.classList.toggle('is-playing', e.data.isPlaying);
+          b.classList.toggle('is-muted', !e.data.isPlaying);
+        });
+      }
+    });
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', setupIframeSoundControls);
+    } else {
+      setupIframeSoundControls();
+    }
+
+    try {
+      window.parent.postMessage({ type: 'SAYBYME_REQUEST_MUSIC_STATE' }, '*');
+    } catch(_) {}
+    return; // Don't run parent audio inside iframes to prevent duplicate music
+  }
+
+  // ==========================================
+  // CASE B: TOP LEVEL WINDOW (Main Audio Controller)
+  // ==========================================
+  const scriptTag = document.currentScript;
+  let basePath = '';
+  if (scriptTag && scriptTag.src) {
+    basePath = scriptTag.src.substring(0, scriptTag.src.lastIndexOf('/') + 1);
+  }
+  const AUDIO_SRC = basePath ? basePath + 'assets/sub_clair-happy-birthday-592177.mp3' : 'assets/sub_clair-happy-birthday-592177.mp3';
+  const DEFAULT_VOLUME = 0.55;
 
   // 1. Inject Styles
   function injectStyles() {
@@ -103,7 +154,7 @@
         border-radius: 50% !important;
         background-color: #ffffff !important;
         border: 3.5px solid #f9cadf !important;
-        box-shadow: 0 3px 12px rgba(122, 22, 70, 0.15) !important;
+        box-shadow: 0 4px 14px rgba(122, 22, 70, 0.16) !important;
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
@@ -118,7 +169,7 @@
       .btn-phone-sound:hover {
         transform: scale(1.1) !important;
         border-color: #f7b5d2 !important;
-        box-shadow: 0 4px 16px rgba(122, 22, 70, 0.25) !important;
+        box-shadow: 0 6px 18px rgba(122, 22, 70, 0.25) !important;
       }
       .btn-phone-sound:active {
         transform: scale(0.92) !important;
@@ -127,10 +178,14 @@
         width: 22px !important;
         height: 22px !important;
         display: block !important;
+        pointer-events: none !important;
       }
       .btn-phone-sound.is-playing {
         border-color: #f7b5d2 !important;
         animation: phoneSoundPulse 2.8s infinite ease-in-out !important;
+      }
+      .btn-phone-sound.is-muted {
+        opacity: 0.95 !important;
       }
 
       @keyframes bgMusicPulse {
@@ -191,30 +246,35 @@
 
     audio.volume = DEFAULT_VOLUME;
 
-    // Ensure main floating button element
+    // Check if a sound button already exists on the page (e.g. preview phone button)
+    const existingSoundBtn = document.getElementById('btn-sound-toggle') || document.querySelector('.btn-phone-sound');
     let btn = document.getElementById('bg-music-btn');
-    if (!btn) {
+    if (!btn && !existingSoundBtn) {
       btn = document.createElement('button');
       btn.id = 'bg-music-btn';
       btn.className = 'bg-music-toggle is-muted';
       btn.type = 'button';
       btn.setAttribute('aria-label', 'Toggle Background Music');
       document.body.appendChild(btn);
-    } else {
+    } else if (btn) {
       btn.className = 'bg-music-toggle is-muted';
     }
-
-    // Phone preview sound button (if present on the page)
-    const phoneSoundBtn = document.getElementById('btn-sound-toggle');
 
     // State from localStorage
     const savedMuted = localStorage.getItem('bg_music_muted');
     let isMuted = (savedMuted === 'true');
 
-    // Restore playback time across page navigations
+    // Restore playback time across page navigations without stalling
     const savedTime = parseFloat(localStorage.getItem('bg_music_time') || '0');
-    if (!isNaN(savedTime) && savedTime > 0) {
-      audio.currentTime = savedTime;
+    function applySavedTime() {
+      if (!isNaN(savedTime) && savedTime > 0 && audio.duration && savedTime < audio.duration) {
+        try { audio.currentTime = savedTime; } catch(_) {}
+      }
+    }
+    if (audio.readyState >= 1) {
+      applySavedTime();
+    } else {
+      audio.addEventListener('loadedmetadata', applySavedTime, { once: true });
     }
 
     // Periodically sync audio time
@@ -232,26 +292,29 @@
     window.addEventListener('pagehide', saveCurrentTime);
     window.addEventListener('beforeunload', saveCurrentTime);
 
+    function broadcastState(playing) {
+      const iframes = document.querySelectorAll('iframe');
+      iframes.forEach(function(f) {
+        try {
+          f.contentWindow.postMessage({ type: 'SAYBYME_MUSIC_STATE', isPlaying: playing }, '*');
+        } catch(_) {}
+      });
+    }
+
     function updateUI(playing) {
       const svg = playing ? SVG_PLAYING : SVG_MUTED;
       
-      // Update main floating button
-      if (btn) {
-        btn.innerHTML = svg;
-        btn.classList.toggle('is-playing', playing);
-        btn.classList.toggle('is-muted', !playing);
-        btn.title = playing ? 'Mute Music' : 'Play Music';
-        btn.setAttribute('aria-label', playing ? 'Mute Background Music' : 'Play Background Music');
-      }
+      // Update all speaker buttons on current page (both outer floating and phone preview)
+      const allButtons = document.querySelectorAll('.bg-music-toggle, .btn-phone-sound, #btn-sound-toggle');
+      allButtons.forEach(function(b) {
+        b.innerHTML = svg;
+        b.classList.toggle('is-playing', playing);
+        b.classList.toggle('is-muted', !playing);
+        b.title = playing ? 'Mute Music' : 'Play Music';
+        b.setAttribute('aria-label', playing ? 'Mute Background Music' : 'Play Background Music');
+      });
 
-      // Update phone preview button
-      if (phoneSoundBtn) {
-        phoneSoundBtn.innerHTML = svg;
-        phoneSoundBtn.classList.toggle('is-playing', playing);
-        phoneSoundBtn.classList.toggle('is-muted', !playing);
-        phoneSoundBtn.title = playing ? 'Mute Music' : 'Play Music';
-        phoneSoundBtn.setAttribute('aria-label', playing ? 'Mute Background Music' : 'Play Background Music');
-      }
+      broadcastState(playing);
     }
 
     function playAudio() {
@@ -285,8 +348,28 @@
       }
     }
 
-    if (btn) btn.onclick = toggleMusic;
-    if (phoneSoundBtn) phoneSoundBtn.onclick = toggleMusic;
+    function bindButtons() {
+      const allButtons = document.querySelectorAll('.bg-music-toggle, .btn-phone-sound, #btn-sound-toggle');
+      allButtons.forEach(function(b) {
+        b.onclick = toggleMusic;
+      });
+    }
+
+    bindButtons();
+
+    // Listen for iframe requests & user interactions
+    window.addEventListener('message', function(e) {
+      if (e.data && e.data.type === 'SAYBYME_TOGGLE_MUSIC') {
+        toggleMusic();
+      } else if (e.data && e.data.type === 'SAYBYME_REQUEST_MUSIC_STATE') {
+        broadcastState(!audio.paused && !isMuted);
+      } else if (e.data && e.data.type === 'SAYBYME_USER_INTERACTION') {
+        const currentMuted = (localStorage.getItem('bg_music_muted') === 'true');
+        if (!currentMuted && audio.paused) {
+          playAudio();
+        }
+      }
+    });
 
     // Initial playback attempt
     if (!isMuted) {
@@ -297,7 +380,8 @@
         updateUI(false);
 
         const onFirstInteraction = function() {
-          if (!isMuted && audio.paused) {
+          const currentMuted = (localStorage.getItem('bg_music_muted') === 'true');
+          if (!currentMuted && audio.paused) {
             audio.play().then(function() {
               updateUI(true);
             }).catch(function() {});
